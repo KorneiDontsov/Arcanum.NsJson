@@ -22,5 +22,10 @@ namespace Arcanum.ForNewtonsoftJson
 		}
 
 		public static IContractResolver shared { get; } = new Immutable();
+
+		public ArcanumJsonContractResolver ()
+		{
+			SerializeCompilerGeneratedMembers = true;
+		}
 	}
 }
