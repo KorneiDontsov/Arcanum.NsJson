@@ -130,6 +130,20 @@ namespace Arcanum.ForNewtonsoftJson
 						return CreateDiscriminatedUnionMiddlewareContract(contract, maybeDiscriminatedUnionInfo);
 					}
 				}
+
+				if (contract.UnderlyingType.IsAbstract is false)
+				{
+					var maybeDiscriminatedUnionCaseInfo = dependencies.dataTypeInfoStorage.Get(contract.UnderlyingType)
+					.asDiscriminatedUnionCaseInfo;
+
+					if (maybeDiscriminatedUnionCaseInfo != null)
+					{
+						return CreateDiscriminatedUnionCaseMiddlewareContract(
+							contract,
+							maybeDiscriminatedUnionCaseInfo
+						);
+					}
+				}
 			}
 
 			return contract;
@@ -144,7 +158,7 @@ namespace Arcanum.ForNewtonsoftJson
 			DiscriminatedUnionInfo discriminatedUnionInfo
 		)
 		{
-			if (contract.UnderlyingType != discriminatedUnionInfo.dataTypeInfo.dataType)
+			if (contract.UnderlyingType != discriminatedUnionInfo.dataType)
 			{
 				throw new Exception(
 					$"'{nameof(discriminatedUnionInfo)}' {discriminatedUnionInfo} doesn't correspond to 'contract' of type {contract.UnderlyingType}."
@@ -159,6 +173,28 @@ namespace Arcanum.ForNewtonsoftJson
 
 			var middlewareContract = contract.Copy();
 			middlewareContract.Converter = new DiscriminatedUnionJsonReadConverter(discriminatedUnionInfo);
+
+			return middlewareContract;
+		}
+
+		/// <param name="discriminatedUnionCaseInfo">
+		///     Must be of type <see cref="JsonContract.UnderlyingType" /> specified in
+		///     <paramref name="contract" />.
+		/// </param>
+		protected virtual JsonContract CreateDiscriminatedUnionCaseMiddlewareContract (
+			JsonContract contract,
+			DiscriminatedUnionCaseInfo discriminatedUnionCaseInfo
+		)
+		{
+			if (contract.UnderlyingType != discriminatedUnionCaseInfo.dataType)
+			{
+				throw new Exception(
+					$"'{nameof(discriminatedUnionCaseInfo)}' {discriminatedUnionCaseInfo} doesn't correspond to 'contract' of type {contract.UnderlyingType}."
+				);
+			}
+
+			var middlewareContract = contract.Copy();
+			middlewareContract.Converter = new DiscriminatedUnionCaseJsonConverter(discriminatedUnionCaseInfo);
 
 			return middlewareContract;
 		}

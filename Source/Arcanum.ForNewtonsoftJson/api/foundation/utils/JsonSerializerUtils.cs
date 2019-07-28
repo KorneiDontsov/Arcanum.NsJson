@@ -19,5 +19,18 @@ namespace Arcanum.ForNewtonsoftJson
 				return serializer.Deserialize(reader, objectType);
 			}
 		}
+
+		public static void SerializeWithoutMiddleware (
+			this JsonSerializer serializer,
+			JsonWriter writer,
+			Object? value,
+			Type? objectType = null
+		)
+		{
+			using (ArcanumJsonContractResolver.ResolveContractArgs.Set(withoutMiddleware: true))
+			{
+				serializer.Serialize(writer, value, objectType);
+			}
+		}
 	}
 }
