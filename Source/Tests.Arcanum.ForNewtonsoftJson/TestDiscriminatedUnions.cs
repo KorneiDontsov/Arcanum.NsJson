@@ -1,4 +1,4 @@
-// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
+﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
 using System;
 using System.Collections;
@@ -7,8 +7,7 @@ using System.Collections.Generic;
 using Arcanum.DataContracts;
 
 using FluentAssertions;
-
-using JetBrains.Annotations;
+using FluentAssertions.Json;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -29,7 +28,6 @@ namespace Tests.Arcanum.ForNewtonsoftJson
 			}
 
 			[JsonArray(AllowNullItems = false)]
-			[UsedImplicitly]
 			public sealed class JsonArrayCase : DiscriminatedUnionExample, ICollection<String>
 			{
 				private ICollection<String> _impl { get; } = new List<String>();
@@ -89,6 +87,26 @@ namespace Tests.Arcanum.ForNewtonsoftJson
 		}
 
 		[Fact]
+		public void JsonObjectCaseIsSerialized ()
+		{
+			var subject = new DiscriminatedUnionExample.JsonObjectCase { prop = "some_test_text" };
+			JToken expectedToken = new JObject
+			{
+				["$case"] = "JsonObjectCase",
+				["prop"] = "some_test_text"
+			};
+
+			JToken actualToken;
+			using (var tokenWriter = new JTokenWriter())
+			{
+				serializer.Serialize(tokenWriter, subject);
+				actualToken = tokenWriter.Token;
+			}
+
+			_ = actualToken.Should().BeEquivalentTo(actualToken);
+		}
+
+		[Fact]
 		public void JsonObjectCaseIsDeserialized ()
 		{
 			JToken token = new JObject
@@ -107,6 +125,34 @@ namespace Tests.Arcanum.ForNewtonsoftJson
 			.BeOfType<DiscriminatedUnionExample.JsonObjectCase>()
 			.Which.prop.Should()
 			.Be("some_test_text");
+		}
+
+		[Fact]
+		public void JsonArrayCaseIsSerialized ()
+		{
+			var subject = new DiscriminatedUnionExample.JsonArrayCase
+			{
+				"test_item_1",
+				"test_item_2"
+			};
+			JToken expectedToken = new JObject
+			{
+				["$case"] = "JsonArrayCase",
+				["$values"] = new JArray
+				{
+					"test_item_1",
+					"test_item_2"
+				}
+			};
+
+			JToken actualToken;
+			using (var tokenWriter = new JTokenWriter())
+			{
+				serializer.Serialize(tokenWriter, subject);
+				actualToken = tokenWriter.Token;
+			}
+
+			_ = actualToken.Should().BeEquivalentTo(actualToken);
 		}
 
 		[Fact]
@@ -135,6 +181,26 @@ namespace Tests.Arcanum.ForNewtonsoftJson
 		}
 
 		[Fact]
+		public void CaseWithCustomNameIsSerialized ()
+		{
+			var subject = new DiscriminatedUnionExample.CaseWithCustomName { prop = "good_text_to_test" };
+			JToken expectedToken = new JObject
+			{
+				["$case"] = "CaseCustomName",
+				["prop"] = "good_text_to_test"
+			};
+
+			JToken actualToken;
+			using (var tokenWriter = new JTokenWriter())
+			{
+				serializer.Serialize(tokenWriter, subject);
+				actualToken = tokenWriter.Token;
+			}
+
+			_ = actualToken.Should().BeEquivalentTo(actualToken);
+		}
+
+		[Fact]
 		public void CaseWithCustomNameIsDeserialized ()
 		{
 			JToken token = new JObject
@@ -153,6 +219,26 @@ namespace Tests.Arcanum.ForNewtonsoftJson
 			.BeOfType<DiscriminatedUnionExample.CaseWithCustomName>()
 			.Which.prop.Should()
 			.Be("good_text_to_test");
+		}
+
+		[Fact]
+		public void LeafCaseIsSerialized ()
+		{
+			var subject = new DiscriminatedUnionExample.MediumCase.LeafCase { prop = "leaf_case_prop_value" };
+			JToken expectedToken = new JObject
+			{
+				["$case"] = "MediumCase.LeafCase",
+				["prop"] = "leaf_case_prop_value"
+			};
+
+			JToken actualToken;
+			using (var tokenWriter = new JTokenWriter())
+			{
+				serializer.Serialize(tokenWriter, subject);
+				actualToken = tokenWriter.Token;
+			}
+
+			_ = actualToken.Should().BeEquivalentTo(actualToken);
 		}
 
 		[Fact]
@@ -195,6 +281,48 @@ namespace Tests.Arcanum.ForNewtonsoftJson
 			.BeOfType<DiscriminatedUnionExample.MediumCase.LeafCase>()
 			.Which.prop.Should()
 			.Be("leaf_case_prop_value");
+		}
+
+		[Fact]
+		public void LeafCaseIsDeserializedAsItself ()
+		{
+			JToken token = new JObject
+			{
+				["$case"] = "MediumCase.LeafCase",
+				["prop"] = "leaf_case_prop_value"
+			};
+
+			DiscriminatedUnionExample.MediumCase.LeafCase actual;
+			using (var tokenReader = new JTokenReader(token))
+			{
+				actual = serializer.Deserialize<DiscriminatedUnionExample.MediumCase.LeafCase>(tokenReader);
+			}
+
+			_ = actual.prop.Should().Be("leaf_case_prop_value");
+		}
+
+		[Fact]
+		public void DeeperLeafCaseIsSerialized ()
+		{
+			var subject = new DiscriminatedUnionExample.MediumCase.DeeperMediumCase.DeeperLeafCase
+			{
+				prop = "deeper_leaf_case_prop_value"
+			};
+
+			JToken expectedToken = new JObject
+			{
+				["$case"] = "MediumCase.DeeperMediumCase.DeeperLeafCase",
+				["prop"] = "deeper_leaf_case_prop_value"
+			};
+
+			JToken actualToken;
+			using (var tokenWriter = new JTokenWriter())
+			{
+				serializer.Serialize(tokenWriter, subject);
+				actualToken = tokenWriter.Token;
+			}
+
+			_ = actualToken.Should().BeEquivalentTo(actualToken);
 		}
 
 		[Fact]
