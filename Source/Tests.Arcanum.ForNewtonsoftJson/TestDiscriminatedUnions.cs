@@ -1,4 +1,4 @@
-﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
+// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
 using System;
 using System.Collections;
@@ -206,10 +206,10 @@ namespace Tests.Arcanum.ForNewtonsoftJson
 				["prop"] = "deeper_leaf_case_prop_value"
 			};
 
-			DiscriminatedUnionExample.MediumCase actual;
+			DiscriminatedUnionExample actual;
 			using (var tokenReader = new JTokenReader(token))
 			{
-				actual = serializer.Deserialize<DiscriminatedUnionExample.MediumCase>(tokenReader);
+				actual = serializer.Deserialize<DiscriminatedUnionExample>(tokenReader);
 			}
 
 			_ = actual.Should()
