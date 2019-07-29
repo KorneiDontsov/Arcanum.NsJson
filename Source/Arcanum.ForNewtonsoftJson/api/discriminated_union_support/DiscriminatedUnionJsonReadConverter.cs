@@ -172,8 +172,6 @@ namespace Arcanum.ForNewtonsoftJson
 				}
 			}
 
-			_ = discriminatedUnionJsonReader.Read();
-
 			return discriminatedUnionCaseType
 			?? throw discriminatedUnionJsonReader.Exception(
 				"The property '$case' is not found. It's required to deserialize discriminated union {0} to a specific case.",
