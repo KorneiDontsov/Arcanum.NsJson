@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Arcanum.DataContracts;
 
 using FluentAssertions;
+using FluentAssertions.Execution;
 using FluentAssertions.Json;
 
 using Newtonsoft.Json;
@@ -345,5 +346,77 @@ namespace Tests.Arcanum.ForNewtonsoftJson
 			.Which.prop.Should()
 			.Be("deeper_leaf_case_prop_value");
 		}
+
+		#region property_of_discriminated_union_type
+		[JsonObject(MemberSerialization.OptIn)]
+		private sealed class DiscriminatedUnionContainerExample
+		{
+			[JsonProperty] public DiscriminatedUnionExample? discriminatedUnionValue { get; set; }
+
+			[JsonProperty] public String? commonText { get; set; }
+		}
+
+		[Fact]
+		public void DiscriminatedUnionContainerIsSerialized()
+		{
+			var subject = new DiscriminatedUnionContainerExample
+			{
+				discriminatedUnionValue = new DiscriminatedUnionExample.JsonObjectCase
+				{
+					prop = "contained_discriminated_union_case_prop"
+				},
+				commonText = "text_near_discriminated_union_value"
+			};
+
+			JToken expectedToken = new JObject
+			{
+				["discriminatedUnionValue"] = new JObject
+				{
+					["$case"] = "JsonObjectCase",
+					["prop"] = "contained_discriminated_union_case_prop"
+				},
+				["commonText"] = "text_near_discriminated_union_value"
+			};
+
+			JToken actualToken;
+			using (var tokenWriter = new JTokenWriter())
+			{
+				serializer.Serialize(tokenWriter, subject);
+				actualToken = tokenWriter.Token;
+			}
+
+			_ = actualToken.Should().BeEquivalentTo(actualToken);
+		}
+
+		[Fact]
+		public void DiscriminatedUnionContainerIsDeserialized ()
+		{
+			JToken token = new JObject
+			{
+				["discriminatedUnionValue"] = new JObject
+				{
+					["$case"] = "JsonObjectCase",
+					["prop"] = "contained_discriminated_union_case_prop"
+				},
+				["commonText"] = "text_near_discriminated_union_value"
+			};
+
+			DiscriminatedUnionContainerExample actual;
+			using (var tokenReader = new JTokenReader(token))
+			{
+				actual = serializer.Deserialize<DiscriminatedUnionContainerExample>(tokenReader);
+			}
+
+			using (new AssertionScope())
+			{
+				_ = actual.discriminatedUnionValue.Should()
+				.BeOfType<DiscriminatedUnionExample.JsonObjectCase>()
+				.Which.prop.Should()
+				.Be("contained_discriminated_union_case_prop");
+
+				_ = actual.commonText.Should().Be("text_near_discriminated_union_value");
+			}
+		}
+		#endregion
 	}
 }
