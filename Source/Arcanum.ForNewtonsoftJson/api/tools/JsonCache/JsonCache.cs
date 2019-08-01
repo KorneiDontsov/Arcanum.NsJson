@@ -31,7 +31,7 @@ namespace Arcanum.ForNewtonsoftJson
 		{
 			_implStream.Position = 0;
 
-			return new JsonTextReader(
+			var reader = new JsonTextReader(
 				new StreamReader(
 					_implStream,
 					Encoding.UTF8,
@@ -40,6 +40,9 @@ namespace Arcanum.ForNewtonsoftJson
 					leaveOpen: true
 				)
 			);
+			_ = reader.Read();
+
+			return reader;
 		}
 	}
 }
