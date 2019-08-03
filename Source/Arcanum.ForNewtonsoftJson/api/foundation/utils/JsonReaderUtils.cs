@@ -2,7 +2,7 @@
 
 using System;
 
-using JetBrains.Annotations;
+using Arcanum.ForNewtonsoftJson.Annotations;
 
 using Newtonsoft.Json;
 
