@@ -5,7 +5,7 @@
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>0.1.2</Version>
+    <Version>0.2.0</Version>
     <Authors>Kornei Dontsov</Authors>
     <Company>Korneev Soft</Company>
     <Product>Arcanum.ForNewtonsoftJson</Product>
