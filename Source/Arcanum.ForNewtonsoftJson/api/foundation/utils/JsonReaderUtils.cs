@@ -1,71 +1,40 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
-using System;
+namespace Arcanum.ForNewtonsoftJson {
+	using Annotations;
+	using Newtonsoft.Json;
+	using System;
 
-using Arcanum.ForNewtonsoftJson.Annotations;
-
-using Newtonsoft.Json;
-
-namespace Arcanum.ForNewtonsoftJson
-{
-	public static class JsonReaderUtils
-	{
+	public static class JsonReaderUtils {
 		public static JsonReaderException Exception (
-			this JsonReader jsonReader,
-			String message,
-			Exception? innerException
-		)
-		{
-			return JsonFactory.ReaderException(jsonReader, message, innerException);
-		}
+		this JsonReader jsonReader, String message, Exception? innerException) =>
+			JsonFactory.ReaderException(jsonReader, message, innerException);
 
-		public static JsonReaderException Exception (
-			this JsonReader jsonReader,
-			String message
-		)
-		{
-			return JsonFactory.ReaderException(jsonReader, message);
-		}
+		public static JsonReaderException Exception (this JsonReader jsonReader, String message) =>
+			JsonFactory.ReaderException(jsonReader, message);
 
 		[StringFormatMethod("messageFormat")]
 		public static JsonReaderException Exception (
-			this JsonReader jsonReader,
-			IFormatProvider formatProvider,
-			String messageFormat,
-			params Object[] messageArgs
-		)
-		{
-			return JsonFactory.ReaderException(jsonReader, formatProvider, messageFormat, messageArgs);
-		}
+		this JsonReader jsonReader,
+		IFormatProvider formatProvider,
+		String messageFormat,
+		params Object[] messageArgs) =>
+			JsonFactory.ReaderException(jsonReader, formatProvider, messageFormat, messageArgs);
 
 		[StringFormatMethod("messageFormat")]
 		public static JsonReaderException Exception (
-			this JsonReader jsonReader,
-			String messageFormat,
-			params Object[] messageArgs
-		)
-		{
-			return JsonFactory.ReaderException(jsonReader, messageFormat, messageArgs);
+		this JsonReader jsonReader, String messageFormat, params Object[] messageArgs
+		) =>
+			JsonFactory.ReaderException(jsonReader, messageFormat, messageArgs);
+
+		public static void ReadNext (this JsonReader jsonReader) {
+			if (! jsonReader.Read()) throw jsonReader.Exception("Unexpected end when reading JSON.");
 		}
 
-		public static void ReadNext (this JsonReader jsonReader)
-		{
-			if (jsonReader.Read() is false)
-			{
-				throw jsonReader.Exception("Unexpected end when reading JSON.");
-			}
-		}
-
-		public static void CurrentTokenMustBe (this JsonReader jsonReader, JsonToken expected)
-		{
+		public static void CurrentTokenMustBe (this JsonReader jsonReader, JsonToken expected) {
 			if (jsonReader.TokenType != expected)
-			{
-				throw jsonReader.Exception(
-					"Expected token to be {0} but accepted {1}.",
-					expected,
-					jsonReader.TokenType
-				);
-			}
+				throw
+					jsonReader.Exception("Expected token to be {0} but accepted {1}.", expected, jsonReader.TokenType);
 		}
 	}
 }
