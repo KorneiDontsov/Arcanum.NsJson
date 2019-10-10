@@ -1,0 +1,3 @@
+[submodule "DotSettings"]
+	path = DotSettings
+	url = https://github.com/KorneiDontsov/Arcanum.DotSettings.git

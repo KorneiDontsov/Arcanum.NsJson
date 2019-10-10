@@ -1,16 +1,12 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
-using System;
-using System.Globalization;
+namespace Arcanum.ForNewtonsoftJson {
+	using Annotations;
+	using Newtonsoft.Json;
+	using System;
+	using System.Globalization;
 
-using Arcanum.ForNewtonsoftJson.Annotations;
-
-using Newtonsoft.Json;
-
-namespace Arcanum.ForNewtonsoftJson
-{
-	public static class JsonFactory
-	{
+	public static class JsonFactory {
 		#region exceptions
 		// based on
 		// https://github.com/JamesNK/Newtonsoft.Json/blob/febdb8188b226ee7810bbf7e053ada171818fbeb/Src/Newtonsoft.Json/JsonReaderException.cs
@@ -19,39 +15,27 @@ namespace Arcanum.ForNewtonsoftJson
 		// Copyright (c) 2007 James Newton-King
 
 		public static JsonReaderException ReaderException (
-			IJsonLineInfo? maybeLineInfo,
-			String path,
-			String message,
-			Exception? innerException = null
-		)
-		{
-			message = formatMessage(maybeLineInfo, path, message);
+		IJsonLineInfo? maybeLineInfo, String path, String message, Exception? innerException = null) {
+			message = FormatMessage(maybeLineInfo, path, message);
 
 			Int32 lineNumber;
 			Int32 linePosition;
-			if (maybeLineInfo != null && maybeLineInfo.HasLineInfo())
-			{
+			if (maybeLineInfo != null && maybeLineInfo.HasLineInfo()) {
 				lineNumber = maybeLineInfo.LineNumber;
 				linePosition = maybeLineInfo.LinePosition;
 			}
-			else
-			{
+			else {
 				lineNumber = 0;
 				linePosition = 0;
 			}
 
 			return new JsonReaderException(message, path, lineNumber, linePosition, innerException);
 
-			static String formatMessage (IJsonLineInfo? maybeLineInfo, String path, String message)
-			{
-				if (!message.EndsWith(Environment.NewLine, StringComparison.Ordinal))
-				{
+			static String FormatMessage (IJsonLineInfo? maybeLineInfo, String path, String message) {
+				if (! message.EndsWith(Environment.NewLine, StringComparison.Ordinal)) {
 					message = message.Trim();
 
-					if (!message.EndsWith(".", StringComparison.Ordinal))
-					{
-						message += ".";
-					}
+					if (! message.EndsWith(".", StringComparison.Ordinal)) message += ".";
 
 					message += " ";
 				}
@@ -59,14 +43,12 @@ namespace Arcanum.ForNewtonsoftJson
 				message += String.Format(CultureInfo.InvariantCulture, "Path '{0}'", path);
 
 				if (maybeLineInfo != null && maybeLineInfo.HasLineInfo())
-				{
 					message += String.Format(
 						CultureInfo.InvariantCulture,
 						", line {0}, position {1}",
 						maybeLineInfo.LineNumber,
 						maybeLineInfo.LinePosition
 					);
-				}
 
 				message += ".";
 
@@ -75,43 +57,24 @@ namespace Arcanum.ForNewtonsoftJson
 		}
 
 		public static JsonReaderException ReaderException (
-			JsonReader jsonReader,
-			String message,
-			Exception? innerException
-		)
-		{
-			return ReaderException(jsonReader as IJsonLineInfo, jsonReader.Path, message, innerException);
-		}
+		JsonReader jsonReader, String message, Exception? innerException) =>
+			ReaderException(jsonReader as IJsonLineInfo, jsonReader.Path, message, innerException);
 
-		public static JsonReaderException ReaderException (JsonReader jsonReader, String message)
-		{
-			return ReaderException(jsonReader, message, innerException: null);
-		}
+		public static JsonReaderException ReaderException (JsonReader jsonReader, String message) =>
+			ReaderException(jsonReader, message, innerException: null);
 
 		[StringFormatMethod("messageFormat")]
 		public static JsonReaderException ReaderException (
-			JsonReader jsonReader,
-			IFormatProvider formatProvider,
-			String messageFormat,
-			params Object[] messageArgs
-		)
-		{
-			return ReaderException(
+		JsonReader jsonReader, IFormatProvider formatProvider, String messageFormat, params Object[] messageArgs) =>
+			ReaderException(
 				jsonReader,
 				String.Format(formatProvider, messageFormat, messageArgs),
-				innerException: null
-			);
-		}
+				innerException: null);
 
 		[StringFormatMethod("messageFormat")]
 		public static JsonReaderException ReaderException (
-			JsonReader jsonReader,
-			String messageFormat,
-			params Object[] messageArgs
-		)
-		{
-			return ReaderException(jsonReader, CultureInfo.InvariantCulture, messageFormat, messageArgs);
-		}
+		JsonReader jsonReader, String messageFormat, params Object[] messageArgs) =>
+			ReaderException(jsonReader, CultureInfo.InvariantCulture, messageFormat, messageArgs);
 		#endregion
 	}
 }
