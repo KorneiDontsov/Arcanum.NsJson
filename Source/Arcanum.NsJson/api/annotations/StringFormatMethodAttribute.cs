@@ -7,6 +7,7 @@ using System;
 namespace Arcanum.NsJson.Annotations {
 	/// <inheritdoc />
 	/// <summary>
+	///     <para> 'Jetbrains.Annotations' attribute </para>
 	///     Indicates that the marked method builds string by the format pattern and (optional) arguments.
 	///     The parameter, which contains the format string, should be given in constructor. The format string
 	///     should be in <see cref = "String.Format(IFormatProvider,String,System.Object[])" />-like form.

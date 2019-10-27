@@ -4,8 +4,8 @@ namespace Arcanum.NsJson {
 	using Newtonsoft.Json;
 	using System;
 
-	public sealed class JsonContractResolveException: JsonException {
-		public JsonContractResolveException (String message, Exception? innerException = null)
+	public sealed class JsonContractException: JsonException {
+		public JsonContractException (String message, Exception? innerException = null)
 			: base(message, innerException) { }
 	}
 }

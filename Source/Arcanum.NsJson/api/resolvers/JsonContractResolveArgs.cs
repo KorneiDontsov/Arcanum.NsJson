@@ -4,7 +4,7 @@ namespace Arcanum.NsJson {
 	using System;
 	using System.Threading;
 
-	readonly struct MiddlewaredContractResolverArgs {
+	readonly struct JsonContractResolveArgs {
 		internal readonly struct Scope: IDisposable {
 			/// <inheritdoc />
 			public void Dispose () => local.Value = default;
@@ -12,17 +12,17 @@ namespace Arcanum.NsJson {
 
 		public Boolean withoutMiddleware { get; }
 
-		static AsyncLocal<MiddlewaredContractResolverArgs> local { get; }
-			= new AsyncLocal<MiddlewaredContractResolverArgs>();
+		static AsyncLocal<JsonContractResolveArgs> local { get; }
+			= new AsyncLocal<JsonContractResolveArgs>();
 
-		MiddlewaredContractResolverArgs (Boolean withoutMiddleware) => this.withoutMiddleware = withoutMiddleware;
+		JsonContractResolveArgs (Boolean withoutMiddleware) => this.withoutMiddleware = withoutMiddleware;
 
 		public static Scope Set (Boolean withoutMiddleware) {
-			local.Value = new MiddlewaredContractResolverArgs(withoutMiddleware);
+			local.Value = new JsonContractResolveArgs(withoutMiddleware);
 			return new Scope();
 		}
 
-		public static MiddlewaredContractResolverArgs Pick () {
+		public static JsonContractResolveArgs Pick () {
 			var args = local.Value;
 			local.Value = default;
 			return args;
