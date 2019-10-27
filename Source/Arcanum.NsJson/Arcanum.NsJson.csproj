@@ -13,6 +13,11 @@
     </PropertyGroup>
 
     <PropertyGroup>
+        <Title>Arcanum.NsJson</Title>
+        <Description>
+            Arcanum.NsJson provides json serialization based on Newtonsoft.Json. It is less flexible, but higher-level
+            and more functional.
+        </Description>
         <Authors>KorneiDontsov</Authors>
         <Copyright>Copyright © Kornei Dontsov 2019</Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -27,8 +32,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-        <PackageReference Include="Arcanum.DataContracts" Version="0.6.0" />
-        <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="1.3.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="12.0.2"/>
+        <PackageReference Include="Arcanum.DataContracts" Version="0.6.1"/>
+        <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="1.3.0"/>
     </ItemGroup>
 </Project>
