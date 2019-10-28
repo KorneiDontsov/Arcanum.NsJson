@@ -4,6 +4,6 @@ namespace Arcanum.NsJson {
 	using Newtonsoft.Json.Serialization;
 
 	public interface IJsonContractModule {
-		JsonContract CreateContract (JsonContract contract);
+		JsonContract CreateContract (JsonContract baseContract);
 	}
 }

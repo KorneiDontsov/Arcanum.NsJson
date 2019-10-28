@@ -16,7 +16,7 @@ namespace Arcanum.NsJson.Tests {
 		}
 
 		[Fact]
-		public void CanBeSerialized () {
+		public void IsSerialized () {
 			var data = new DataWithBackingFields { text = "some_text" };
 			var expectedDataJToken = new JObject { ["text"] = "some_text" };
 
@@ -26,7 +26,7 @@ namespace Arcanum.NsJson.Tests {
 		}
 
 		[Fact]
-		public void CanBeDeserialized () {
+		public void IsDeserialized () {
 			var dataToken = new JObject { ["text"] = "some_deserialized_text" };
 
 			var actualData = serializer.FromToken<DataWithBackingFields>(dataToken);

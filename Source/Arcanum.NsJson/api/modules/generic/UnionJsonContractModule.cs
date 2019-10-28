@@ -209,20 +209,20 @@ namespace Arcanum.NsJson {
 		}
 
 		/// <inheritdoc />
-		public JsonContract? MayCreateContract (JsonContract contract) {
-			if (contract.IsOfAbstractClass() && contract.HasNoConverter()
-			&& DataTypeInfoStorage.shared.Get(contract.UnderlyingType).asUnionInfo is { } unionInfo) {
-				if (contract.UnderlyingType != unionInfo.dataType)
+		public JsonContract? MayCreateContract (JsonContract baseContract) {
+			if (baseContract.IsOfAbstractClass() && baseContract.HasNoConverter()
+			&& DataTypeInfoStorage.shared.Get(baseContract.UnderlyingType).asUnionInfo is { } unionInfo) {
+				if (baseContract.UnderlyingType != unionInfo.dataType)
 					throw
 						new Exception(
-							$"'{nameof(unionInfo)}' {unionInfo} doesn't correspond to 'contract' of type {contract.UnderlyingType}.");
+							$"'{nameof(unionInfo)}' {unionInfo} doesn't correspond to 'contract' of type {baseContract.UnderlyingType}.");
 				else if (unionInfo.hasErrors)
 					throw
 						new JsonContractException(
 							$"Cannot resolve {unionInfo.dataType} because it has errors.\n{unionInfo.GetErrorString()}");
 				else {
-					contract.Converter = new Converter(unionInfo);
-					return contract;
+					baseContract.Converter = new Converter(unionInfo);
+					return baseContract;
 				}
 			}
 			else
