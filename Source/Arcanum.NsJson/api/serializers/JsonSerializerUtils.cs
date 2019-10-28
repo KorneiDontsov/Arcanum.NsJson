@@ -35,6 +35,13 @@ namespace Arcanum.NsJson {
 			return jsonTextBuilder.ToString();
 		}
 
+		public static String ToText (this IJsonSerializer jsonSerializer, Object? maybeData, Boolean pretty) {
+			using var jsonTextBuilder = JsonFactory.TextWriter();
+			jsonTextBuilder.Formatting = pretty ? Formatting.Indented : Formatting.None;
+			jsonSerializer.Write(jsonTextBuilder, maybeData);
+			return jsonTextBuilder.ToString();
+		}
+
 		/// <exception cref = "JsonException" />
 		public static Object? MayFromText (
 		this IJsonSerializer jsonSerializer, String text, Type dataType) {
