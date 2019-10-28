@@ -13,6 +13,7 @@ namespace Arcanum.NsJson {
 			var jsonContractFactory =
 				JsonContractFactory.Build()
 					.With<UnionJsonContractModule>()
+					.With<EnumJsonContractModule>()
 					.Ok();
 			var middlewareJsonContractFactory =
 				MiddlewareJsonContractFactory.Build()
