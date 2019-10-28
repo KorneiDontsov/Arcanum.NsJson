@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
 namespace Arcanum.NsJson.Tests {
+	using Arcanum.NsJson.Abstractions;
 	using FluentAssertions;
 	using FluentAssertions.Json;
 	using Newtonsoft.Json.Linq;

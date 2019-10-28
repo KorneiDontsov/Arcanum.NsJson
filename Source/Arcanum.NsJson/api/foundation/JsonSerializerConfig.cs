@@ -9,6 +9,10 @@ namespace Arcanum.NsJson {
 	public sealed class JsonSerializerConfig {
 		public CultureInfo? culture { get; set; }
 
+		public Int32? maxDepth { get; set; }
+
+		public Boolean? checkAdditionalContent { get; set; }
+
 		public IEqualityComparer? referenceEqualityComparer { get; set; }
 
 		public Func<IReferenceResolver>? referenceResolverProvider { get; set; }
