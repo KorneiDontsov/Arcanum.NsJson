@@ -2,6 +2,7 @@
 
 namespace Arcanum.NsJson {
 	using Newtonsoft.Json.Serialization;
+	using System.Net;
 
 	partial class JsonFactory {
 		static JsonContractResolverCore contractResolverCore { get; } =
@@ -14,6 +15,7 @@ namespace Arcanum.NsJson {
 				JsonContractFactory.Build()
 					.With<UnionJsonContractModule>()
 					.With<EnumJsonContractModule>()
+					.With<DnsEndPoint, DnsEndPointJsonContractModule>()
 					.Ok();
 			var middlewareJsonContractFactory =
 				MiddlewareJsonContractFactory.Build()
