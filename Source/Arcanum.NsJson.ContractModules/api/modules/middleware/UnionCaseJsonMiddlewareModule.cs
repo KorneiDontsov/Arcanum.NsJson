@@ -1,15 +1,16 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
-namespace Arcanum.NsJson {
+namespace Arcanum.NsJson.ContractModules {
 	using Arcanum.DataContracts;
 	using Arcanum.NsJson.ContractResolvers;
+	using Arcanum.NsJson.Tools;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Serialization;
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 
-	class UnionCaseJsonMiddlewareModule: IJsonMiddlewareModule {
+	public sealed class UnionCaseJsonMiddlewareModule: IJsonMiddlewareModule {
 		class Converter: JsonConverter {
 			IUnionCaseInfo unionCaseInfo { get; }
 

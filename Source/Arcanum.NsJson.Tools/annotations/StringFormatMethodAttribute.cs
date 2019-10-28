@@ -4,7 +4,7 @@
 
 using System;
 
-namespace Arcanum.NsJson.Annotations {
+namespace Arcanum.NsJson.Tools {
 	/// <inheritdoc />
 	/// <summary>
 	///     <para> 'Jetbrains.Annotations' attribute </para>

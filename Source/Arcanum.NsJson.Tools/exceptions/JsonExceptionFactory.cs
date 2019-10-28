@@ -1,12 +1,11 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
-namespace Arcanum.NsJson {
-	using Arcanum.NsJson.Annotations;
+namespace Arcanum.NsJson.Tools {
 	using Newtonsoft.Json;
 	using System;
 	using System.Globalization;
 
-	partial class JsonFactory {
+	public static class JsonExceptionFactory {
 		// based on
 		// https://github.com/JamesNK/Newtonsoft.Json/blob/febdb8188b226ee7810bbf7e053ada171818fbeb/Src/Newtonsoft.Json/JsonReaderException.cs
 		// https://github.com/JamesNK/Newtonsoft.Json/blob/6360cc4c4b4a45f7a82ad6c060cddd9cdb3c7d02/Src/Newtonsoft.Json/JsonPosition.cs

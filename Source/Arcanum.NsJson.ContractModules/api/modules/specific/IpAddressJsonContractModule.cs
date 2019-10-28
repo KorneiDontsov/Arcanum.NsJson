@@ -1,14 +1,15 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
-namespace Arcanum.NsJson {
+namespace Arcanum.NsJson.ContractModules {
 	using Arcanum.NsJson.ContractResolvers;
+	using Arcanum.NsJson.Tools;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Serialization;
 	using System;
 	using System.Globalization;
 	using System.Net;
 
-	class IpAddressJsonContractModule: IJsonContractModule {
+	public sealed class IpAddressJsonContractModule: IJsonContractModule {
 		class Converter: JsonConverter<IPAddress> {
 			/// <inheritdoc />
 			public override void WriteJson (JsonWriter writer, IPAddress value, JsonSerializer serializer) {

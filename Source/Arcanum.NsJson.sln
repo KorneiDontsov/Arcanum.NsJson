@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcanum.NsJson.Abstractions
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcanum.NsJson.ContractResolvers", "Arcanum.NsJson.ContractResolvers\Arcanum.NsJson.ContractResolvers.csproj", "{253B4124-8DB6-46A2-82BA-B99FB53C08F3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcanum.NsJson.ContractModules", "Arcanum.NsJson.ContractModules\Arcanum.NsJson.ContractModules.csproj", "{3D523709-7CCD-4B58-90F3-1CCA3D953831}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arcanum.NsJson", "Arcanum.NsJson\Arcanum.NsJson.csproj", "{899B622B-E7A8-4F6C-87BF-01FA3A094C6A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcanum.NsJson.Tests", "Arcanum.NsJson.Tests\Arcanum.NsJson.Tests.csproj", "{0702D634-B3DC-4826-B5A3-70FB52D22722}"
@@ -43,6 +45,12 @@ Global
 		{253B4124-8DB6-46A2-82BA-B99FB53C08F3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{253B4124-8DB6-46A2-82BA-B99FB53C08F3}.NuGet|Any CPU.ActiveCfg = Debug|Any CPU
 		{253B4124-8DB6-46A2-82BA-B99FB53C08F3}.NuGet|Any CPU.Build.0 = Debug|Any CPU
+		{3D523709-7CCD-4B58-90F3-1CCA3D953831}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D523709-7CCD-4B58-90F3-1CCA3D953831}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D523709-7CCD-4B58-90F3-1CCA3D953831}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D523709-7CCD-4B58-90F3-1CCA3D953831}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D523709-7CCD-4B58-90F3-1CCA3D953831}.NuGet|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D523709-7CCD-4B58-90F3-1CCA3D953831}.NuGet|Any CPU.Build.0 = Debug|Any CPU
 		{899B622B-E7A8-4F6C-87BF-01FA3A094C6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{899B622B-E7A8-4F6C-87BF-01FA3A094C6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{899B622B-E7A8-4F6C-87BF-01FA3A094C6A}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,6 +1,6 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
-namespace Arcanum.NsJson {
+namespace Arcanum.NsJson.ContractModules {
 	using Arcanum.NsJson.ContractResolvers;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Serialization;
@@ -9,7 +9,7 @@ namespace Arcanum.NsJson {
 	using System.Net.Sockets;
 	using static JsonContractKit<System.Net.DnsEndPoint>;
 
-	class DnsEndPointJsonContractModule: IJsonContractModule {
+	public sealed class DnsEndPointJsonContractModule: IJsonContractModule {
 		/// <inheritdoc />
 		public JsonContract CreateContract (JsonContract baseContract) {
 			var hostProp = ReadOnlyProperty(nameof(DnsEndPoint.Host), dnsEndPoint => dnsEndPoint.Host);
