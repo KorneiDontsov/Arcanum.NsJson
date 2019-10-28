@@ -1,0 +1,15 @@
+<Project>
+    <PropertyGroup>
+        <RepositoryUrl>https://github.com/KorneiDontsov/Arcanum.NsJson</RepositoryUrl>
+        <Authors>KorneiDontsov</Authors>
+        <Copyright>Copyright © Kornei Dontsov 2019</Copyright>
+        <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\..\LICENSE.txt">
+            <Pack>true</Pack>
+            <PackagePath>$(PackageLicenseFile)</PackagePath>
+        </None>
+    </ItemGroup>
+</Project>
