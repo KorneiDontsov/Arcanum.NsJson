@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
-// disable nullable warnings
-
-#pragma warning disable 8601
+#pragma warning disable 8601 //disable nullable warnings
 
 namespace Arcanum.NsJson {
 	using Newtonsoft.Json;
