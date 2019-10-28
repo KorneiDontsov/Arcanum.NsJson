@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <Configurations>Debug;Release;NuGet</Configurations>
         <Platforms>AnyCPU</Platforms>
+        <Optimize Condition=" '$(Configuration)' != 'Debug' ">true</Optimize>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -14,28 +15,28 @@
             Arcanum.NsJson provides json serialization based on Newtonsoft.Json. It is less flexible, but higher-level
             and more functional.
         </Description>
-        <Version>0.3.0</Version>
+        <Version>0.4.0</Version>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+        <PackageReference Include="Newtonsoft.Json" Version="12.0.2"/>
     </ItemGroup>
 
     <Choose>
         <When Condition="'$(Configuration)' == 'NuGet'">
             <ItemGroup>
-                <PackageReference Include="Arcanum.NsJson.Abstractions" Version="0.0.1" />
-                <PackageReference Include="Arcanum.NsJson.ContractResolvers" Version="0.0.1" />
-                <PackageReference Include="Arcanum.NsJson.ContractModules" Version="0.0.1" />
+                <PackageReference Include="Arcanum.NsJson.Abstractions" Version="0.4.0"/>
+                <PackageReference Include="Arcanum.NsJson.ContractResolvers" Version="0.4.0"/>
+                <PackageReference Include="Arcanum.NsJson.ContractModules" Version="0.4.0"/>
             </ItemGroup>
         </When>
         <Otherwise>
             <ItemGroup>
-                <ProjectReference Include="../Arcanum.NsJson.Abstractions/Arcanum.NsJson.Abstractions.csproj" />
-                <ProjectReference Include="..\Arcanum.NsJson.ContractResolvers\Arcanum.NsJson.ContractResolvers.csproj" />
-                <ProjectReference Include="..\Arcanum.NsJson.ContractModules\Arcanum.NsJson.ContractModules.csproj" />
+                <ProjectReference Include="../Arcanum.NsJson.Abstractions/Arcanum.NsJson.Abstractions.csproj"/>
+                <ProjectReference Include="../Arcanum.NsJson.ContractResolvers/Arcanum.NsJson.ContractResolvers.csproj"/>
+                <ProjectReference Include="../Arcanum.NsJson.ContractModules/Arcanum.NsJson.ContractModules.csproj"/>
             </ItemGroup>
         </Otherwise>
     </Choose>

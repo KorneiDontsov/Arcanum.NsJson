@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <Configurations>Debug;Release;NuGet</Configurations>
         <Platforms>AnyCPU</Platforms>
+        <Optimize Condition=" '$(Configuration)' != 'Debug' ">true</Optimize>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -13,12 +14,12 @@
         <Description>
             Arcanum.NsJson.Tools is part of Arcanum.NsJson distribution that provides useful tools.
         </Description>
-        <Version>0.0.1</Version>
+        <Version>0.4.0</Version>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+        <PackageReference Include="Newtonsoft.Json" Version="12.0.2"/>
     </ItemGroup>
 </Project>
