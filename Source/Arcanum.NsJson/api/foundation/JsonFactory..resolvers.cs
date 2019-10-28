@@ -15,6 +15,7 @@ namespace Arcanum.NsJson {
 				JsonContractFactory.Build()
 					.With<UnionJsonContractModule>()
 					.With<EnumJsonContractModule>()
+					.With<IPAddress, IpAddressJsonContractModule>()
 					.With<DnsEndPoint, DnsEndPointJsonContractModule>()
 					.Ok();
 			var middlewareJsonContractFactory =
