@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <Configurations>Debug;Release;NuGet</Configurations>
         <Platforms>AnyCPU</Platforms>
+        <Optimize Condition=" '$(Configuration)' != 'Debug' ">true</Optimize>
     </PropertyGroup>
 
     <PropertyGroup>
