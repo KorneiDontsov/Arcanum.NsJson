@@ -7,6 +7,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Global", "Global", "{B520C7
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcanum.NsJson.Tools", "Arcanum.NsJson.Tools\Arcanum.NsJson.Tools.csproj", "{4D800237-D6DE-4FC4-B111-7DB659252FAD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcanum.NsJson.Abstractions", "Arcanum.NsJson.Abstractions\Arcanum.NsJson.Abstractions.csproj", "{86896C1C-9B01-4B8C-A55C-A8B92A1389E0}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Arcanum.NsJson", "Arcanum.NsJson\Arcanum.NsJson.csproj", "{899B622B-E7A8-4F6C-87BF-01FA3A094C6A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcanum.NsJson.Tests", "Arcanum.NsJson.Tests\Arcanum.NsJson.Tests.csproj", "{0702D634-B3DC-4826-B5A3-70FB52D22722}"
@@ -15,12 +20,27 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
+		NuGet|Any CPU = NuGet|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4D800237-D6DE-4FC4-B111-7DB659252FAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D800237-D6DE-4FC4-B111-7DB659252FAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D800237-D6DE-4FC4-B111-7DB659252FAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D800237-D6DE-4FC4-B111-7DB659252FAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D800237-D6DE-4FC4-B111-7DB659252FAD}.NuGet|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D800237-D6DE-4FC4-B111-7DB659252FAD}.NuGet|Any CPU.Build.0 = Debug|Any CPU
+		{86896C1C-9B01-4B8C-A55C-A8B92A1389E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86896C1C-9B01-4B8C-A55C-A8B92A1389E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86896C1C-9B01-4B8C-A55C-A8B92A1389E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86896C1C-9B01-4B8C-A55C-A8B92A1389E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86896C1C-9B01-4B8C-A55C-A8B92A1389E0}.NuGet|Any CPU.ActiveCfg = NuGet|Any CPU
+		{86896C1C-9B01-4B8C-A55C-A8B92A1389E0}.NuGet|Any CPU.Build.0 = NuGet|Any CPU
 		{899B622B-E7A8-4F6C-87BF-01FA3A094C6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{899B622B-E7A8-4F6C-87BF-01FA3A094C6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{899B622B-E7A8-4F6C-87BF-01FA3A094C6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{899B622B-E7A8-4F6C-87BF-01FA3A094C6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{899B622B-E7A8-4F6C-87BF-01FA3A094C6A}.NuGet|Any CPU.ActiveCfg = NuGet|Any CPU
+		{899B622B-E7A8-4F6C-87BF-01FA3A094C6A}.NuGet|Any CPU.Build.0 = NuGet|Any CPU
 		{0702D634-B3DC-4826-B5A3-70FB52D22722}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0702D634-B3DC-4826-B5A3-70FB52D22722}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0702D634-B3DC-4826-B5A3-70FB52D22722}.Release|Any CPU.ActiveCfg = Release|Any CPU

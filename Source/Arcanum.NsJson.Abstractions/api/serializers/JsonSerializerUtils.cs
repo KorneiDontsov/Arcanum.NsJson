@@ -2,7 +2,8 @@
 
 #pragma warning disable 8601 //disable nullable warnings
 
-namespace Arcanum.NsJson {
+namespace Arcanum.NsJson.Abstractions {
+	using Arcanum.NsJson.Tools;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using System;
@@ -28,13 +29,13 @@ namespace Arcanum.NsJson {
 
 		/// <exception cref = "JsonException" />
 		public static String ToText (this IJsonSerializer jsonSerializer, Object? maybeData) {
-			using var jsonTextBuilder = JsonFactory.TextWriter();
+			using var jsonTextBuilder = JsonStreamFactory.WriteText();
 			jsonSerializer.Write(jsonTextBuilder, maybeData);
 			return jsonTextBuilder.ToString();
 		}
 
 		public static String ToText (this IJsonSerializer jsonSerializer, Object? maybeData, Boolean pretty) {
-			using var jsonTextBuilder = JsonFactory.TextWriter();
+			using var jsonTextBuilder = JsonStreamFactory.WriteText();
 			jsonTextBuilder.Formatting = pretty ? Formatting.Indented : Formatting.None;
 			jsonSerializer.Write(jsonTextBuilder, maybeData);
 			return jsonTextBuilder.ToString();
@@ -43,7 +44,7 @@ namespace Arcanum.NsJson {
 		/// <exception cref = "JsonException" />
 		public static Object? MayFromText (
 		this IJsonSerializer jsonSerializer, String text, Type dataType) {
-			using var jsonTextReader = JsonFactory.TextReader(text);
+			using var jsonTextReader = JsonStreamFactory.ReadText(text);
 			return jsonSerializer.MayRead(jsonTextReader, dataType);
 		}
 
@@ -63,14 +64,14 @@ namespace Arcanum.NsJson {
 
 		/// <exception cref = "JsonException" />
 		public static JToken ToToken (this IJsonSerializer jsonSerializer, Object? maybeData) {
-			using var jsonTokenWriter = JsonFactory.TokenWriter();
+			using var jsonTokenWriter = JsonStreamFactory.WriteToken();
 			jsonSerializer.Write(jsonTokenWriter, maybeData);
 			return jsonTokenWriter.Token;
 		}
 
 		/// <exception cref = "JsonException" />
 		public static Object? MayFromToken (this IJsonSerializer jsonSerializer, JToken token, Type dataType) {
-			using var jsonTokenReader = JsonFactory.TokenReader(token);
+			using var jsonTokenReader = JsonStreamFactory.ReadToken(token);
 			return jsonSerializer.MayRead(jsonTokenReader, dataType);
 		}
 

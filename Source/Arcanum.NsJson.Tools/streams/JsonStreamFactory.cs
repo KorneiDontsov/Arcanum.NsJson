@@ -1,25 +1,25 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
-namespace Arcanum.NsJson {
+namespace Arcanum.NsJson.Tools {
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using System;
 	using System.IO;
 	using System.Text;
 
-	partial class JsonFactory {
-		public static JsonTextReader TextReader (String text) =>
+	public static class JsonStreamFactory {
+		public static JsonTextReader ReadText (String text) =>
 			new JsonTextReader(new StringReader(text));
 
-		public static JsonTextBuilder TextWriter () =>
+		public static JsonTextBuilder WriteText () =>
 			new JsonTextBuilder(new StringBuilder());
 
-		public static JsonTextBuilder TextWriter (UInt32 startCapacity) =>
+		public static JsonTextBuilder WriteText (UInt32 startCapacity) =>
 			new JsonTextBuilder(new StringBuilder((Int32) Math.Min(startCapacity, Int32.MaxValue)));
 
-		public static JTokenReader TokenReader (JToken token) =>
+		public static JTokenReader ReadToken (JToken token) =>
 			new JTokenReader(token);
 
-		public static JTokenWriter TokenWriter () => new JTokenWriter();
+		public static JTokenWriter WriteToken () => new JTokenWriter();
 	}
 }
