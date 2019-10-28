@@ -15,7 +15,7 @@
             Arcanum.NsJson provides json serialization based on Newtonsoft.Json. It is less flexible, but higher-level
             and more functional.
         </Description>
-        <Version>0.3.0</Version>
+        <Version>0.4.0</Version>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
@@ -27,9 +27,9 @@
     <Choose>
         <When Condition="'$(Configuration)' == 'NuGet'">
             <ItemGroup>
-                <PackageReference Include="Arcanum.NsJson.Abstractions" Version="0.0.1"/>
-                <PackageReference Include="Arcanum.NsJson.ContractResolvers" Version="0.0.1"/>
-                <PackageReference Include="Arcanum.NsJson.ContractModules" Version="0.0.1"/>
+                <PackageReference Include="Arcanum.NsJson.Abstractions" Version="0.4.0"/>
+                <PackageReference Include="Arcanum.NsJson.ContractResolvers" Version="0.4.0"/>
+                <PackageReference Include="Arcanum.NsJson.ContractModules" Version="0.4.0"/>
             </ItemGroup>
         </When>
         <Otherwise>
