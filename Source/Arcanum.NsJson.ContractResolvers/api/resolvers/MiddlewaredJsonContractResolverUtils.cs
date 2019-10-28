@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
-namespace Arcanum.NsJson {
+namespace Arcanum.NsJson.ContractResolvers {
 	using Newtonsoft.Json;
 	using System;
 
-	static class MiddlewaredJsonContractResolverUtils {
+	public static class MiddlewaredJsonContractResolverUtils {
 		public static Object? DeserializeWithoutMiddleware (
 		this JsonSerializer serializer, JsonReader reader, Type objectType) {
 			using (JsonContractResolveArgs.Set(withoutMiddleware: true))

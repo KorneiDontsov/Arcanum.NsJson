@@ -1,11 +1,11 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
-namespace Arcanum.NsJson {
+namespace Arcanum.NsJson.ContractResolvers {
 	using Newtonsoft.Json.Serialization;
 	using System;
 	using System.Collections.Immutable;
 
-	class JsonContractFactory {
+	public sealed class JsonContractFactory {
 		ImmutableDictionary<Type, IJsonContractModule> modules { get; }
 
 		ImmutableList<IJsonContractGenericModule> genericModules { get; }
@@ -32,7 +32,7 @@ namespace Arcanum.NsJson {
 		#region builder
 		public static Builder Build () => new Builder();
 
-		public class Builder {
+		public sealed class Builder {
 			ImmutableDictionary<Type, IJsonContractModule>.Builder modules { get; }
 
 			ImmutableList<IJsonContractGenericModule>.Builder genericModules { get; }

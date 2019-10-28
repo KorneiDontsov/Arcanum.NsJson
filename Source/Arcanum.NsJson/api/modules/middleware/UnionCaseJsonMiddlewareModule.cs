@@ -2,6 +2,7 @@
 
 namespace Arcanum.NsJson {
 	using Arcanum.DataContracts;
+	using Arcanum.NsJson.ContractResolvers;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Serialization;
 	using System;

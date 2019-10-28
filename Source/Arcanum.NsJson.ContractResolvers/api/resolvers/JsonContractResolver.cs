@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
-namespace Arcanum.NsJson {
+namespace Arcanum.NsJson.ContractResolvers {
 	using Newtonsoft.Json.Serialization;
 	using System;
 
-	class JsonContractResolver: IContractResolver {
+	public sealed class JsonContractResolver: IContractResolver {
 		JsonContractFactory jsonContractFactory { get; }
 
 		MiddlewareJsonContractFactory middlewareJsonContractFactory { get; }
