@@ -14,13 +14,13 @@
         <Description>
             Arcanum.NsJson.ContractModules is part of Arcanum.NsJson distribution that provides json contract modules.
         </Description>
-        <Version>0.4.0</Version>
+        <Version>0.5.0</Version>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="12.0.2"/>
+        <PackageReference Include="Newtonsoft.Json" Version="12.0.*"/>
         <PackageReference Include="Arcanum.DataContracts" Version="0.6.1"/>
         <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="1.3.0"/>
     </ItemGroup>
@@ -28,9 +28,9 @@
     <Choose>
         <When Condition="'$(Configuration)' == 'NuGet'">
             <ItemGroup>
-                <PackageReference Include="Arcanum.NsJson.Tools" Version="0.4.0"/>
-                <PackageReference Include="Arcanum.NsJson.Abstractions" Version="0.4.0"/>
-                <PackageReference Include="Arcanum.NsJson.ContractResolvers" Version="0.4.0"/>
+                <PackageReference Include="Arcanum.NsJson.Tools" Version="[0.5.0]"/>
+                <PackageReference Include="Arcanum.NsJson.Abstractions" Version="[0.5.0]"/>
+                <PackageReference Include="Arcanum.NsJson.ContractResolvers" Version="[0.5.0]"/>
             </ItemGroup>
         </When>
         <Otherwise>
