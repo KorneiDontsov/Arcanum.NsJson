@@ -5,12 +5,12 @@ namespace Arcanum.NsJson.ContractResolvers {
 	using System;
 	using System.Collections.Immutable;
 
-	public sealed class JsonContractFactory {
+	public sealed class JsonContractDistribution {
 		ImmutableDictionary<Type, IJsonContractModule> modules { get; }
 
 		ImmutableList<IJsonContractGenericModule> genericModules { get; }
 
-		JsonContractFactory (
+		JsonContractDistribution (
 		ImmutableDictionary<Type, IJsonContractModule> modules,
 		ImmutableList<IJsonContractGenericModule> genericModules) {
 			this.modules = modules;
@@ -58,8 +58,8 @@ namespace Arcanum.NsJson.ContractResolvers {
 			public Builder With<TModule> () where TModule: class, IJsonContractGenericModule, new() =>
 				With(new TModule());
 
-			public JsonContractFactory Ok () =>
-				new JsonContractFactory(
+			public JsonContractDistribution Ok () =>
+				new JsonContractDistribution(
 					modules: modules.ToImmutable(),
 					genericModules: genericModules.ToImmutable());
 		}

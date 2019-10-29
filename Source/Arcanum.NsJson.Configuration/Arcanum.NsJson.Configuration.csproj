@@ -9,10 +9,10 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <Product>Arcanum.NsJson.Tools</Product>
-        <Title>Arcanum.NsJson.Tools</Title>
+        <Product>Arcanum.Ns.Json.Configuration</Product>
+        <Title>Arcanum.Ns.Json.Configuration</Title>
         <Description>
-            Arcanum.NsJson.Tools is part of Arcanum.NsJson distribution that provides useful tools.
+            Arcanum.Ns.Json.Configuration is part of Arcanum.NsJson distribution that provides configurations.
         </Description>
         <Version>0.5.0</Version>
         <IncludeSymbols>true</IncludeSymbols>

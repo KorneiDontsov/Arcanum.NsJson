@@ -4,10 +4,10 @@ namespace Arcanum.NsJson.ContractResolvers {
 	using Newtonsoft.Json.Serialization;
 	using System;
 
-	public sealed class JsonContractResolver: IContractResolver {
-		JsonContractFactory jsonContractFactory { get; }
+	public sealed class DistributionBasedJsonContractResolver: IContractResolver {
+		JsonContractDistribution jsonContractDistribution { get; }
 
-		MiddlewareJsonContractFactory middlewareJsonContractFactory { get; }
+		MiddlewareJsonContractDistribution middlewareJsonContractDistribution { get; }
 
 		IContractResolver core { get; }
 
@@ -15,13 +15,13 @@ namespace Arcanum.NsJson.ContractResolvers {
 
 		JsonContractStorage middlewareContractStorage { get; }
 
-		public JsonContractResolver (
+		public DistributionBasedJsonContractResolver (
 		IContractResolver core,
-		JsonContractFactory jsonContractFactory,
-		MiddlewareJsonContractFactory middlewareJsonContractFactory) {
+		JsonContractDistribution jsonContractDistribution,
+		MiddlewareJsonContractDistribution middlewareJsonContractDistribution) {
 			this.core = core;
-			this.jsonContractFactory = jsonContractFactory;
-			this.middlewareJsonContractFactory = middlewareJsonContractFactory;
+			this.jsonContractDistribution = jsonContractDistribution;
+			this.middlewareJsonContractDistribution = middlewareJsonContractDistribution;
 			contractStorage = new JsonContractStorage(CreateContract);
 			middlewareContractStorage = new JsonContractStorage(CreateMiddlewareContract);
 		}
@@ -36,12 +36,12 @@ namespace Arcanum.NsJson.ContractResolvers {
 
 		JsonContract CreateContract (Type dataType) {
 			var baseContract = core.ResolveContract(dataType);
-			return jsonContractFactory.CreateContract(baseContract);
+			return jsonContractDistribution.CreateContract(baseContract);
 		}
 
 		JsonContract CreateMiddlewareContract (Type dataType) {
 			var contract = contractStorage.GetOrCreate(dataType);
-			return middlewareJsonContractFactory.CreateMiddlewareContract(contract);
+			return middlewareJsonContractDistribution.CreateMiddlewareContract(contract);
 		}
 	}
 }

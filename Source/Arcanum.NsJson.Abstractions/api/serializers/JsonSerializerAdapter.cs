@@ -1,11 +1,10 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
-namespace Arcanum.NsJson {
-	using Arcanum.NsJson.Abstractions;
+namespace Arcanum.NsJson.Abstractions {
 	using Newtonsoft.Json;
 	using System;
 
-	class JsonSerializerAdapter: IJsonSerializer {
+	public sealed class JsonSerializerAdapter: IJsonSerializer {
 		JsonSerializer serializer { get; }
 
 		public JsonSerializerAdapter (JsonSerializer serializer) => this.serializer = serializer;

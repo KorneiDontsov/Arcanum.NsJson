@@ -4,10 +4,10 @@ namespace Arcanum.NsJson.ContractResolvers {
 	using Newtonsoft.Json.Serialization;
 	using System.Collections.Immutable;
 
-	public sealed class MiddlewareJsonContractFactory {
+	public sealed class MiddlewareJsonContractDistribution {
 		ImmutableList<IJsonMiddlewareModule> modules { get; }
 
-		MiddlewareJsonContractFactory (ImmutableList<IJsonMiddlewareModule> modules) =>
+		MiddlewareJsonContractDistribution (ImmutableList<IJsonMiddlewareModule> modules) =>
 			this.modules = modules;
 
 		public JsonContract CreateMiddlewareContract (JsonContract contract) {
@@ -35,8 +35,8 @@ namespace Arcanum.NsJson.ContractResolvers {
 			public Builder With<TModule> () where TModule: class, IJsonMiddlewareModule, new() =>
 				With(new TModule());
 
-			public MiddlewareJsonContractFactory Ok () =>
-				new MiddlewareJsonContractFactory(modules: modules.ToImmutable());
+			public MiddlewareJsonContractDistribution Ok () =>
+				new MiddlewareJsonContractDistribution(modules: modules.ToImmutable());
 		}
 		#endregion
 	}
