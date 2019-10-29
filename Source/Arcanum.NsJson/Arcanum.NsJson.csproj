@@ -21,22 +21,24 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="12.0.2"/>
+        <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     </ItemGroup>
 
     <Choose>
         <When Condition="'$(Configuration)' == 'NuGet'">
             <ItemGroup>
-                <PackageReference Include="Arcanum.NsJson.Abstractions" Version="0.4.0"/>
-                <PackageReference Include="Arcanum.NsJson.ContractResolvers" Version="0.4.0"/>
-                <PackageReference Include="Arcanum.NsJson.ContractModules" Version="0.4.0"/>
+                <PackageReference Include="Arcanum.NsJson.Abstractions" Version="0.4.0" />
+                <PackageReference Include="Arcanum.NsJson.Configuration" Version="0.4.0" />
+                <PackageReference Include="Arcanum.NsJson.ContractResolvers" Version="0.4.0" />
+                <PackageReference Include="Arcanum.NsJson.ContractModules" Version="0.4.0" />
             </ItemGroup>
         </When>
         <Otherwise>
             <ItemGroup>
-                <ProjectReference Include="../Arcanum.NsJson.Abstractions/Arcanum.NsJson.Abstractions.csproj"/>
-                <ProjectReference Include="../Arcanum.NsJson.ContractResolvers/Arcanum.NsJson.ContractResolvers.csproj"/>
-                <ProjectReference Include="../Arcanum.NsJson.ContractModules/Arcanum.NsJson.ContractModules.csproj"/>
+                <ProjectReference Include="../Arcanum.NsJson.Abstractions/Arcanum.NsJson.Abstractions.csproj" />
+                <ProjectReference Include="../Arcanum.NsJson.Configuration/Arcanum.NsJson.Configuration.csproj" />
+                <ProjectReference Include="../Arcanum.NsJson.ContractResolvers/Arcanum.NsJson.ContractResolvers.csproj" />
+                <ProjectReference Include="../Arcanum.NsJson.ContractModules/Arcanum.NsJson.ContractModules.csproj" />
             </ItemGroup>
         </Otherwise>
     </Choose>

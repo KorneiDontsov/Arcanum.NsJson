@@ -2,15 +2,32 @@
 
 namespace Arcanum.NsJson {
 	using Arcanum.NsJson.Abstractions;
-	using Newtonsoft.Json;
+	using Arcanum.NsJson.Configuration;
+	using Arcanum.NsJson.ContractModules;
+	using Arcanum.NsJson.ContractResolvers;
+	using Newtonsoft.Json.Serialization;
 
 	public static class JsonFactory {
-		public static IJsonSerializer defaultSerializer { get; } = Serializer(JsonSerializerConfig.@default);
+		static JsonSerializerSetup serializerSetup { get; }
 
-		public static IJsonSerializer Serializer (JsonSerializerConfig serializerConfig) {
-			var settings = JsonConfigUtils.CreateNsSerializerSettings(serializerConfig);
-			var serializer = JsonSerializer.Create(settings);
-			return new JsonSerializerAdapter(serializer);
+		static IContractResolver contractResolver { get; }
+
+		public static IJsonSerializer defaultSerializer { get; }
+
+		static JsonFactory () {
+			serializerSetup = JsonSerializerSetup.arcane;
+			contractResolver =
+				new DistributionBasedJsonContractResolver(
+					core: new NsJsonContractResolver(),
+					jsonContractDistribution: JsonContractDistributionFactory.BuildArcane().Ok(),
+					middlewareJsonContractDistribution: JsonContractDistributionFactory.BuildArcaneMiddleware().Ok());
+			defaultSerializer =
+				new JsonSerializerAdapter(
+					serializer: serializerSetup.CreateNsSerializer(contractResolver));
 		}
+
+		public static IJsonSerializer Serializer (JsonSerializerConfig serializerConfig) =>
+			new JsonSerializerAdapter(
+				serializer: serializerSetup.CreateNsSerializer(contractResolver, serializerConfig));
 	}
 }
