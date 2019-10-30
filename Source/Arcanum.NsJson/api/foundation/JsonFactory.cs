@@ -5,6 +5,7 @@ namespace Arcanum.NsJson {
 	using Arcanum.NsJson.Configuration;
 	using Arcanum.NsJson.ContractModules;
 	using Arcanum.NsJson.ContractResolvers;
+	using Newtonsoft.Json;
 	using Newtonsoft.Json.Serialization;
 
 	public static class JsonFactory {
@@ -26,8 +27,10 @@ namespace Arcanum.NsJson {
 					serializer: serializerSetup.CreateNsSerializer(contractResolver));
 		}
 
+		public static JsonSerializer NsSerializer (JsonSerializerConfig? serializerConfig = null) =>
+			serializerSetup.CreateNsSerializer(contractResolver, serializerConfig);
+
 		public static IJsonSerializer Serializer (JsonSerializerConfig serializerConfig) =>
-			new JsonSerializerAdapter(
-				serializer: serializerSetup.CreateNsSerializer(contractResolver, serializerConfig));
+			new JsonSerializerAdapter(serializer: NsSerializer(serializerConfig));
 	}
 }

@@ -15,7 +15,7 @@
             Arcanum.NsJson provides json serialization based on Newtonsoft.Json. It is less flexible, but higher-level
             and more functional.
         </Description>
-        <Version>0.5.0</Version>
+        <Version>0.6.0</Version>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
