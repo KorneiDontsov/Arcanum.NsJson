@@ -2,7 +2,6 @@
 
 namespace Arcanum.NsJson.Tests {
 	using Arcanum.DataContracts;
-	using Arcanum.NsJson.Abstractions;
 	using FluentAssertions;
 	using FluentAssertions.Execution;
 	using FluentAssertions.Json;

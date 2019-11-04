@@ -2,7 +2,6 @@
 
 namespace Arcanum.NsJson.ContractModules {
 	using Arcanum.DataContracts;
-	using Arcanum.NsJson.Abstractions;
 	using Arcanum.NsJson.ContractResolvers;
 	using Arcanum.NsJson.Tools;
 	using Newtonsoft.Json;
@@ -212,6 +211,7 @@ namespace Arcanum.NsJson.ContractModules {
 		}
 
 		/// <inheritdoc />
+		/// <exception cref = "JsonContractException" />
 		public JsonContract? MayCreateContract (JsonContract baseContract) {
 			if (baseContract.IsOfAbstractClass() && baseContract.HasNoConverter()
 			&& DataTypeInfoStorage.shared.Get(baseContract.UnderlyingType).asUnionInfo is { } unionInfo) {

@@ -1,8 +1,6 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
 namespace Arcanum.NsJson {
-	using Arcanum.NsJson.Abstractions;
-	using Arcanum.NsJson.Configuration;
 	using Arcanum.NsJson.ContractModules;
 	using Arcanum.NsJson.ContractResolvers;
 	using Newtonsoft.Json;
@@ -19,7 +17,7 @@ namespace Arcanum.NsJson {
 			serializerSetup = JsonSerializerSetup.arcane;
 			contractResolver =
 				new DistributionBasedJsonContractResolver(
-					core: new NsJsonContractResolver(),
+					core: NsJsonContractResolver.shared,
 					jsonContractDistribution: JsonContractDistributionFactory.BuildArcane().Ok(),
 					middlewareJsonContractDistribution: JsonContractDistributionFactory.BuildArcaneMiddleware().Ok());
 			defaultSerializer =

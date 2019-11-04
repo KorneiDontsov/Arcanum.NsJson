@@ -17,6 +17,7 @@ namespace Arcanum.NsJson.ContractResolvers {
 			this.genericModules = genericModules;
 		}
 
+		/// <exception cref = "JsonContractException" />
 		public JsonContract CreateContract (JsonContract baseContract) {
 			if (modules.TryGetValue(baseContract.UnderlyingType, out var module))
 				return module.CreateContract(baseContract);

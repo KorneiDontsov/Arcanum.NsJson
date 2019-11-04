@@ -3,6 +3,7 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>8.0</LangVersion>
         <Nullable>enable</Nullable>
+        <NoWarn>1591</NoWarn>
         <Configurations>Debug;Release;NuGet</Configurations>
         <Platforms>AnyCPU</Platforms>
         <Optimize Condition=" '$(Configuration)' != 'Debug' ">true</Optimize>
@@ -12,16 +13,29 @@
         <Product>Arcanum.NsJson.ContractResolvers</Product>
         <Title>Arcanum.NsJson.ContractResolvers</Title>
         <Description>
-            Arcanum.NsJson.ContractResolvers is part of Arcanum.NsJson distribution that provides json contract
-            resolve framework.
+            Arcanum.NsJson.ContractResolvers is part of Arcanum.NsJson distribution that provides json contract resolve framework.
         </Description>
-        <Version>0.5.0</Version>
+        <Version>1.0.0</Version>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="12.0.*"/>
         <PackageReference Include="System.Collections.Immutable" Version="1.6.0"/>
     </ItemGroup>
+
+    <Choose>
+        <When Condition="'$(Configuration)' == 'NuGet'">
+            <ItemGroup>
+                <PackageReference Include="Arcanum.NsJson.Abstractions" Version="[1.0.0]"/>
+            </ItemGroup>
+        </When>
+        <Otherwise>
+            <ItemGroup>
+                <ProjectReference Include="../Arcanum.NsJson.Abstractions/Arcanum.NsJson.Abstractions.csproj"/>
+            </ItemGroup>
+        </Otherwise>
+    </Choose>
 </Project>

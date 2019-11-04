@@ -27,6 +27,7 @@ namespace Arcanum.NsJson.ContractResolvers {
 		}
 
 		/// <inheritdoc />
+		/// <exception cref = "JsonContractException" />
 		public JsonContract ResolveContract (Type dataType) {
 			var chosenContractStorage = JsonContractResolveArgs.Pick().withoutMiddleware
 				? contractStorage
@@ -34,6 +35,7 @@ namespace Arcanum.NsJson.ContractResolvers {
 			return chosenContractStorage.GetOrCreate(dataType);
 		}
 
+		/// <exception cref = "JsonContractException" />
 		JsonContract CreateContract (Type dataType) {
 			var baseContract = core.ResolveContract(dataType);
 			return jsonContractDistribution.CreateContract(baseContract);

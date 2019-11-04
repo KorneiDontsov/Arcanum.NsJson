@@ -3,6 +3,7 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>8.0</LangVersion>
         <Nullable>enable</Nullable>
+        <NoWarn>1591</NoWarn>
         <Configurations>Debug;Release;NuGet</Configurations>
         <Platforms>AnyCPU</Platforms>
         <Optimize Condition=" '$(Configuration)' != 'Debug' ">true</Optimize>
@@ -14,9 +15,10 @@
         <Description>
             Arcanum.Ns.Json.Configuration is part of Arcanum.NsJson distribution that provides configurations.
         </Description>
-        <Version>0.5.0</Version>
+        <Version>1.0.0</Version>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
