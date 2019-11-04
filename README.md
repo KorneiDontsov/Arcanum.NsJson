@@ -1,1 +1,1 @@
-# Arcanum.ForNewtonsoftJson
+# Arcanum.NsJson
