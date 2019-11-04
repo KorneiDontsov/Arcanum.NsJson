@@ -14,6 +14,8 @@ namespace Arcanum.NsJson.ContractResolvers {
 		}
 
 		Impl impl { get; } = new Impl();
+		
+		public static NsJsonContractResolver shared { get; } = new NsJsonContractResolver();
 
 		/// <inheritdoc />
 		public JsonContract ResolveContract (Type dataType) => impl.ResolveContract(dataType);

@@ -10,6 +10,7 @@ namespace Arcanum.NsJson.ContractResolvers {
 		MiddlewareJsonContractDistribution (ImmutableList<IJsonMiddlewareModule> modules) =>
 			this.modules = modules;
 
+		/// <exception cref = "JsonContractException" />
 		public JsonContract CreateMiddlewareContract (JsonContract contract) {
 			foreach (var module in modules)
 				if (module.MayCreateConverter(contract) is { } middlewareJsonConverter)

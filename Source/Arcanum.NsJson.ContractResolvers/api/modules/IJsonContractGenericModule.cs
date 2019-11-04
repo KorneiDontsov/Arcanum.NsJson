@@ -4,6 +4,7 @@ namespace Arcanum.NsJson.ContractResolvers {
 	using Newtonsoft.Json.Serialization;
 
 	public interface IJsonContractGenericModule {
+		/// <exception cref = "JsonContractException" />
 		JsonContract? MayCreateContract (JsonContract baseContract);
 	}
 }

@@ -25,4 +25,17 @@
         <PackageReference Include="Newtonsoft.Json" Version="12.0.*"/>
         <PackageReference Include="System.Collections.Immutable" Version="1.6.0"/>
     </ItemGroup>
+
+    <Choose>
+        <When Condition="'$(Configuration)' == 'NuGet'">
+            <ItemGroup>
+                <PackageReference Include="Arcanum.NsJson.Abstractions" Version="[0.5.0]"/>
+            </ItemGroup>
+        </When>
+        <Otherwise>
+            <ItemGroup>
+                <ProjectReference Include="../Arcanum.NsJson.Abstractions/Arcanum.NsJson.Abstractions.csproj"/>
+            </ItemGroup>
+        </Otherwise>
+    </Choose>
 </Project>

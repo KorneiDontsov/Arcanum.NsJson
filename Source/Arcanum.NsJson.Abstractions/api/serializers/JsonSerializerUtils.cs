@@ -2,7 +2,7 @@
 
 #pragma warning disable 8601 //disable nullable warnings
 
-namespace Arcanum.NsJson.Abstractions {
+namespace Arcanum.NsJson {
 	using Arcanum.NsJson.Tools;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
