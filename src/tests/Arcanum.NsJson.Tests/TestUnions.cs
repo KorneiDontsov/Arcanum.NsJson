@@ -164,7 +164,7 @@ namespace Arcanum.NsJson.Tests {
 		public void LeafCaseIsSerialized () {
 			var subject = new UnionExample.MediumCase.LeafCase { prop = "leaf_case_prop_value" };
 			JToken expectedToken = new JObject {
-				["$case"] = "MediumCase.LeafCase",
+				["$case"] = "MediumCase/LeafCase",
 				["prop"] = "leaf_case_prop_value"
 			};
 
@@ -176,7 +176,7 @@ namespace Arcanum.NsJson.Tests {
 		[Fact]
 		public void LeafCaseIsDeserializedAsRoot () {
 			JToken token = new JObject {
-				["$case"] = "MediumCase.LeafCase",
+				["$case"] = "MediumCase/LeafCase",
 				["prop"] = "leaf_case_prop_value"
 			};
 
@@ -189,7 +189,7 @@ namespace Arcanum.NsJson.Tests {
 		[Fact]
 		public void LeafCaseIsDeserializedAsMediumCase () {
 			JToken token = new JObject {
-				["$case"] = "MediumCase.LeafCase",
+				["$case"] = "MediumCase/LeafCase",
 				["prop"] = "leaf_case_prop_value"
 			};
 
@@ -218,7 +218,7 @@ namespace Arcanum.NsJson.Tests {
 			};
 
 			JToken expectedToken = new JObject {
-				["$case"] = "MediumCase.DeeperMediumCase.DeeperLeafCase",
+				["$case"] = "MediumCase/DeeperMediumCase/DeeperLeafCase",
 				["prop"] = "deeper_leaf_case_prop_value"
 			};
 
@@ -230,7 +230,7 @@ namespace Arcanum.NsJson.Tests {
 		[Fact]
 		public void DeeperLeafCaseIsDeserialized () {
 			JToken token = new JObject {
-				["$case"] = "MediumCase.DeeperMediumCase.DeeperLeafCase",
+				["$case"] = "MediumCase/DeeperMediumCase/DeeperLeafCase",
 				["prop"] = "deeper_leaf_case_prop_value"
 			};
 
