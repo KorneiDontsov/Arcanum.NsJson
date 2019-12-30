@@ -2,6 +2,6 @@
 
 namespace Arcanum.NsJson.Tests {
 	public abstract class TestJsonSerializer {
-		protected IJsonSerializer serializer { get; } = Module.defaultJsonSerializer;
+		protected IJsonSerializer serializer { get; } = Module.standardJsonSerializer;
 	}
 }

@@ -11,65 +11,65 @@ namespace Arcanum.NsJson {
 	public static class Json {
 		/// <exception cref = "JsonException" />
 		public static void Write (JsonWriter jsonWriter, Object? maybeData) =>
-			defaultJsonSerializer.Write(jsonWriter, maybeData);
+			standardJsonSerializer.Write(jsonWriter, maybeData);
 
 		/// <exception cref = "JsonException" />
 		public static Object? MayRead (JsonReader jsonReader, Type dataType) =>
-			defaultJsonSerializer.MayRead(jsonReader, dataType);
+			standardJsonSerializer.MayRead(jsonReader, dataType);
 
 		/// <exception cref = "JsonException" />
 		public static T MayRead<T> (JsonReader jsonReader) =>
-			defaultJsonSerializer.MayRead<T>(jsonReader);
+			standardJsonSerializer.MayRead<T>(jsonReader);
 
 		/// <exception cref = "JsonException" />
 		public static Object Read (JsonReader jsonReader, Type dataType) =>
-			defaultJsonSerializer.Read(jsonReader, dataType);
+			standardJsonSerializer.Read(jsonReader, dataType);
 
 		/// <exception cref = "JsonException" />
 		public static T Read<T> (JsonReader jsonReader) =>
-			defaultJsonSerializer.Read<T>(jsonReader);
+			standardJsonSerializer.Read<T>(jsonReader);
 
 		/// <exception cref = "JsonException" />
 		public static String ToText (Object? maybeData) =>
-			defaultJsonSerializer.ToText(maybeData);
+			standardJsonSerializer.ToText(maybeData);
 
 		public static String ToText (Object? maybeData, Boolean pretty) =>
-			defaultJsonSerializer.ToText(maybeData, pretty);
+			standardJsonSerializer.ToText(maybeData, pretty);
 
 		/// <exception cref = "JsonException" />
 		public static Object? MayFromText (String text, Type dataType) =>
-			defaultJsonSerializer.MayFromText(text, dataType);
+			standardJsonSerializer.MayFromText(text, dataType);
 
 		/// <exception cref = "JsonException" />
 		public static T MayFromText<T> (String text) =>
-			defaultJsonSerializer.MayFromText<T>(text);
+			standardJsonSerializer.MayFromText<T>(text);
 
 		/// <exception cref = "JsonException" />
 		public static Object FromText (String text, Type dataType) =>
-			defaultJsonSerializer.FromText(text, dataType);
+			standardJsonSerializer.FromText(text, dataType);
 
 		/// <exception cref = "JsonException" />
 		public static T FromText<T> (String text) =>
-			defaultJsonSerializer.FromText<T>(text);
+			standardJsonSerializer.FromText<T>(text);
 
 		/// <exception cref = "JsonException" />
 		public static JToken ToToken (Object? maybeData) =>
-			defaultJsonSerializer.ToToken(maybeData);
+			standardJsonSerializer.ToToken(maybeData);
 
 		/// <exception cref = "JsonException" />
 		public static Object? MayFromToken (JToken token, Type dataType) =>
-			defaultJsonSerializer.MayFromToken(token, dataType);
+			standardJsonSerializer.MayFromToken(token, dataType);
 
 		/// <exception cref = "JsonException" />
 		public static T MayFromToken<T> (JToken token) =>
-			defaultJsonSerializer.MayFromToken<T>(token);
+			standardJsonSerializer.MayFromToken<T>(token);
 
 		/// <exception cref = "JsonException" />
 		public static Object FromToken (JToken token, Type dataType) =>
-			defaultJsonSerializer.FromToken(token, dataType);
+			standardJsonSerializer.FromToken(token, dataType);
 
 		/// <exception cref = "JsonException" />
 		public static T FromToken<T> (JToken token) =>
-			defaultJsonSerializer.FromToken<T>(token);
+			standardJsonSerializer.FromToken<T>(token);
 	}
 }

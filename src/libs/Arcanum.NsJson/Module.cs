@@ -86,7 +86,7 @@ namespace Arcanum.NsJson {
 			return new JsonSerializerAdapter(nsSerializer);
 		}
 
-		public static JsonSerializerSetup defaultJsonSerializerSetup { get; } =
+		public static JsonSerializerSetup standardJsonSerializerSetup { get; } =
 			new JsonSerializerSetup(
 				CultureInfo.InvariantCulture,
 				maxDepth: 32,
@@ -95,19 +95,19 @@ namespace Arcanum.NsJson {
 				referenceResolverProvider: () => new JsonSerializer().ReferenceResolver!,
 				serializationBinder: new JsonSerializer().SerializationBinder);
 
-		public static IContractResolver defaultContractResolver { get; } =
+		public static IContractResolver standardContractResolver { get; } =
 			CreateMicroContractResolverBuilder()
-				.AddDefaultContracts()
+				.AddStandardContracts()
 				.Build();
 
-		public static IJsonSerializer defaultJsonSerializer { get; } =
+		public static IJsonSerializer standardJsonSerializer { get; } =
 			new JsonSerializerAdapter(
-				serializer: defaultJsonSerializerSetup.CreateNsJsonSerializer(defaultContractResolver));
+				serializer: standardJsonSerializerSetup.CreateNsJsonSerializer(standardContractResolver));
 
 		public static JsonSerializer CreateNsJsonSerializer (JsonSerializerConfig? serializerConfig = null) =>
-			defaultJsonSerializerSetup.CreateNsJsonSerializer(defaultContractResolver, serializerConfig);
+			standardJsonSerializerSetup.CreateNsJsonSerializer(standardContractResolver, serializerConfig);
 
 		public static IJsonSerializer CreateJsonSerializer (JsonSerializerConfig serializerConfig) =>
-			defaultJsonSerializerSetup.CreateJsonSerializer(defaultContractResolver, serializerConfig);
+			standardJsonSerializerSetup.CreateJsonSerializer(standardContractResolver, serializerConfig);
 	}
 }
