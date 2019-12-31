@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
 namespace Arcanum.NsJson {
+	using Newtonsoft.Json;
 	using Newtonsoft.Json.Serialization;
 	using System;
 	using System.Collections.Generic;
@@ -130,5 +131,16 @@ namespace Arcanum.NsJson {
 			copyJsonContractFunctorDict.TryGetValue(source.GetType(), out var copyFunctor)
 				? copyFunctor(source)
 				: throw new Exception($"Contract type {source.GetType()} is not expected.");
+
+		public static JsonContract WithConverter (this JsonContract contract, JsonConverter converter) {
+			contract.Converter = converter;
+			return contract;
+		}
+
+		public static Boolean IsOfAbstractClass (this JsonContract contract) =>
+			contract.UnderlyingType.IsClass && contract.UnderlyingType.IsAbstract;
+
+		public static Boolean IsOfNonAbstractClass (this JsonContract contract) =>
+			contract.UnderlyingType.IsClass && ! contract.UnderlyingType.IsAbstract;
 	}
 }

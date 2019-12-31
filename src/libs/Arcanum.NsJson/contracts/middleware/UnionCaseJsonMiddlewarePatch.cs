@@ -15,7 +15,7 @@ namespace Arcanum.NsJson.Contracts {
 			public UnionCaseWriteMiddleware (Route caseRoute) => caseRouteStr = caseRoute.ToString();
 
 			/// <inheritdoc />
-			public void WriteJson (JsonWriter writer, Object? value, JsonSerializer serializer, WriteJson previous) {
+			public void WriteJson (JsonWriter writer, Object value, JsonSerializer serializer, WriteJson previous) {
 				static void WriteValue (JsonReader input, JsonWriter output) {
 					switch (input.TokenType) {
 						case JsonToken.StartObject:

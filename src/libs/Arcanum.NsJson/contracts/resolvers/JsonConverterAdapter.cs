@@ -18,7 +18,7 @@ namespace Arcanum.NsJson.Contracts {
 
 		/// <inheritdoc />
 		public override void WriteJson (JsonWriter writer, Object? value, JsonSerializer serializer) =>
-			writeJson(writer, value, serializer);
+			writeJson(writer, value!, serializer);
 
 		/// <inheritdoc />
 		public override Object? ReadJson

@@ -1,4 +1,4 @@
-// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
+﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
 namespace Arcanum.NsJson.Contracts {
 	public static class Module {
@@ -7,9 +7,9 @@ namespace Arcanum.NsJson.Contracts {
 
 		public static IMicroContractResolverBuilder AddStandardContracts (this IMicroContractResolverBuilder builder) =>
 			builder
+				.AddFactory<NsJsonContractFactory>()
 				.AddCreator<IpAddressJsonContractCreator>()
 				.AddCreator<DnsEndPointJsonContractCreator>()
-				.AddFactory<NsJsonContractFactory>()
 				.AddPatch<EnumJsonContractPatch>()
 				.AddPatch<UnionJsonContractPatch>()
 				.AddMiddlewarePatch<UnionCaseJsonMiddlewarePatch>();

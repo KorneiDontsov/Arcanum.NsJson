@@ -4,5 +4,5 @@ namespace Arcanum.NsJson.Contracts {
 	using Newtonsoft.Json;
 	using System;
 
-	public delegate void WriteJson (JsonWriter writer, Object? value, JsonSerializer serializer);
+	public delegate void WriteJson (JsonWriter writer, Object value, JsonSerializer serializer);
 }

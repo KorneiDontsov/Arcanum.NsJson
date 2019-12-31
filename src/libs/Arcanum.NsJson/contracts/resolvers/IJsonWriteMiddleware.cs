@@ -5,6 +5,6 @@ namespace Arcanum.NsJson.Contracts {
 	using System;
 
 	public interface IJsonWriteMiddleware {
-		void WriteJson (JsonWriter writer, Object? value, JsonSerializer serializer, WriteJson previous);
+		void WriteJson (JsonWriter writer, Object value, JsonSerializer serializer, WriteJson previous);
 	}
 }
