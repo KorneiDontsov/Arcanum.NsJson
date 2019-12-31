@@ -1,17 +1,19 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
-#nullable disable warnings
-
 namespace Arcanum.NsJson {
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using System;
+	using System.Diagnostics.CodeAnalysis;
 	using static Arcanum.NsJson.JsonStreamModule;
 
 	public static class JsonSerializerFunctions {
 		/// <exception cref = "JsonException" />
+		[return: MaybeNull]
 		public static T MayRead<T> (this IJsonSerializer jsonSerializer, JsonReader jsonReader) =>
-			(T) jsonSerializer.MayRead(jsonReader, typeof(T));
+			jsonSerializer.MayRead(jsonReader, typeof(T)) is {} data
+				? (T) data
+				: default;
 
 		/// <exception cref = "JsonException" />
 		static Exception DeserializedNullException (Type expectedDataType) =>
@@ -19,11 +21,12 @@ namespace Arcanum.NsJson {
 
 		/// <exception cref = "JsonException" />
 		public static Object Read (this IJsonSerializer jsonSerializer, JsonReader jsonReader, Type dataType) =>
-			jsonSerializer.MayRead(jsonReader, dataType) is { } data
+			jsonSerializer.MayRead(jsonReader, dataType) is {} data
 				? data
 				: throw DeserializedNullException(dataType);
 
 		/// <exception cref = "JsonException" />
+		[return: NotNull]
 		public static T Read<T> (this IJsonSerializer jsonSerializer, JsonReader jsonReader) =>
 			(T) jsonSerializer.Read(jsonReader, typeof(T));
 
@@ -48,16 +51,20 @@ namespace Arcanum.NsJson {
 		}
 
 		/// <exception cref = "JsonException" />
+		[return: MaybeNull]
 		public static T MayFromText<T> (this IJsonSerializer jsonSerializer, String text) =>
-			(T) jsonSerializer.MayFromText(text, typeof(T));
+			jsonSerializer.MayFromText(text, typeof(T)) is {} data
+				? (T) data
+				: default;
 
 		/// <exception cref = "JsonException" />
 		public static Object FromText (this IJsonSerializer jsonSerializer, String text, Type dataType) =>
-			jsonSerializer.MayFromText(text, dataType) is { } data
+			jsonSerializer.MayFromText(text, dataType) is {} data
 				? data
 				: throw DeserializedNullException(dataType);
 
 		/// <exception cref = "JsonException" />
+		[return: NotNull]
 		public static T FromText<T> (this IJsonSerializer jsonSerializer, String text) =>
 			(T) jsonSerializer.FromText(text, typeof(T));
 
@@ -75,16 +82,20 @@ namespace Arcanum.NsJson {
 		}
 
 		/// <exception cref = "JsonException" />
+		[return: MaybeNull]
 		public static T MayFromToken<T> (this IJsonSerializer jsonSerializer, JToken token) =>
-			(T) jsonSerializer.MayFromToken(token, typeof(T));
+			jsonSerializer.MayFromToken(token, typeof(T)) is {} data
+				? (T) data
+				: default;
 
 		/// <exception cref = "JsonException" />
 		public static Object FromToken (this IJsonSerializer jsonSerializer, JToken token, Type dataType) =>
-			jsonSerializer.MayFromToken(token, dataType) is { } data
+			jsonSerializer.MayFromToken(token, dataType) is {} data
 				? data
 				: throw DeserializedNullException(dataType);
 
 		/// <exception cref = "JsonException" />
+		[return: NotNull]
 		public static T FromToken<T> (this IJsonSerializer jsonSerializer, JToken token) =>
 			(T) jsonSerializer.FromToken(token, typeof(T));
 	}

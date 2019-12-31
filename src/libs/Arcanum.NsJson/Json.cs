@@ -1,11 +1,10 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
-#nullable disable warnings
-
 namespace Arcanum.NsJson {
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using System;
+	using System.Diagnostics.CodeAnalysis;
 	using static Arcanum.NsJson.Module;
 
 	public static class Json {
@@ -18,6 +17,7 @@ namespace Arcanum.NsJson {
 			standardJsonSerializer.MayRead(jsonReader, dataType);
 
 		/// <exception cref = "JsonException" />
+		[return: MaybeNull]
 		public static T MayRead<T> (JsonReader jsonReader) =>
 			standardJsonSerializer.MayRead<T>(jsonReader);
 
@@ -26,6 +26,7 @@ namespace Arcanum.NsJson {
 			standardJsonSerializer.Read(jsonReader, dataType);
 
 		/// <exception cref = "JsonException" />
+		[return: NotNull]
 		public static T Read<T> (JsonReader jsonReader) =>
 			standardJsonSerializer.Read<T>(jsonReader);
 
@@ -41,6 +42,7 @@ namespace Arcanum.NsJson {
 			standardJsonSerializer.MayFromText(text, dataType);
 
 		/// <exception cref = "JsonException" />
+		[return: MaybeNull]
 		public static T MayFromText<T> (String text) =>
 			standardJsonSerializer.MayFromText<T>(text);
 
@@ -49,6 +51,7 @@ namespace Arcanum.NsJson {
 			standardJsonSerializer.FromText(text, dataType);
 
 		/// <exception cref = "JsonException" />
+		[return: NotNull]
 		public static T FromText<T> (String text) =>
 			standardJsonSerializer.FromText<T>(text);
 
@@ -61,6 +64,7 @@ namespace Arcanum.NsJson {
 			standardJsonSerializer.MayFromToken(token, dataType);
 
 		/// <exception cref = "JsonException" />
+		[return: MaybeNull]
 		public static T MayFromToken<T> (JToken token) =>
 			standardJsonSerializer.MayFromToken<T>(token);
 
@@ -69,6 +73,7 @@ namespace Arcanum.NsJson {
 			standardJsonSerializer.FromToken(token, dataType);
 
 		/// <exception cref = "JsonException" />
+		[return: NotNull]
 		public static T FromToken<T> (JToken token) =>
 			standardJsonSerializer.FromToken<T>(token);
 	}
