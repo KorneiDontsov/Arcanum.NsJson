@@ -71,9 +71,7 @@ namespace Arcanum.NsJson.Contracts {
 				for (var i = writeMiddlewares.Count - 1; i >= 0; i -= 1) {
 					var middleware = writeMiddlewares[i];
 					var previous = write;
-					write =
-						(writer, value, serializer) =>
-							middleware.WriteJson(writer, value, serializer, previous);
+					write = (writer, value, serializer) => middleware.WriteJson(writer, value, serializer, previous);
 				}
 
 				return write;
@@ -81,15 +79,13 @@ namespace Arcanum.NsJson.Contracts {
 
 			ReadJson BuildRead (Type dataType) {
 				ReadJson read =
-					(reader, existingValue, serializer) => {
+					(reader, serializer) => {
 						using (new AsyncLocalTrigger(noMiddleware))
 							return serializer.Deserialize(reader, dataType);
 					};
 				foreach (var middleware in readMiddlewares) {
 					var next = read;
-					read =
-						(reader, existingValue, serializer) =>
-							middleware.ReadJson(reader, existingValue, serializer, next);
+					read = (reader, serializer) => middleware.ReadJson(reader, serializer, next);
 				}
 
 				return read;
@@ -99,7 +95,7 @@ namespace Arcanum.NsJson.Contracts {
 				if (writeMiddlewares.Count > 0 || readMiddlewares.Count > 0) {
 					var write = BuildWrite(dataType);
 					var read = BuildRead(dataType);
-					return new JsonConverterAdapter(write, read);
+					return new MiddlewareJsonConverter(write, read);
 				}
 				else
 					return null;

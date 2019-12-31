@@ -107,21 +107,14 @@ namespace Arcanum.NsJson.Contracts {
 						unionInfo.dataType);
 		}
 
-		class UnionJsonConverter: JsonConverter {
+		class UnionJsonConverter: JsonConverterAdapter, IReadJsonConverter {
 			IUnionInfo unionInfo { get; }
 
 			public UnionJsonConverter (IUnionInfo unionInfo) =>
 				this.unionInfo = unionInfo;
 
 			/// <inheritdoc />
-			public override Boolean CanConvert (Type objectType) => true;
-
-			/// <inheritdoc />
-			public override Object? ReadJson
-			(JsonReader reader,
-			 Type objectType,
-			 Object? existingValue,
-			 JsonSerializer serializer) {
+			public Object? Read (JsonReader reader, Type dataType, JsonSerializer serializer) {
 				if (reader.TokenType is JsonToken.Null) return null;
 
 				using var cache = JsonCacheFactory.shared.GetCache();
@@ -133,15 +126,6 @@ namespace Arcanum.NsJson.Contracts {
 				using var cacheReader = cache.OpenToRead();
 				return serializer.Deserialize(cacheReader, unionCaseType);
 			}
-
-			#region cannot_write
-			/// <inheritdoc />
-			public override Boolean CanWrite => false;
-
-			/// <inheritdoc />
-			public override void WriteJson (JsonWriter writer, Object? value, JsonSerializer serializer) =>
-				throw new NotSupportedException();
-			#endregion
 		}
 
 		/// <inheritdoc />

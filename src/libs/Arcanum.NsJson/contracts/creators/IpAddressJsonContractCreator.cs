@@ -8,20 +8,15 @@ namespace Arcanum.NsJson.Contracts {
 	using System.Net;
 
 	public sealed class IpAddressJsonContractCreator: IJsonContractCreator {
-		class IpAddressJsonConverter: JsonConverter<IPAddress> {
+		class IpAddressJsonConverter: JsonConverterAdapter, IWriteJsonConverter, IReadJsonConverter {
 			/// <inheritdoc />
-			public override void WriteJson (JsonWriter writer, IPAddress value, JsonSerializer serializer) {
+			public void Write (JsonWriter writer, Object value, JsonSerializer serializer) {
 				var ipAddressString = value.ToString();
 				writer.WriteValue(ipAddressString);
 			}
 
 			/// <inheritdoc />
-			public override IPAddress ReadJson
-			(JsonReader reader,
-			 Type objectType,
-			 IPAddress existingValue,
-			 Boolean hasExistingValue,
-			 JsonSerializer serializer) {
+			public Object? Read (JsonReader reader, Type dataType, JsonSerializer serializer) {
 				reader.CurrentTokenMustBe(JsonToken.String);
 				var ipAddressString = (String) reader.Value!;
 
@@ -43,8 +38,6 @@ namespace Arcanum.NsJson.Contracts {
 
 		/// <inheritdoc />
 		public JsonContract CreateContract () =>
-			new JsonStringContract(dataType) {
-				Converter = new IpAddressJsonConverter()
-			};
+			new JsonStringContract(dataType) { Converter = new IpAddressJsonConverter() };
 	}
 }

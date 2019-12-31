@@ -4,29 +4,15 @@ namespace Arcanum.NsJson.Contracts {
 	using Newtonsoft.Json;
 	using System;
 
-	class NullableStructJsonConverter: JsonConverter {
+	class NullableStructJsonConverter: JsonConverterAdapter, IReadJsonConverter {
 		Type notNullDataType { get; }
 
 		public NullableStructJsonConverter (Type notNullDataType) => this.notNullDataType = notNullDataType;
 
 		/// <inheritdoc />
-		public override Boolean CanConvert (Type objectType) => true;
-
-		/// <inheritdoc />
-		public override Object? ReadJson
-		(JsonReader reader,
-		 Type objectType,
-		 Object? existingValue,
-		 JsonSerializer serializer) =>
+		public Object? Read (JsonReader reader, Type dataType, JsonSerializer serializer) =>
 			reader.TokenType is JsonToken.Null
 				? null
 				: serializer.Deserialize(reader, notNullDataType);
-
-		/// <inheritdoc />
-		public override Boolean CanWrite => false;
-
-		/// <inheritdoc />
-		public override void WriteJson (JsonWriter writer, Object? value, JsonSerializer serializer) =>
-			throw new NotSupportedException();
 	}
 }

@@ -5,6 +5,6 @@ namespace Arcanum.NsJson.Contracts {
 	using System;
 
 	public interface IJsonReadMiddleware {
-		Object? ReadJson (JsonReader reader, Object? existingValue, JsonSerializer serializer, ReadJson next);
+		Object? ReadJson (JsonReader reader, JsonSerializer serializer, ReadJson next);
 	}
 }

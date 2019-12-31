@@ -4,28 +4,21 @@ namespace Arcanum.NsJson.Contracts {
 	using Newtonsoft.Json;
 	using System;
 
-	class JsonConverterAdapter: JsonConverter {
+	class MiddlewareJsonConverter: JsonConverterAdapter, IWriteJsonConverter, IReadJsonConverter {
 		WriteJson writeJson { get; }
 		ReadJson readJson { get; }
 
-		public JsonConverterAdapter (WriteJson writeJson, ReadJson readJson) {
+		public MiddlewareJsonConverter (WriteJson writeJson, ReadJson readJson) {
 			this.writeJson = writeJson;
 			this.readJson = readJson;
 		}
 
 		/// <inheritdoc />
-		public override Boolean CanConvert (Type objectType) => true;
+		public void Write (JsonWriter writer, Object value, JsonSerializer serializer) =>
+			writeJson(writer, value, serializer);
 
 		/// <inheritdoc />
-		public override void WriteJson (JsonWriter writer, Object? value, JsonSerializer serializer) =>
-			writeJson(writer, value!, serializer);
-
-		/// <inheritdoc />
-		public override Object? ReadJson
-		(JsonReader reader,
-		 Type objectType,
-		 Object? existingValue,
-		 JsonSerializer serializer) =>
-			readJson(reader, existingValue, serializer);
+		public Object? Read (JsonReader reader, Type dataType, JsonSerializer serializer) =>
+			readJson(reader, serializer);
 	}
 }
