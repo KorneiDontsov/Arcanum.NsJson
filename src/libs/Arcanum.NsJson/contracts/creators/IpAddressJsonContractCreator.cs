@@ -17,18 +17,23 @@ namespace Arcanum.NsJson.Contracts {
 
 			/// <inheritdoc />
 			public Object? Read (JsonReader reader, Type dataType, JsonSerializer serializer) {
-				reader.CurrentTokenMustBe(JsonToken.String);
-				var ipAddressString = (String) reader.Value!;
-
-				try { return IPAddress.Parse(ipAddressString); }
-				catch (FormatException formatEx) {
-					throw
-						reader.Exception(
-							String.Format(
-								CultureInfo.InvariantCulture,
-								"Failed to deserialize '{0}' to IPAddress.",
-								ipAddressString),
-							formatEx);
+				switch (reader.TokenType) {
+					case JsonToken.Null: return null;
+					case JsonToken.String:
+						var ipAddressStr = (String) reader.Value!;
+						try {
+							return IPAddress.Parse(ipAddressStr);
+						}
+						catch (FormatException formatEx) {
+							var message =
+								String.Format(
+									CultureInfo.InvariantCulture,
+									"Failed to deserialize '{0}' to IPAddress.",
+									ipAddressStr);
+							throw reader.Exception(message, formatEx);
+						}
+					case var unexpectedTokenType:
+						throw reader.Exception("Expected string but accepted {0}.", unexpectedTokenType);
 				}
 			}
 		}

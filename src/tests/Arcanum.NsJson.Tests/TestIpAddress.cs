@@ -41,5 +41,12 @@ namespace Arcanum.NsJson.Tests {
 
 			actual.Should().Be(expected);
 		}
+
+		[Fact]
+		public void NullIsDeserialized () {
+			var token = new JValue((Object?) null);
+			var actual = serializer.MayFromToken<IPAddress?>(token);
+			actual.Should().BeNull();
+		}
 	}
 }
