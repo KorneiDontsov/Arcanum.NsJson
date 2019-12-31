@@ -12,32 +12,19 @@ namespace Arcanum.NsJson.Contracts {
 		public Type dataType => typeof(DnsEndPoint);
 
 		/// <inheritdoc />
-		public JsonContract CreateContract () {
-			var hostProp =
-				JsonContractKit<DnsEndPoint>.ReadOnlyProperty(
-					nameof(DnsEndPoint.Host),
-					dnsEndPoint => dnsEndPoint.Host);
-			var portProp =
-				JsonContractKit<DnsEndPoint>.ReadOnlyProperty(
-					nameof(DnsEndPoint.Port), dnsEndPoint => dnsEndPoint.Port);
-			var addressFamilyProp =
-				JsonContractKit<DnsEndPoint>.ReadOnlyProperty(
+		public JsonContract CreateContract () =>
+			new JsonObjectContractBuilder<DnsEndPoint>()
+				.AddCreatorArg(nameof(DnsEndPoint.Host), d => d.Host)
+				.AddCreatorArg(nameof(DnsEndPoint.Port), d => d.Port)
+				.AddCreatorArg(
 					nameof(DnsEndPoint.AddressFamily),
-					dnsEndPoint => dnsEndPoint.AddressFamily,
+					d => d.AddressFamily,
 					Required.Default,
 					DefaultValueHandling.IgnoreAndPopulate,
-					defaultValue: AddressFamily.Unspecified);
-
-			return new JsonObjectContract(typeof(DnsEndPoint)) {
-				CreatedType = typeof(DnsEndPoint),
-				MemberSerialization = MemberSerialization.OptOut,
-				Properties = { hostProp, portProp, addressFamilyProp },
-				CreatorParameters = { hostProp, portProp, addressFamilyProp },
-				OverrideCreator =
-					JsonContractKit<DnsEndPoint>.OverrideCreator(
-						(String host, Int32 port, AddressFamily addressFamily) =>
-							new DnsEndPoint(host, port, addressFamily))
-			};
-		}
+					defaultValue: AddressFamily.Unspecified)
+				.AddCreator(
+					(String host, Int32 port, AddressFamily addressFamily) =>
+						new DnsEndPoint(host, port, addressFamily))
+				.Build();
 	}
 }

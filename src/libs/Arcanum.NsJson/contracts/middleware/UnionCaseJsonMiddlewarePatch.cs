@@ -42,13 +42,13 @@ namespace Arcanum.NsJson.Contracts {
 				writer.WritePropertyName("$case");
 				writer.WriteValue(caseRouteStr);
 
-				using var cache = JsonCacheFactory.shared.GetCache();
+				using (var cache = JsonCache.Rent()) {
+					using (var cacheWriter = cache.OpenToWrite())
+						previous(cacheWriter, value, serializer);
 
-				using (var cacheWriter = cache.OpenToWrite())
-					previous(cacheWriter, value, serializer);
-
-				using (var cacheReader = cache.OpenToRead())
-					WriteValue(input: cacheReader, output: writer);
+					using (var cacheReader = cache.OpenToRead())
+						WriteValue(input: cacheReader, output: writer);
+				}
 
 				writer.WriteEndObject();
 			}

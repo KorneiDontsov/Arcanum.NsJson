@@ -25,7 +25,7 @@ namespace Arcanum.NsJson.Contracts {
 			if (Nullable.GetUnderlyingType(dataType) is {} notNullDataType)
 				return
 					NsJsonContractResolver.shared.ResolveContract(dataType)
-						.WithConverter(new NullableStructJsonConverter(notNullDataType));
+						.AddConverter(new NullableStructJsonConverter(notNullDataType));
 			else {
 				static JsonContract? MayCreateContract
 				(ImmutableArray<IJsonContractFactory> contractFactories,

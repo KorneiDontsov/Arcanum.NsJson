@@ -132,7 +132,7 @@ namespace Arcanum.NsJson {
 				? copyFunctor(source)
 				: throw new Exception($"Contract type {source.GetType()} is not expected.");
 
-		public static JsonContract WithConverter (this JsonContract contract, JsonConverter converter) {
+		public static JsonContract AddConverter (this JsonContract contract, JsonConverter converter) {
 			contract.Converter = converter;
 			return contract;
 		}
