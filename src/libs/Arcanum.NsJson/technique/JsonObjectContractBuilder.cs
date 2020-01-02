@@ -8,6 +8,9 @@ namespace Arcanum.NsJson {
 
 	class JsonObjectContractBuilder<T> {
 		[return: NotNull]
+		public delegate T Creator<T1, T2> ([AllowNull] T1 arg1, [AllowNull] T2 arg2);
+
+		[return: NotNull]
 		public delegate T Creator<T1, T2, T3> ([AllowNull] T1 arg1, [AllowNull] T2 arg2, [AllowNull] T3 arg3);
 
 		JsonObjectContract contract { get; } =
@@ -35,6 +38,27 @@ namespace Arcanum.NsJson {
 				DefaultValue = defaultValue
 			};
 
+		static JsonProperty CreateProperty<TProp>
+		(String propName,
+		 Func<T, TProp> get,
+		 Action<T, TProp> set,
+		 Required required = Required.Always,
+		 DefaultValueHandling defaultValueHandling = DefaultValueHandling.Include,
+		 Object? defaultValue = null) =>
+			new JsonProperty {
+				PropertyName = propName,
+				UnderlyingName = propName,
+				PropertyType = typeof(TProp),
+				DeclaringType = typeof(T),
+				Readable = true,
+				Writable = true,
+				ValueProvider = new ValueProvider<T, TProp>(get, set),
+				HasMemberAttribute = true,
+				Required = required,
+				DefaultValueHandling = defaultValueHandling,
+				DefaultValue = defaultValue
+			};
+
 		public JsonObjectContractBuilder<T> AddProperty<TProp>
 		(String propName,
 		 Func<T, TProp> get,
@@ -42,6 +66,18 @@ namespace Arcanum.NsJson {
 		 DefaultValueHandling defaultValueHandling = DefaultValueHandling.Include,
 		 Object? defaultValue = null) {
 			var prop = CreateProperty(propName, get, required, defaultValueHandling, defaultValue);
+			contract.Properties.AddProperty(prop);
+			return this;
+		}
+
+		public JsonObjectContractBuilder<T> AddProperty<TProp>
+		(String propName,
+		 Func<T, TProp> get,
+		 Action<T, TProp> set,
+		 Required required = Required.Always,
+		 DefaultValueHandling defaultValueHandling = DefaultValueHandling.Include,
+		 Object? defaultValue = null) {
+			var prop = CreateProperty(propName, get, set, required, defaultValueHandling, defaultValue);
 			contract.Properties.AddProperty(prop);
 			return this;
 		}
@@ -55,6 +91,24 @@ namespace Arcanum.NsJson {
 			var prop = CreateProperty(propName, get, required, defaultValueHandling, defaultValue);
 			contract.Properties.AddProperty(prop);
 			contract.CreatorParameters.AddProperty(prop);
+			return this;
+		}
+
+		public JsonObjectContractBuilder<T> AddCreatorArg<TProp>
+		(String propName,
+		 Func<T, TProp> get,
+		 Action<T, TProp> set,
+		 Required required = Required.Always,
+		 DefaultValueHandling defaultValueHandling = DefaultValueHandling.Include,
+		 Object? defaultValue = null) {
+			var prop = CreateProperty(propName, get, set, required, defaultValueHandling, defaultValue);
+			contract.Properties.AddProperty(prop);
+			contract.CreatorParameters.AddProperty(prop);
+			return this;
+		}
+
+		public JsonObjectContractBuilder<T> AddCreator<T1, T2> (Creator<T1, T2> creator) {
+			contract.OverrideCreator = args => creator((T1) args[0]!, (T2) args[1]!);
 			return this;
 		}
 
