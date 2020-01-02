@@ -32,5 +32,15 @@ namespace Arcanum.NsJson.Tests {
 			var actualEnumCase = serializer.FromToken<EnumExample>(token);
 			actualEnumCase.Should().Be(enumCase);
 		}
+
+		[Theory]
+		[InlineData(EnumExample.Case1)]
+		[InlineData(EnumExample.Case2)]
+		[InlineData(EnumExample.Case3)]
+		public void IsDeserializedFromCaseObject (EnumExample enumCase) {
+			var token = new JObject { ["$case"] = enumCase.ToString() };
+			var actualEnumCase = serializer.FromToken<EnumExample>(token);
+			actualEnumCase.Should().Be(enumCase);
+		}
 	}
 }
