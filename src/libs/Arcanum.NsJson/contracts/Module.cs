@@ -12,9 +12,9 @@ namespace Arcanum.NsJson.Contracts {
 				.AddFactory<BasicJsonContractFactory>()
 				.AddFactory<NullableStructJsonContractFactory>()
 				.AddFactory<EnumJsonContractFactory>()
+				.AddFactory<UnionJsonContractFactory>()
 				.AddCreator<IPAddress, IpAddressJsonContractCreator>()
 				.AddCreator<DnsEndPoint, DnsEndPointJsonContractCreator>()
-				.AddPatch<UnionJsonContractPatch>()
 				.AddMiddlewareFactory<UnionCaseJsonMiddlewareFactory>();
 	}
 }

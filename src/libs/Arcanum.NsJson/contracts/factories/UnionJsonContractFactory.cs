@@ -4,11 +4,10 @@ namespace Arcanum.NsJson.Contracts {
 	using Arcanum.DataContracts;
 	using Arcanum.Routes;
 	using Newtonsoft.Json;
-	using Newtonsoft.Json.Serialization;
 	using System;
 	using static Arcanum.DataContracts.Module;
 
-	public sealed class UnionJsonContractPatch: IJsonContractPatch {
+	public sealed class UnionJsonContractFactory: IJsonContractFactory {
 		/// <summary>
 		///     Writes to <paramref name = "output" /> case json. Returns case type.
 		/// </summary>
@@ -129,15 +128,19 @@ namespace Arcanum.NsJson.Contracts {
 		}
 
 		/// <inheritdoc />
-		public void Patch (JsonContract contract) {
-			if (contract.IsOfAbstractClass() && GetDataTypeInfo(contract.UnderlyingType).asUnionInfo is { } unionInfo) {
+		public void Handle (IJsonContractRequest request) {
+			var matched = request.dataType.IsClass && request.dataType.IsAbstract;
+			if (matched && GetDataTypeInfo(request.dataType).asUnionInfo is {} unionInfo) {
 				if (unionInfo.hasErrors) {
 					var message =
 						$"Cannot resolve {unionInfo.dataType} because it has errors.\n{unionInfo.GetErrorString()}";
 					throw new JsonContractException(message);
 				}
-				else
+				else {
+					var contract = BasicJsonContractFactory.CreateContract(request.dataType);
 					contract.Converter ??= new UnionJsonConverter(unionInfo.rootUnionInfo);
+					request.Return(contract);
+				}
 			}
 		}
 	}
