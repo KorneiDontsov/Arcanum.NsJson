@@ -13,7 +13,6 @@ namespace Arcanum.NsJson.Tests {
 			public Int64 x { get; }
 			public Int64 y { get; }
 
-			[JsonConstructor]
 			public Point (Int64 x, Int64 y) {
 				this.x = x;
 				this.y = y;

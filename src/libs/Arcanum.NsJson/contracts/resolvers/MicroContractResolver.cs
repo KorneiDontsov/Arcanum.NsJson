@@ -66,6 +66,24 @@ namespace Arcanum.NsJson.Contracts {
 
 		static AsyncLocal<Boolean> noMiddleware { get; } = new AsyncLocal<Boolean>();
 
+		class MiddlewareJsonConverter: JsonConverterAdapter, IWriteJsonConverter, IReadJsonConverter {
+			WriteJson writeJson { get; }
+			ReadJson readJson { get; }
+
+			public MiddlewareJsonConverter (WriteJson writeJson, ReadJson readJson) {
+				this.writeJson = writeJson;
+				this.readJson = readJson;
+			}
+
+			/// <inheritdoc />
+			public void Write (JsonWriter writer, Object value, JsonSerializer serializer) =>
+				writeJson(writer, value, serializer);
+
+			/// <inheritdoc />
+			public Object? Read (JsonReader reader, Type dataType, JsonSerializer serializer) =>
+				readJson(reader, serializer);
+		}
+
 		class JsonMiddlewareRequest: IJsonMiddlewareRequest {
 			List<IJsonReadMiddleware> readMiddlewares { get; } = new List<IJsonReadMiddleware>();
 

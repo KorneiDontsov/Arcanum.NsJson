@@ -72,7 +72,5 @@ namespace Arcanum.NsJson {
 				referenceComparer ?? this.referenceComparer,
 				referenceResolverProvider ?? this.referenceResolverProvider,
 				serializationBinder ?? this.serializationBinder);
-
-		
 	}
 }
