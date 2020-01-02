@@ -5,6 +5,6 @@ namespace Arcanum.NsJson {
 	using System;
 
 	public interface IFromJsonConverter {
-		Object? Read (JsonReader reader, Type dataType, JsonSerializer serializer);
+		Object? Read (JsonReader reader, JsonSerializer serializer);
 	}
 }

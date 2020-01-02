@@ -103,7 +103,7 @@ namespace Arcanum.NsJson.Contracts {
 			}
 
 			/// <inheritdoc />
-			public Object? Read (JsonReader reader, Type dataType, JsonSerializer serializer) {
+			public Object? Read (JsonReader reader, JsonSerializer serializer) {
 				static Exception BadTokenException (JsonReader reader) =>
 					reader.Exception("Expected token to be string or object but accepted {0}", reader.TokenType);
 

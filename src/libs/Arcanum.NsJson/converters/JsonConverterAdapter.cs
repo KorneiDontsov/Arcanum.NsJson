@@ -38,6 +38,6 @@ namespace Arcanum.NsJson {
 		 JsonSerializer serializer) =>
 			readConverter is null
 				? throw new NotSupportedException()
-				: readConverter.Read(reader, objectType, serializer);
+				: readConverter.Read(reader, serializer);
 	}
 }

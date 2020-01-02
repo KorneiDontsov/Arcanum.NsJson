@@ -58,7 +58,7 @@ namespace Arcanum.NsJson.Contracts {
 			}
 
 			/// <inheritdoc />
-			public Object? Read (JsonReader reader, Type dataType, JsonSerializer serializer) {
+			public Object? Read (JsonReader reader, JsonSerializer serializer) {
 				var valueName = ReadEnumName(reader);
 				if (values.TryGetValue(valueName, out var value))
 					return value;

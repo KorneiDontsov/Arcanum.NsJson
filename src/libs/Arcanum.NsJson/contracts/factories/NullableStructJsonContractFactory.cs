@@ -11,7 +11,7 @@ namespace Arcanum.NsJson.Contracts {
 			public NullableStructJsonConverter (Type notNullDataType) => this.notNullDataType = notNullDataType;
 
 			/// <inheritdoc />
-			public Object? Read (JsonReader reader, Type dataType, JsonSerializer serializer) =>
+			public Object? Read (JsonReader reader, JsonSerializer serializer) =>
 				reader.TokenType is JsonToken.Null
 					? null
 					: serializer.Deserialize(reader, notNullDataType);
