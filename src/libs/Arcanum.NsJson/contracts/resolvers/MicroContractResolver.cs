@@ -22,29 +22,23 @@ namespace Arcanum.NsJson.Contracts {
 		/// </summary>
 		/// <exception cref = "JsonContractException" />
 		JsonContract CreateContract (Type dataType) {
-			if (Nullable.GetUnderlyingType(dataType) is {} notNullDataType)
-				return
-					NsJsonContractResolver.shared.ResolveContract(dataType)
-						.AddConverter(new NullableStructJsonConverter(notNullDataType));
-			else {
-				static JsonContract? MayCreateContract
-				(ImmutableArray<IJsonContractFactory> contractFactories,
-				 Type dataType) {
-					foreach (var contractFactory in contractFactories)
-						if (contractFactory.MayCreateContract(dataType) is {} contract)
-							return contract;
-					return null;
-				}
-
-				var contract =
-					contractCreators.GetValueOrDefault(dataType)?.CreateContract()
-					?? MayCreateContract(contractFactories, dataType)
-					?? throw new JsonContractException($"{dataType} has no contract.");
-
-				foreach (var contractPatch in contractPatches) contractPatch.Patch(contract);
-
-				return contract;
+			static JsonContract? MayCreateContract
+			(ImmutableArray<IJsonContractFactory> contractFactories,
+			 Type dataType) {
+				foreach (var contractFactory in contractFactories)
+					if (contractFactory.MayCreateContract(dataType) is {} contract)
+						return contract;
+				return null;
 			}
+
+			var contract =
+				contractCreators.GetValueOrDefault(dataType)?.CreateContract()
+				?? MayCreateContract(contractFactories, dataType)
+				?? throw new JsonContractException($"{dataType} has no contract.");
+
+			foreach (var contractPatch in contractPatches) contractPatch.Patch(contract);
+
+			return contract;
 		}
 
 		static AsyncLocal<Boolean> noMiddleware { get; } = new AsyncLocal<Boolean>();

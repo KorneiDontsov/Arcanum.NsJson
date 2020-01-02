@@ -9,10 +9,11 @@ namespace Arcanum.NsJson.Contracts {
 
 		public static IMicroContractResolverBuilder AddStandardContracts (this IMicroContractResolverBuilder builder) =>
 			builder
-				.AddFactory<NsJsonContractFactory>()
+				.AddFactory<BasicJsonContractFactory>()
+				.AddFactory<NullableStructJsonContractFactory>()
+				.AddFactory<EnumJsonContractFactory>()
 				.AddCreator<IPAddress, IpAddressJsonContractCreator>()
 				.AddCreator<DnsEndPoint, DnsEndPointJsonContractCreator>()
-				.AddPatch<EnumJsonContractPatch>()
 				.AddPatch<UnionJsonContractPatch>()
 				.AddMiddlewarePatch<UnionCaseJsonMiddlewarePatch>();
 	}
