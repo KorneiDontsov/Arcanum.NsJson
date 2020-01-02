@@ -7,24 +7,24 @@ namespace Arcanum.NsJson {
 	using System.IO;
 	using System.Text;
 
-	readonly struct JsonCache: IDisposable {
+	public sealed class JsonMemory: IDisposable {
 		MemoryStream stream { get; }
 
-		JsonCache (MemoryStream stream) => this.stream = stream;
+		JsonMemory (MemoryStream stream) => this.stream = stream;
 
 		/// <inheritdoc />
 		public void Dispose () => stream.Dispose();
 
 		static RecyclableMemoryStreamManager streamManager { get; } = new RecyclableMemoryStreamManager();
 
-		public static JsonCache Rent () => new JsonCache(streamManager.GetStream());
+		public static JsonMemory Rent () => new JsonMemory(streamManager.GetStream());
 
-		public JsonWriter OpenToWrite () {
+		public JsonWriter Write () {
 			stream.Position = 0;
 			return new JsonTextWriter(new StreamWriter(stream, Encoding.UTF8, bufferSize: 1024, leaveOpen: true));
 		}
 
-		public JsonReader OpenToRead () {
+		public JsonReader Read () {
 			stream.Position = 0;
 			var reader =
 				new JsonTextReader(

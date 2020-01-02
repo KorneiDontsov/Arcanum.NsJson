@@ -116,14 +116,14 @@ namespace Arcanum.NsJson.Contracts {
 			public Object? Read (JsonReader reader, Type dataType, JsonSerializer serializer) {
 				if (reader.TokenType is JsonToken.Null) return null;
 
-				using var cache = JsonCache.Rent();
+				using (var source = JsonMemory.Rent()) {
+					Type unionCaseType; // I guess 'unionCaseType' is always assignable to 'objectType'.
+					using (var writer = source.Write())
+						unionCaseType = ExtractCaseType(input: reader, output: writer, unionInfo);
 
-				Type unionCaseType; // I guess 'unionCaseType' is always assignable to 'objectType'.
-				using (var cacheWriter = cache.OpenToWrite())
-					unionCaseType = ExtractCaseType(input: reader, output: cacheWriter, unionInfo);
-
-				using (var cacheReader = cache.OpenToRead())
-					return serializer.Deserialize(cacheReader, unionCaseType);
+					using (var sourceReader = source.Read())
+						return serializer.Deserialize(sourceReader, unionCaseType);
+				}
 			}
 		}
 
