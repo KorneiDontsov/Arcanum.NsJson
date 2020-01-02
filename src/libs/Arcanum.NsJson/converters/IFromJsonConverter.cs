@@ -4,7 +4,7 @@ namespace Arcanum.NsJson {
 	using Newtonsoft.Json;
 	using System;
 
-	public interface IWriteJsonConverter {
-		void Write (JsonWriter writer, Object value, JsonSerializer serializer);
+	public interface IFromJsonConverter {
+		Object? Read (JsonReader reader, Type dataType, JsonSerializer serializer);
 	}
 }

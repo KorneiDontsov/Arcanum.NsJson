@@ -8,7 +8,7 @@ namespace Arcanum.NsJson.Contracts {
 	using System.Net;
 
 	public sealed class IpAddressJsonContractCreator: IJsonContractCreator {
-		class IpAddressJsonConverter: JsonConverterAdapter, IWriteJsonConverter, IReadJsonConverter {
+		class IpAddressJsonConverter: JsonConverterAdapter, IToJsonConverter, IFromJsonConverter {
 			/// <inheritdoc />
 			public void Write (JsonWriter writer, Object value, JsonSerializer serializer) {
 				var ipAddressString = value.ToString();

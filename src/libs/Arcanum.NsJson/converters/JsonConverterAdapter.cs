@@ -5,13 +5,13 @@ namespace Arcanum.NsJson {
 	using System;
 
 	public abstract class JsonConverterAdapter: JsonConverter {
-		IWriteJsonConverter? writeConverter { get; }
+		IToJsonConverter? writeConverter { get; }
 
-		IReadJsonConverter? readConverter { get; }
+		IFromJsonConverter? readConverter { get; }
 
 		protected JsonConverterAdapter () {
-			writeConverter = this as IWriteJsonConverter;
-			readConverter = this as IReadJsonConverter;
+			writeConverter = this as IToJsonConverter;
+			readConverter = this as IFromJsonConverter;
 		}
 
 		/// <inheritdoc />

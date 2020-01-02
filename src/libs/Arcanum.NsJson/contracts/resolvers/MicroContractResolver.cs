@@ -101,7 +101,7 @@ namespace Arcanum.NsJson.Contracts {
 
 		static AsyncLocal<Boolean> noMiddleware { get; } = new AsyncLocal<Boolean>();
 
-		class MiddlewareJsonConverter: JsonConverterAdapter, IWriteJsonConverter, IReadJsonConverter {
+		class MiddlewareJsonConverter: JsonConverterAdapter, IToJsonConverter, IFromJsonConverter {
 			WriteJson writeJson { get; }
 			ReadJson readJson { get; }
 
@@ -120,9 +120,9 @@ namespace Arcanum.NsJson.Contracts {
 		}
 
 		class JsonMiddlewareRequest: IJsonMiddlewareRequest {
-			List<IJsonReadMiddleware> readMiddlewares { get; } = new List<IJsonReadMiddleware>();
+			List<IFromJsonMiddleware> fromJsonMiddlewares { get; } = new List<IFromJsonMiddleware>();
 
-			List<IJsonWriteMiddleware> writeMiddlewares { get; } = new List<IJsonWriteMiddleware>();
+			List<IToJsonMiddleware> toJsonMiddlewares { get; } = new List<IToJsonMiddleware>();
 
 			/// <inheritdoc />
 			public Type dataType { get; }
@@ -130,12 +130,12 @@ namespace Arcanum.NsJson.Contracts {
 			public JsonMiddlewareRequest (Type dataType) => this.dataType = dataType;
 
 			/// <inheritdoc />
-			public void Yield (IJsonWriteMiddleware writeMiddleware) =>
-				writeMiddlewares.Add(writeMiddleware);
+			public void Yield (IToJsonMiddleware toJsonMiddleware) =>
+				toJsonMiddlewares.Add(toJsonMiddleware);
 
 			/// <inheritdoc />
-			public void Yield (IJsonReadMiddleware readMiddleware) =>
-				readMiddlewares.Add(readMiddleware);
+			public void Yield (IFromJsonMiddleware fromJsonMiddleware) =>
+				fromJsonMiddlewares.Add(fromJsonMiddleware);
 
 			WriteJson BuildWrite () {
 				WriteJson write =
@@ -143,10 +143,10 @@ namespace Arcanum.NsJson.Contracts {
 						using (new AsyncLocalTrigger(noMiddleware))
 							serializer.Serialize(writer, value, dataType);
 					};
-				for (var i = writeMiddlewares.Count - 1; i >= 0; i -= 1) {
-					var middleware = writeMiddlewares[i];
+				for (var i = toJsonMiddlewares.Count - 1; i >= 0; i -= 1) {
+					var middleware = toJsonMiddlewares[i];
 					var previous = write;
-					write = (writer, value, serializer) => middleware.WriteJson(writer, value, serializer, previous);
+					write = (writer, value, serializer) => middleware.Write(writer, value, serializer, previous);
 				}
 
 				return write;
@@ -158,16 +158,16 @@ namespace Arcanum.NsJson.Contracts {
 						using (new AsyncLocalTrigger(noMiddleware))
 							return serializer.Deserialize(reader, dataType);
 					};
-				foreach (var middleware in readMiddlewares) {
+				foreach (var middleware in fromJsonMiddlewares) {
 					var next = read;
-					read = (reader, serializer) => middleware.ReadJson(reader, serializer, next);
+					read = (reader, serializer) => middleware.Read(reader, serializer, next);
 				}
 
 				return read;
 			}
 
-			public JsonConverter? MayBuildConverter () {
-				if (writeMiddlewares.Count > 0 || readMiddlewares.Count > 0) {
+			public JsonConverter? MayBuildMiddlewareConverter () {
+				if (toJsonMiddlewares.Count > 0 || fromJsonMiddlewares.Count > 0) {
 					var write = BuildWrite();
 					var read = BuildRead();
 					return new MiddlewareJsonConverter(write, read);
@@ -188,7 +188,7 @@ namespace Arcanum.NsJson.Contracts {
 				foreach (var middlewarePatch in middlewarePatches)
 					middlewarePatch.Handle(middlewareRequest);
 
-				return middlewareRequest.MayBuildConverter() is {} middlewareConverter
+				return middlewareRequest.MayBuildMiddlewareConverter() is {} middlewareConverter
 					? contract.Copy().AddConverter(middlewareConverter)
 					: contract;
 			}

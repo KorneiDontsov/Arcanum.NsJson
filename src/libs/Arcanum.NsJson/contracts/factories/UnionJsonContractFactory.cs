@@ -8,7 +8,7 @@ namespace Arcanum.NsJson.Contracts {
 	using static Arcanum.DataContracts.Module;
 
 	public sealed class UnionJsonContractFactory: IJsonContractFactory {
-		class UnionJsonConverter: JsonConverterAdapter, IReadJsonConverter {
+		class UnionJsonConverter: JsonConverterAdapter, IFromJsonConverter {
 			IUnionInfo unionInfo { get; }
 
 			public UnionJsonConverter (IUnionInfo unionInfo) =>

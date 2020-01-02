@@ -6,7 +6,7 @@ namespace Arcanum.NsJson.Contracts {
 	using System;
 
 	public sealed class NullableStructJsonContractFactory: IJsonContractFactory {
-		class NullableStructJsonConverter: JsonConverterAdapter, IReadJsonConverter {
+		class NullableStructJsonConverter: JsonConverterAdapter, IFromJsonConverter {
 			Type notNullDataType { get; }
 			public NullableStructJsonConverter (Type notNullDataType) => this.notNullDataType = notNullDataType;
 

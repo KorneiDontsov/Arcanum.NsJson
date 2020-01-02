@@ -2,16 +2,20 @@
 
 namespace Arcanum.NsJson.Contracts {
 	using Arcanum.DataContracts;
-	using Arcanum.Routes;
 	using Newtonsoft.Json;
 	using System;
 	using static Arcanum.DataContracts.Module;
+	using static Newtonsoft.Json.JsonToken;
 
 	public sealed class UnionCaseJsonMiddlewareFactory: IJsonMiddlewareFactory {
-		class UnionCaseWriteMiddleware: IJsonWriteMiddleware {
+		class UnionCaseWriteMiddleware: IToJsonMiddleware {
+			IUnionCaseInfo unionCaseInfo { get; }
 			String caseRouteStr { get; }
 
-			public UnionCaseWriteMiddleware (Route caseRoute) => caseRouteStr = caseRoute.ToString();
+			public UnionCaseWriteMiddleware (IUnionCaseInfo unionCaseInfo, String caseRouteStr) {
+				this.unionCaseInfo = unionCaseInfo;
+				this.caseRouteStr = caseRouteStr;
+			}
 
 			void WriteCaseProp (JsonWriter writer) {
 				writer.WritePropertyName("$case");
@@ -19,7 +23,7 @@ namespace Arcanum.NsJson.Contracts {
 			}
 
 			/// <inheritdoc />
-			public void WriteJson (JsonWriter writer, Object value, JsonSerializer serializer, WriteJson previous) {
+			public void Write (JsonWriter writer, Object value, JsonSerializer serializer, WriteJson previous) {
 				using var source = JsonMemory.Rent();
 
 				using (var sourceWriter = source.Write())
@@ -27,27 +31,37 @@ namespace Arcanum.NsJson.Contracts {
 
 				using (var reader = source.Read())
 					switch (reader.TokenType) {
-						case JsonToken.StartObject:
+						case StartObject:
 							reader.ReadNext();
 
-							if (reader.TokenType is JsonToken.EndObject)
+							if (reader.TokenType is EndObject)
 								writer.WriteValue(caseRouteStr);
 							else {
 								writer.WriteStartObject();
 								WriteCaseProp(writer);
 
-								while (reader.TokenType != JsonToken.EndObject) {
-									writer.WriteToken(reader);
-									reader.ReadNext();
-									writer.WriteToken(reader, writeChildren: true);
-									reader.ReadNext();
+								while (reader.TokenType != EndObject) {
+									reader.CurrentTokenMustBe(PropertyName);
+									var propName = (String) reader.Value!;
+									if (propName is "$case") {
+										var msg =
+											$"Failed to serialize '{unionCaseInfo}' because it has property '$case' "
+											+ "which is not allowed.";
+										throw new JsonSerializationException(msg);
+									}
+									else {
+										writer.WriteToken(reader);
+										reader.ReadNext();
+										writer.WriteToken(reader, writeChildren: true);
+										reader.ReadNext();
+									}
 								}
 
 								writer.WriteEndObject();
 							}
 
 							break;
-						case JsonToken.StartArray:
+						case StartArray:
 							writer.WriteStartObject();
 							WriteCaseProp(writer);
 							writer.WritePropertyName("$values");
@@ -71,7 +85,7 @@ namespace Arcanum.NsJson.Contracts {
 			if (matched && GetDataTypeInfo(request.dataType).asUnionCaseInfo is {} unionCaseInfo)
 				try {
 					var caseRoute = unionCaseInfo.GetNestedCaseRoute();
-					request.Yield(new UnionCaseWriteMiddleware(caseRoute));
+					request.Yield(new UnionCaseWriteMiddleware(unionCaseInfo, caseRoute.ToString()));
 				}
 				catch (FormatException ex) {
 					throw new JsonContractException($"Failed to get route of '{unionCaseInfo}'.", ex);

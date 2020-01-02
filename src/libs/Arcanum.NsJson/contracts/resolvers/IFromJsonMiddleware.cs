@@ -4,7 +4,7 @@ namespace Arcanum.NsJson.Contracts {
 	using Newtonsoft.Json;
 	using System;
 
-	public interface IJsonWriteMiddleware {
-		void WriteJson (JsonWriter writer, Object value, JsonSerializer serializer, WriteJson previous);
+	public interface IFromJsonMiddleware {
+		Object? Read (JsonReader reader, JsonSerializer serializer, ReadJson next);
 	}
 }

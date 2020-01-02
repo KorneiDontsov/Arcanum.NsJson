@@ -6,8 +6,8 @@ namespace Arcanum.NsJson.Contracts {
 	public interface IJsonMiddlewareRequest {
 		Type dataType { get; }
 
-		void Yield (IJsonWriteMiddleware writeMiddleware);
+		void Yield (IToJsonMiddleware toJsonMiddleware);
 
-		void Yield (IJsonReadMiddleware readMiddleware);
+		void Yield (IFromJsonMiddleware fromJsonMiddleware);
 	}
 }

@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
-namespace Arcanum.NsJson.Contracts {
+namespace Arcanum.NsJson {
 	using Newtonsoft.Json;
 	using System;
 
-	public interface IJsonReadMiddleware {
-		Object? ReadJson (JsonReader reader, JsonSerializer serializer, ReadJson next);
+	public interface IToJsonConverter {
+		void Write (JsonWriter writer, Object value, JsonSerializer serializer);
 	}
 }
