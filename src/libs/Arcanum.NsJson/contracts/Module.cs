@@ -15,6 +15,6 @@ namespace Arcanum.NsJson.Contracts {
 				.AddCreator<IPAddress, IpAddressJsonContractCreator>()
 				.AddCreator<DnsEndPoint, DnsEndPointJsonContractCreator>()
 				.AddPatch<UnionJsonContractPatch>()
-				.AddMiddlewarePatch<UnionCaseJsonMiddlewarePatch>();
+				.AddMiddlewareFactory<UnionCaseJsonMiddlewareFactory>();
 	}
 }

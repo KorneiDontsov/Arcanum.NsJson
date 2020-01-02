@@ -4,11 +4,10 @@ namespace Arcanum.NsJson.Contracts {
 	using Arcanum.DataContracts;
 	using Arcanum.Routes;
 	using Newtonsoft.Json;
-	using Newtonsoft.Json.Serialization;
 	using System;
 	using static Arcanum.DataContracts.Module;
 
-	public sealed class UnionCaseJsonMiddlewarePatch: IJsonMiddlewarePatch {
+	public sealed class UnionCaseJsonMiddlewareFactory: IJsonMiddlewareFactory {
 		class UnionCaseWriteMiddleware: IJsonWriteMiddleware {
 			String caseRouteStr { get; }
 
@@ -55,12 +54,12 @@ namespace Arcanum.NsJson.Contracts {
 		}
 
 		/// <inheritdoc />
-		public void Configure (JsonContract contract, IJsonMiddlewareBuilder middlewareBuilder) {
-			var matched = contract.IsOfNonAbstractClass();
-			if (matched && GetDataTypeInfo(contract.UnderlyingType).asUnionCaseInfo is {} unionCaseInfo)
+		public void Handle (IJsonMiddlewareRequest request) {
+			var matched = request.dataType.IsClass && ! request.dataType.IsAbstract;
+			if (matched && GetDataTypeInfo(request.dataType).asUnionCaseInfo is {} unionCaseInfo)
 				try {
 					var caseRoute = unionCaseInfo.GetNestedCaseRoute();
-					middlewareBuilder.AddWriteMiddleware(new UnionCaseWriteMiddleware(caseRoute));
+					request.Yield(new UnionCaseWriteMiddleware(caseRoute));
 				}
 				catch (FormatException ex) {
 					throw new JsonContractException($"Failed to get route of '{unionCaseInfo}'.", ex);

@@ -18,8 +18,8 @@ namespace Arcanum.NsJson.Contracts {
 		where T: class, IJsonContractPatch, new() =>
 			builder.AddPatch(Singleton<T>.instance);
 
-		public static IMicroContractResolverBuilder AddMiddlewarePatch<T> (this IMicroContractResolverBuilder builder)
-		where T: class, IJsonMiddlewarePatch, new() =>
-			builder.AddMiddlewarePatch(Singleton<T>.instance);
+		public static IMicroContractResolverBuilder AddMiddlewareFactory<T> (this IMicroContractResolverBuilder builder)
+		where T: class, IJsonMiddlewareFactory, new() =>
+			builder.AddMiddlewareFactory(Singleton<T>.instance);
 	}
 }

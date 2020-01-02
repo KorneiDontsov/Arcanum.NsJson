@@ -18,12 +18,11 @@ namespace Arcanum.NsJson.Contracts {
 		}
 
 		/// <inheritdoc />
-		public JsonContract? MayCreateContract (Type dataType) {
-			if (Nullable.GetUnderlyingType(dataType) is {} notNullDataType) {
+		public void Handle (IJsonContractRequest request) {
+			if (Nullable.GetUnderlyingType(request.dataType) is {} notNullDataType) {
 				var converter = new NullableStructJsonConverter(notNullDataType);
-				return new JsonLinqContract(dataType) { Converter = converter };
+				request.Return(new JsonLinqContract(request.dataType) { Converter = converter });
 			}
-			else return null;
 		}
 	}
 }

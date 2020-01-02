@@ -12,9 +12,42 @@ namespace Arcanum.NsJson.Contracts {
 		ImmutableDictionary<Type, IJsonContractCreator> contractCreators { get; }
 		ImmutableArray<IJsonContractFactory> contractFactories { get; }
 		ImmutableArray<IJsonContractPatch> contractPatches { get; }
-		ImmutableArray<IJsonMiddlewarePatch> middlewarePatches { get; }
+		ImmutableArray<IJsonMiddlewareFactory> middlewarePatches { get; }
 		JsonContractStorage contractStorage { get; }
 		JsonContractStorage middlewareContractStorage { get; }
+
+		class JsonContractRequest: IJsonContractRequest {
+			/// <inheritdoc />
+			public Type dataType { get; }
+
+			public JsonContract? contract { get; private set; }
+
+			public JsonContractRequest (Type dataType) => this.dataType = dataType;
+
+			/// <inheritdoc />
+			public void Return (JsonContract contract) {
+				if (this.contract is null)
+					this.contract = contract;
+				else
+					throw new Exception("Cannot return contract second time.");
+			}
+		}
+
+		JsonContract? MayCreateContract (Type dataType) =>
+			contractCreators.GetValueOrDefault(dataType)?.CreateContract();
+
+		JsonContract? RequestContract (Type dataType) {
+			var request = new JsonContractRequest(dataType);
+			foreach (var contractFactory in contractFactories) {
+				contractFactory.Handle(request);
+				if (request.contract is {}) return request.contract;
+			}
+			return null;
+		}
+
+		void PatchContract (JsonContract contract) {
+			foreach (var contractPatch in contractPatches) contractPatch.Patch(contract);
+		}
 
 		/// <summary>
 		///     <paramref name = "dataType" /> is not ByRef type because execution go through
@@ -22,41 +55,36 @@ namespace Arcanum.NsJson.Contracts {
 		/// </summary>
 		/// <exception cref = "JsonContractException" />
 		JsonContract CreateContract (Type dataType) {
-			static JsonContract? MayCreateContract
-			(ImmutableArray<IJsonContractFactory> contractFactories,
-			 Type dataType) {
-				foreach (var contractFactory in contractFactories)
-					if (contractFactory.MayCreateContract(dataType) is {} contract)
-						return contract;
-				return null;
+			var contract = MayCreateContract(dataType) ?? RequestContract(dataType);
+			if (contract is null)
+				throw new JsonContractException($"{dataType} has no contract.");
+			else {
+				PatchContract(contract);
+				return contract;
 			}
-
-			var contract =
-				contractCreators.GetValueOrDefault(dataType)?.CreateContract()
-				?? MayCreateContract(contractFactories, dataType)
-				?? throw new JsonContractException($"{dataType} has no contract.");
-
-			foreach (var contractPatch in contractPatches) contractPatch.Patch(contract);
-
-			return contract;
 		}
 
 		static AsyncLocal<Boolean> noMiddleware { get; } = new AsyncLocal<Boolean>();
 
-		class JsonMiddlewareBuilder: IJsonMiddlewareBuilder {
+		class JsonMiddlewareRequest: IJsonMiddlewareRequest {
 			List<IJsonReadMiddleware> readMiddlewares { get; } = new List<IJsonReadMiddleware>();
 
 			List<IJsonWriteMiddleware> writeMiddlewares { get; } = new List<IJsonWriteMiddleware>();
 
 			/// <inheritdoc />
-			public void AddWriteMiddleware (IJsonWriteMiddleware writeMiddleware) =>
+			public Type dataType { get; }
+
+			public JsonMiddlewareRequest (Type dataType) => this.dataType = dataType;
+
+			/// <inheritdoc />
+			public void Yield (IJsonWriteMiddleware writeMiddleware) =>
 				writeMiddlewares.Add(writeMiddleware);
 
 			/// <inheritdoc />
-			public void AddReadMiddleware (IJsonReadMiddleware readMiddleware) =>
+			public void Yield (IJsonReadMiddleware readMiddleware) =>
 				readMiddlewares.Add(readMiddleware);
 
-			WriteJson BuildWrite (Type dataType) {
+			WriteJson BuildWrite () {
 				WriteJson write =
 					(writer, value, serializer) => {
 						using (new AsyncLocalTrigger(noMiddleware))
@@ -71,7 +99,7 @@ namespace Arcanum.NsJson.Contracts {
 				return write;
 			}
 
-			ReadJson BuildRead (Type dataType) {
+			ReadJson BuildRead () {
 				ReadJson read =
 					(reader, serializer) => {
 						using (new AsyncLocalTrigger(noMiddleware))
@@ -85,10 +113,10 @@ namespace Arcanum.NsJson.Contracts {
 				return read;
 			}
 
-			public JsonConverter? MayBuildConverter (Type dataType) {
+			public JsonConverter? MayBuildConverter () {
 				if (writeMiddlewares.Count > 0 || readMiddlewares.Count > 0) {
-					var write = BuildWrite(dataType);
-					var read = BuildRead(dataType);
+					var write = BuildWrite();
+					var read = BuildRead();
 					return new MiddlewareJsonConverter(write, read);
 				}
 				else
@@ -102,18 +130,14 @@ namespace Arcanum.NsJson.Contracts {
 				return middlewareContractStorage.GetOrCreate(dataType.GetElementType());
 			else {
 				var contract = contractStorage.GetOrCreate(dataType);
-				var middlewareContract = contract.Copy();
-				var middlewareBuilder = new JsonMiddlewareBuilder();
+				var middlewareRequest = new JsonMiddlewareRequest(dataType);
 
 				foreach (var middlewarePatch in middlewarePatches)
-					middlewarePatch.Configure(middlewareContract, middlewareBuilder);
+					middlewarePatch.Handle(middlewareRequest);
 
-				if (middlewareBuilder.MayBuildConverter(dataType) is {} middlewareConverter) {
-					middlewareContract.Converter = middlewareConverter;
-					return middlewareContract;
-				}
-				else
-					return contract;
+				return middlewareRequest.MayBuildConverter() is {} middlewareConverter
+					? contract.Copy().AddConverter(middlewareConverter)
+					: contract;
 			}
 		}
 
@@ -121,7 +145,7 @@ namespace Arcanum.NsJson.Contracts {
 		(ImmutableDictionary<Type, IJsonContractCreator> contractCreators,
 		 ImmutableArray<IJsonContractFactory> contractFactories,
 		 ImmutableArray<IJsonContractPatch> contractPatches,
-		 ImmutableArray<IJsonMiddlewarePatch> middlewarePatches) {
+		 ImmutableArray<IJsonMiddlewareFactory> middlewarePatches) {
 			this.contractCreators = contractCreators;
 			this.contractFactories = contractFactories;
 			this.contractPatches = contractPatches;

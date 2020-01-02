@@ -11,7 +11,7 @@ namespace Arcanum.NsJson.Contracts {
 
 		IMicroContractResolverBuilder AddPatch (IJsonContractPatch contractPatch);
 
-		IMicroContractResolverBuilder AddMiddlewarePatch (IJsonMiddlewarePatch middlewarePatch);
+		IMicroContractResolverBuilder AddMiddlewareFactory (IJsonMiddlewareFactory middlewareFactory);
 
 		IContractResolver Build ();
 	}

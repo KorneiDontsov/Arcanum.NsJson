@@ -1,9 +1,12 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
 namespace Arcanum.NsJson.Contracts {
-	public interface IJsonMiddlewareBuilder {
-		void AddWriteMiddleware (IJsonWriteMiddleware writeMiddleware);
+	using Newtonsoft.Json.Serialization;
+	using System;
 
-		void AddReadMiddleware (IJsonReadMiddleware readMiddleware);
+	public interface IJsonContractRequest {
+		Type dataType { get; }
+
+		void Return (JsonContract contract);
 	}
 }
