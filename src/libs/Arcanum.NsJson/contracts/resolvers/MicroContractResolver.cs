@@ -20,25 +20,66 @@ namespace Arcanum.NsJson.Contracts {
 			/// <inheritdoc />
 			public Type dataType { get; }
 
-			JsonContract? contract;
+			JsonContract? returnedContract;
 
 			public JsonContractRequest (Type dataType) => this.dataType = dataType;
 
 			/// <inheritdoc />
 			public void Return (JsonContract contract) {
-				if (this.contract is null)
-					this.contract = contract;
+				if (returnedContract is null)
+					returnedContract = contract;
 				else
 					throw new Exception("Cannot return contract second time.");
 			}
 
+			JsonContract CreateContract (IJsonContractCreator contractCreator) {
+				var contract = contractCreator.CreateContract();
+				if (contract.UnderlyingType == dataType)
+					return contract;
+				else {
+					var msg =
+						$"Json contract creator '{contractCreator.GetType()}' created contract of type "
+						+ $"'{contract.UnderlyingType}' instead of '{dataType}'.";
+					throw new Exception(msg);
+				}
+			}
+
+			public JsonContract? MayCreateContract (ImmutableDictionary<Type, IJsonContractCreator> contractCreators) =>
+				contractCreators.TryGetValue(dataType, out var contractCreator)
+					? CreateContract(contractCreator)
+					: null;
+
+			public JsonContract? MayCreateExternalContract () =>
+				dataType.MatchCustomAttribute<IJsonContractCreator>(inherit: false) is {} externalContractCreator
+					? CreateContract(externalContractCreator)
+					: null;
+
 			public JsonContract? RequestContract (ImmutableArray<IJsonContractFactory> contractFactories) {
+				returnedContract = null;
 				foreach (var contractFactory in contractFactories) {
 					contractFactory.Handle(this);
-					if (contract is {}) return contract;
+					if (returnedContract is {} contract) {
+						if (contract.UnderlyingType == dataType)
+							return contract;
+						else {
+							var msg =
+								$"Json contract factory '{contractFactory.GetType()}' created contract of type "
+								+ $"'{contract.UnderlyingType}' instead of '{dataType}'.";
+							throw new Exception(msg);
+						}
+					}
 				}
 				return null;
 			}
+
+			public JsonContract? RequestExternalContract () {
+				var externalFactories = dataType.MatchCustomAttributes<IJsonContractFactory>();
+				return RequestContract(externalFactories);
+			}
+
+			/// <exception cref = "JsonContractException" />
+			public JsonContractException NoContractException () =>
+				new JsonContractException($"{dataType} has no contract.");
 		}
 
 		/// <summary>
@@ -47,19 +88,15 @@ namespace Arcanum.NsJson.Contracts {
 		/// </summary>
 		/// <exception cref = "JsonContractException" />
 		JsonContract CreateContract (Type dataType) {
-			if (dataType.MatchCustomAttribute<IJsonContractCreator>(inherit: false) is {} externalCreator)
-				return externalCreator.CreateContract();
-			else {
-				var contractRequest = new JsonContractRequest(dataType);
-				var externalFactories = dataType.MatchCustomAttributes<IJsonContractFactory>();
-				var contract =
-					contractRequest.RequestContract(externalFactories)
-					?? contractCreators.GetValueOrDefault(dataType)?.CreateContract()
-					?? contractRequest.RequestContract(contractFactories)
-					?? throw new JsonContractException($"{dataType} has no contract.");
-				foreach (var contractPatch in contractPatches) contractPatch.Patch(contract);
-				return contract;
-			}
+			var contractRequest = new JsonContractRequest(dataType);
+			var contract =
+				contractRequest.MayCreateExternalContract()
+				?? contractRequest.RequestExternalContract()
+				?? contractRequest.MayCreateContract(contractCreators)
+				?? contractRequest.RequestContract(contractFactories)
+				?? throw contractRequest.NoContractException();
+			foreach (var contractPatch in contractPatches) contractPatch.Patch(contract);
+			return contract;
 		}
 
 		static AsyncLocal<Boolean> noMiddleware { get; } = new AsyncLocal<Boolean>();
