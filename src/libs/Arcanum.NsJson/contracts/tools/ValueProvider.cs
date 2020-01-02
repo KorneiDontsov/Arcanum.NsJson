@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
-namespace Arcanum.NsJson {
+namespace Arcanum.NsJson.Contracts {
 	using Newtonsoft.Json.Serialization;
 	using System;
 
-	class ValueProvider<TTarget, TValue>: IValueProvider {
+	public sealed class ValueProvider<TTarget, TValue>: IValueProvider {
 		Func<TTarget, TValue> get { get; }
 		Action<TTarget, TValue> set { get; }
 

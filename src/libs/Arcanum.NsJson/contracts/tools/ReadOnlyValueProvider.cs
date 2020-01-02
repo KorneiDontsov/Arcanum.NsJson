@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
-namespace Arcanum.NsJson {
+namespace Arcanum.NsJson.Contracts {
 	using Newtonsoft.Json.Serialization;
 	using System;
 
-	class ReadOnlyValueProvider<TTarget, TValue>: IValueProvider {
+	public sealed class ReadOnlyValueProvider<TTarget, TValue>: IValueProvider {
 		Func<TTarget, TValue> get { get; }
 		public ReadOnlyValueProvider (Func<TTarget, TValue> get) => this.get = get;
 

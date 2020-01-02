@@ -20,7 +20,7 @@ namespace Arcanum.NsJson.Contracts {
 			/// <inheritdoc />
 			public Type dataType { get; }
 
-			public JsonContract? contract { get; private set; }
+			JsonContract? contract;
 
 			public JsonContractRequest (Type dataType) => this.dataType = dataType;
 
@@ -31,22 +31,14 @@ namespace Arcanum.NsJson.Contracts {
 				else
 					throw new Exception("Cannot return contract second time.");
 			}
-		}
 
-		JsonContract? MayCreateContract (Type dataType) =>
-			contractCreators.GetValueOrDefault(dataType)?.CreateContract();
-
-		JsonContract? RequestContract (Type dataType) {
-			var request = new JsonContractRequest(dataType);
-			foreach (var contractFactory in contractFactories) {
-				contractFactory.Handle(request);
-				if (request.contract is {}) return request.contract;
+			public JsonContract? RequestContract (ImmutableArray<IJsonContractFactory> contractFactories) {
+				foreach (var contractFactory in contractFactories) {
+					contractFactory.Handle(this);
+					if (contract is {}) return contract;
+				}
+				return null;
 			}
-			return null;
-		}
-
-		void PatchContract (JsonContract contract) {
-			foreach (var contractPatch in contractPatches) contractPatch.Patch(contract);
 		}
 
 		/// <summary>
@@ -55,11 +47,17 @@ namespace Arcanum.NsJson.Contracts {
 		/// </summary>
 		/// <exception cref = "JsonContractException" />
 		JsonContract CreateContract (Type dataType) {
-			var contract = MayCreateContract(dataType) ?? RequestContract(dataType);
-			if (contract is null)
-				throw new JsonContractException($"{dataType} has no contract.");
+			if (dataType.MatchCustomAttribute<IJsonContractCreator>(inherit: false) is {} externalCreator)
+				return externalCreator.CreateContract();
 			else {
-				PatchContract(contract);
+				var contractRequest = new JsonContractRequest(dataType);
+				var externalFactories = dataType.MatchCustomAttributes<IJsonContractFactory>();
+				var contract =
+					contractRequest.RequestContract(externalFactories)
+					?? contractCreators.GetValueOrDefault(dataType)?.CreateContract()
+					?? contractRequest.RequestContract(contractFactories)
+					?? throw new JsonContractException($"{dataType} has no contract.");
+				foreach (var contractPatch in contractPatches) contractPatch.Patch(contract);
 				return contract;
 			}
 		}

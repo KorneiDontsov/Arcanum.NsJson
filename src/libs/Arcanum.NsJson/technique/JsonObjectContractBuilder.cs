@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
 namespace Arcanum.NsJson {
+	using Arcanum.NsJson.Contracts;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Serialization;
 	using System;
@@ -32,7 +33,6 @@ namespace Arcanum.NsJson {
 				Readable = true,
 				Writable = false,
 				ValueProvider = new ReadOnlyValueProvider<T, TProp>(get),
-				HasMemberAttribute = true,
 				Required = required,
 				DefaultValueHandling = defaultValueHandling,
 				DefaultValue = defaultValue
@@ -53,7 +53,6 @@ namespace Arcanum.NsJson {
 				Readable = true,
 				Writable = true,
 				ValueProvider = new ValueProvider<T, TProp>(get, set),
-				HasMemberAttribute = true,
 				Required = required,
 				DefaultValueHandling = defaultValueHandling,
 				DefaultValue = defaultValue
