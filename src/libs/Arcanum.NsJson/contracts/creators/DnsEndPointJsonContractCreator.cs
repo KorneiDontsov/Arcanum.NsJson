@@ -9,9 +9,6 @@ namespace Arcanum.NsJson.Contracts {
 
 	public sealed class DnsEndPointJsonContractCreator: IJsonContractCreator {
 		/// <inheritdoc />
-		public Type dataType => typeof(DnsEndPoint);
-
-		/// <inheritdoc />
 		public JsonContract CreateContract () =>
 			new JsonObjectContractBuilder<DnsEndPoint>()
 				.AddCreatorArg(nameof(DnsEndPoint.Host), d => d.Host)

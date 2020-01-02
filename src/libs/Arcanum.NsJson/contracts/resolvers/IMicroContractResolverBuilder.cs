@@ -2,9 +2,10 @@
 
 namespace Arcanum.NsJson.Contracts {
 	using Newtonsoft.Json.Serialization;
+	using System;
 
 	public interface IMicroContractResolverBuilder {
-		IMicroContractResolverBuilder AddCreator (IJsonContractCreator contractCreator);
+		IMicroContractResolverBuilder AddCreator (Type dataType, IJsonContractCreator contractCreator);
 
 		IMicroContractResolverBuilder AddFactory (IJsonContractFactory contractFactory);
 

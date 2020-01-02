@@ -2,11 +2,8 @@
 
 namespace Arcanum.NsJson.Contracts {
 	using Newtonsoft.Json.Serialization;
-	using System;
 
 	public interface IJsonContractCreator {
-		Type dataType { get; }
-
 		/// <exception cref = "JsonContractException" />
 		JsonContract CreateContract ();
 	}

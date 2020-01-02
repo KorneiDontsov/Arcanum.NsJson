@@ -6,9 +6,9 @@ namespace Arcanum.NsJson.Contracts {
 			public static T instance { get; } = new T();
 		}
 
-		public static IMicroContractResolverBuilder AddCreator<T> (this IMicroContractResolverBuilder builder)
+		public static IMicroContractResolverBuilder AddCreator<TData, T> (this IMicroContractResolverBuilder builder)
 		where T: class, IJsonContractCreator, new() =>
-			builder.AddCreator(Singleton<T>.instance);
+			builder.AddCreator(typeof(TData), Singleton<T>.instance);
 
 		public static IMicroContractResolverBuilder AddFactory<T> (this IMicroContractResolverBuilder builder)
 		where T: class, IJsonContractFactory, new() =>

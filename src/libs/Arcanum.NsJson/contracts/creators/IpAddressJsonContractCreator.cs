@@ -39,10 +39,7 @@ namespace Arcanum.NsJson.Contracts {
 		}
 
 		/// <inheritdoc />
-		public Type dataType => typeof(IPAddress);
-
-		/// <inheritdoc />
 		public JsonContract CreateContract () =>
-			new JsonStringContract(dataType) { Converter = new IpAddressJsonConverter() };
+			new JsonStringContract(typeof(IPAddress)) { Converter = new IpAddressJsonConverter() };
 	}
 }

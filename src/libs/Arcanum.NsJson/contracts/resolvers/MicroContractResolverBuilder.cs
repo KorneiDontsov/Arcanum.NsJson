@@ -19,8 +19,8 @@ namespace Arcanum.NsJson.Contracts {
 			ImmutableArray.CreateBuilder<IJsonMiddlewarePatch>();
 
 		/// <inheritdoc />
-		public IMicroContractResolverBuilder AddCreator (IJsonContractCreator contractCreator) {
-			contractCreators[contractCreator.dataType] = contractCreator;
+		public IMicroContractResolverBuilder AddCreator (Type dataType, IJsonContractCreator contractCreator) {
+			contractCreators[dataType] = contractCreator;
 			return this;
 		}
 
