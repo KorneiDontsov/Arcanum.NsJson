@@ -59,7 +59,6 @@ namespace Arcanum.NsJson {
 		public static JsonReaderException ReaderException (JsonReader jsonReader, String message) =>
 			ReaderException(jsonReader, message, innerException: null);
 
-		[StringFormatMethod("messageFormat")]
 		public static JsonReaderException ReaderException
 		(JsonReader jsonReader,
 		 IFormatProvider formatProvider,
@@ -70,7 +69,6 @@ namespace Arcanum.NsJson {
 				String.Format(formatProvider, messageFormat, messageArgs),
 				innerException: null);
 
-		[StringFormatMethod("messageFormat")]
 		public static JsonReaderException ReaderException
 		(JsonReader jsonReader,
 		 String messageFormat,
