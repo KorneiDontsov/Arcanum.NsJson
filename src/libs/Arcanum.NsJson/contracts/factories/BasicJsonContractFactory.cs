@@ -17,7 +17,7 @@ namespace Arcanum.NsJson.Contracts {
 
 		static Resolver resolver { get; } = new Resolver();
 
-		internal static JsonContract CreateContract (Type dataType) => resolver.CreateContract(dataType);
+		public static JsonContract CreateContract (Type dataType) => resolver.CreateContract(dataType);
 
 		/// <inheritdoc />
 		public void Handle (IJsonContractRequest request) =>

@@ -13,43 +13,55 @@ namespace Arcanum.NsJson.Contracts {
 
 			public UnionCaseWriteMiddleware (Route caseRoute) => caseRouteStr = caseRoute.ToString();
 
-			/// <inheritdoc />
-			public void WriteJson (JsonWriter writer, Object value, JsonSerializer serializer, WriteJson previous) {
-				static void WriteValue (JsonReader input, JsonWriter output) {
-					switch (input.TokenType) {
-						case JsonToken.StartObject:
-							input.ReadNext();
-							while (input.TokenType != JsonToken.EndObject) {
-								output.WriteToken(input);
-								input.ReadNext();
-								output.WriteToken(input, writeChildren: true);
-								input.ReadNext();
-							}
-							break;
-						case JsonToken.StartArray:
-							output.WritePropertyName("$values");
-							output.WriteToken(input, writeChildren: true);
-							break;
-						default:
-							output.WritePropertyName("$value");
-							output.WriteToken(input);
-							break;
-					}
-				}
-
-				writer.WriteStartObject();
+			void WriteCaseProp (JsonWriter writer) {
 				writer.WritePropertyName("$case");
 				writer.WriteValue(caseRouteStr);
+			}
 
-				using (var source = JsonMemory.Rent()) {
-					using (var sourceWriter = source.Write())
-						previous(sourceWriter, value, serializer);
+			/// <inheritdoc />
+			public void WriteJson (JsonWriter writer, Object value, JsonSerializer serializer, WriteJson previous) {
+				using var source = JsonMemory.Rent();
 
-					using (var reader = source.Read())
-						WriteValue(input: reader, output: writer);
-				}
+				using (var sourceWriter = source.Write())
+					previous(sourceWriter, value, serializer);
 
-				writer.WriteEndObject();
+				using (var reader = source.Read())
+					switch (reader.TokenType) {
+						case JsonToken.StartObject:
+							reader.ReadNext();
+
+							if (reader.TokenType is JsonToken.EndObject)
+								writer.WriteValue(caseRouteStr);
+							else {
+								writer.WriteStartObject();
+								WriteCaseProp(writer);
+
+								while (reader.TokenType != JsonToken.EndObject) {
+									writer.WriteToken(reader);
+									reader.ReadNext();
+									writer.WriteToken(reader, writeChildren: true);
+									reader.ReadNext();
+								}
+
+								writer.WriteEndObject();
+							}
+
+							break;
+						case JsonToken.StartArray:
+							writer.WriteStartObject();
+							WriteCaseProp(writer);
+							writer.WritePropertyName("$values");
+							writer.WriteToken(reader, writeChildren: true);
+							writer.WriteEndObject();
+							break;
+						default:
+							writer.WriteStartObject();
+							WriteCaseProp(writer);
+							writer.WritePropertyName("$value");
+							writer.WriteToken(reader);
+							writer.WriteEndObject();
+							break;
+					}
 			}
 		}
 
