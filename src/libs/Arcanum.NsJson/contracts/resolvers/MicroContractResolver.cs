@@ -99,7 +99,7 @@ namespace Arcanum.NsJson.Contracts {
 			return contract;
 		}
 
-		static AsyncLocal<Boolean> noMiddleware { get; } = new AsyncLocal<Boolean>();
+		static ThreadLocal<Boolean> noMiddleware { get; } = new ThreadLocal<Boolean>();
 
 		class MiddlewareJsonConverter: JsonConverterAdapter, IToJsonConverter, IFromJsonConverter {
 			WriteJson writeJson { get; }
@@ -140,7 +140,7 @@ namespace Arcanum.NsJson.Contracts {
 			WriteJson BuildWrite () {
 				WriteJson write =
 					(writer, value, serializer) => {
-						using (new AsyncLocalTrigger(noMiddleware))
+						using (new ThreadLocalTrigger(noMiddleware))
 							serializer.Serialize(writer, value, dataType);
 					};
 				for (var i = toJsonMiddlewares.Count - 1; i >= 0; i -= 1) {
@@ -155,7 +155,7 @@ namespace Arcanum.NsJson.Contracts {
 			ReadJson BuildRead () {
 				ReadJson read =
 					(reader, serializer) => {
-						using (new AsyncLocalTrigger(noMiddleware))
+						using (new ThreadLocalTrigger(noMiddleware))
 							return serializer.Deserialize(reader, dataType);
 					};
 				foreach (var middleware in fromJsonMiddlewares) {
