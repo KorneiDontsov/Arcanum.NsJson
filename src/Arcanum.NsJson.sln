@@ -19,11 +19,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{49DAAD33
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcanum.NsJson.Tests", "tests\Arcanum.NsJson.Tests\Arcanum.NsJson.Tests.csproj", "{919F7566-1CB5-455D-A0CF-AE722D494828}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcanum.NsJson.DependencyInjection.Tests", "tests\Arcanum.NsJson.DependencyInjection.Tests\Arcanum.NsJson.DependencyInjection.Tests.csproj", "{B659EEBE-9B8B-48FD-B634-7F1677B15FAC}"
+EndProject
 Global
 	GlobalSection(NestedProjects) = preSolution
 		{899B622B-E7A8-4F6C-87BF-01FA3A094C6A} = {B520C700-7D45-4D82-BFB5-218FA68CF5CF}
 		{BFE8AB54-BF64-493B-905E-57612F144A73} = {B520C700-7D45-4D82-BFB5-218FA68CF5CF}
 		{919F7566-1CB5-455D-A0CF-AE722D494828} = {49DAAD33-3AD9-4ECE-AE05-FCBE7FEA0BF9}
+		{B659EEBE-9B8B-48FD-B634-7F1677B15FAC} = {49DAAD33-3AD9-4ECE-AE05-FCBE7FEA0BF9}
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +51,11 @@ Global
 		{919F7566-1CB5-455D-A0CF-AE722D494828}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{919F7566-1CB5-455D-A0CF-AE722D494828}.Release|Any CPU.Build.0 = Release|Any CPU
 		{919F7566-1CB5-455D-A0CF-AE722D494828}.NuGet|Any CPU.ActiveCfg = Release|Any CPU
+		{B659EEBE-9B8B-48FD-B634-7F1677B15FAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B659EEBE-9B8B-48FD-B634-7F1677B15FAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B659EEBE-9B8B-48FD-B634-7F1677B15FAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B659EEBE-9B8B-48FD-B634-7F1677B15FAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B659EEBE-9B8B-48FD-B634-7F1677B15FAC}.NuGet|Any CPU.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
