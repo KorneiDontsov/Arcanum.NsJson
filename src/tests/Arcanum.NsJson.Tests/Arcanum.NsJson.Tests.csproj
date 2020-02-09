@@ -1,13 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.0</TargetFramework>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
         <LangVersion>8.0</LangVersion>
         <Nullable>enable</Nullable>
         <RootNamespace>Arcanum.NsJson.Tests</RootNamespace>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
