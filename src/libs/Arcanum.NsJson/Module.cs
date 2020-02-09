@@ -98,6 +98,7 @@ namespace Arcanum.NsJson {
 		public static IContractResolver standardContractResolver { get; } =
 			CreateMicroContractResolverBuilder()
 				.AddStandardContracts()
+				.AddPlatformContracts()
 				.Build();
 
 		public static IJsonSerializer standardJsonSerializer { get; } =
