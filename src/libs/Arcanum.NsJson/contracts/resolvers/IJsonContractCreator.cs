@@ -5,6 +5,6 @@ namespace Arcanum.NsJson.Contracts {
 
 	public interface IJsonContractCreator {
 		/// <exception cref = "JsonContractException" />
-		JsonContract CreateContract ();
+		JsonContract CreateJsonContract ();
 	}
 }

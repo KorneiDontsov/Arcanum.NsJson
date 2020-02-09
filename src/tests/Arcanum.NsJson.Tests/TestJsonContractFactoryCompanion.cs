@@ -13,44 +13,44 @@ namespace Arcanum.NsJson.Tests {
 	using System.Reflection;
 	using Xunit;
 
-	public class TestUseJsonContractFactory: TestJsonSerializer {
+	public class TestJsonContractFactoryCompanion: TestJsonSerializer {
 		interface IDefaultValueProvider {
 			Object? defaultValue { get; }
 		}
 
-		[OptionalJsonContractFactory]
 		class Optional<T> where T: struct {
 			public T maybeValue { get; set; }
-		}
 
-		class OptionalJsonContractFactory: Attribute, IJsonContractFactory {
-			/// <inheritdoc />
-			public void Handle (IJsonContractRequest request) {
-				var valueType = request.dataType.GetGenericArguments()[0];
-				var valueDefault =
-					valueType.GetCustomAttributes()
-						.Select(a => a as IDefaultValueProvider).FirstOrDefault(a => a is {})
-						?.defaultValue;
-				var valueProp =
-					new JsonProperty {
-						PropertyName = "Value",
-						UnderlyingName = "maybeValue",
-						PropertyType = valueType,
-						DeclaringType = request.dataType,
-						Readable = true,
-						Writable = true,
-						ValueProvider = new ReflectionValueProvider(request.dataType.GetProperty("maybeValue")!),
-						Required = Required.Default,
-						DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
-						DefaultValue = valueDefault
-					};
-				var contract =
-					new JsonObjectContract(request.dataType) {
-						MemberSerialization = MemberSerialization.OptOut,
-						Properties = { valueProp },
-						DefaultCreator = () => Activator.CreateInstance(request.dataType)!
-					};
-				request.Return(contract);
+			[UsedImplicitly]
+			public class Companion: IJsonContractFactory {
+				/// <inheritdoc />
+				public void Handle (IJsonContractRequest request) {
+					var valueType = request.dataType.GetGenericArguments()[0];
+					var valueDefault =
+						valueType.GetCustomAttributes()
+							.Select(a => a as IDefaultValueProvider).FirstOrDefault(a => a is {})
+							?.defaultValue;
+					var valueProp =
+						new JsonProperty {
+							PropertyName = "Value",
+							UnderlyingName = "maybeValue",
+							PropertyType = valueType,
+							DeclaringType = request.dataType,
+							Readable = true,
+							Writable = true,
+							ValueProvider = new ReflectionValueProvider(request.dataType.GetProperty("maybeValue")!),
+							Required = Required.Default,
+							DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+							DefaultValue = valueDefault
+						};
+					var contract =
+						new JsonObjectContract(request.dataType) {
+							MemberSerialization = MemberSerialization.OptOut,
+							Properties = { valueProp },
+							DefaultCreator = () => Activator.CreateInstance(request.dataType)!
+						};
+					request.Return(contract);
+				}
 			}
 		}
 

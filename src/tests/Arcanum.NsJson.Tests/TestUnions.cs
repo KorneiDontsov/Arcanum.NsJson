@@ -49,7 +49,7 @@ namespace Arcanum.NsJson.Tests {
 				public Boolean Remove (String item) => impl.Remove(item);
 			}
 
-			[UnionCase("CaseCustomName")]
+			[UnionCaseName("CaseCustomName")]
 			public sealed class CaseWithCustomName: UnionExample {
 				public String? prop { get; set; }
 			}

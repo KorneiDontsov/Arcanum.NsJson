@@ -7,7 +7,7 @@ namespace Arcanum.NsJson.Contracts {
 
 	public sealed class IpEndPointJsonContractCreator: IJsonContractCreator {
 		/// <inheritdoc />
-		public JsonContract CreateContract () =>
+		public JsonContract CreateJsonContract () =>
 			new JsonObjectContractBuilder<IPEndPoint>()
 				.AddCreatorArg(nameof(IPEndPoint.Address), d => d.Address)
 				.AddCreatorArg(nameof(IPEndPoint.Port), d => d.Port)
