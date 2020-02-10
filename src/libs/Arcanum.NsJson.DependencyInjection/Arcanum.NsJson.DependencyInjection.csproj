@@ -7,7 +7,7 @@
 
     <PropertyGroup>
         <Product>Arcanum.NsJson.DependencyInjection</Product>
-        <Version>1.0.0</Version>
+        <Version>2.0.0</Version>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -24,7 +24,7 @@
     <Choose>
         <When Condition="'$(Configuration)' == 'NuGet'">
             <ItemGroup>
-                <PackageReference Include="Arcanum.NsJson" Version="1.0.0" />
+                <PackageReference Include="Arcanum.NsJson" Version="2.0.0" />
             </ItemGroup>
         </When>
         <Otherwise>
