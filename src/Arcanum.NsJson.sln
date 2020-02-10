@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29102.190
@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcanum.NsJson.Tests", "tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcanum.NsJson.DependencyInjection.Tests", "tests\Arcanum.NsJson.DependencyInjection.Tests\Arcanum.NsJson.DependencyInjection.Tests.csproj", "{B659EEBE-9B8B-48FD-B634-7F1677B15FAC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arcanum.NsJson.AspNet.Tests", "tests\Arcanum.NsJson.AspNet.Tests\Arcanum.NsJson.AspNet.Tests.csproj", "{78A97229-21EF-4CFA-A5EC-99C058B0EF90}"
+EndProject
 Global
 	GlobalSection(NestedProjects) = preSolution
 		{899B622B-E7A8-4F6C-87BF-01FA3A094C6A} = {B520C700-7D45-4D82-BFB5-218FA68CF5CF}
@@ -30,6 +32,7 @@ Global
 		{D8D78217-0F71-4610-99A0-2C8E5EF8E558} = {B520C700-7D45-4D82-BFB5-218FA68CF5CF}
 		{919F7566-1CB5-455D-A0CF-AE722D494828} = {49DAAD33-3AD9-4ECE-AE05-FCBE7FEA0BF9}
 		{B659EEBE-9B8B-48FD-B634-7F1677B15FAC} = {49DAAD33-3AD9-4ECE-AE05-FCBE7FEA0BF9}
+		{78A97229-21EF-4CFA-A5EC-99C058B0EF90} = {49DAAD33-3AD9-4ECE-AE05-FCBE7FEA0BF9}
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +68,11 @@ Global
 		{B659EEBE-9B8B-48FD-B634-7F1677B15FAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B659EEBE-9B8B-48FD-B634-7F1677B15FAC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B659EEBE-9B8B-48FD-B634-7F1677B15FAC}.NuGet|Any CPU.ActiveCfg = Debug|Any CPU
+		{78A97229-21EF-4CFA-A5EC-99C058B0EF90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78A97229-21EF-4CFA-A5EC-99C058B0EF90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78A97229-21EF-4CFA-A5EC-99C058B0EF90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78A97229-21EF-4CFA-A5EC-99C058B0EF90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78A97229-21EF-4CFA-A5EC-99C058B0EF90}.NuGet|Any CPU.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
