@@ -19,7 +19,9 @@ namespace Arcanum.NsJson.Contracts {
 				.AddCreator<IPAddress, IpAddressJsonContractCreator>()
 				.AddCreator<IPEndPoint, IpEndPointJsonContractCreator>()
 				.AddCreator<DnsEndPoint, DnsEndPointJsonContractCreator>()
-				.AddMiddlewareFactory<UnionCaseJsonMiddlewareFactory>();
+				.AddPatch<DiscardDeserializationCallbacksJsonContractPatch>()
+				.AddMiddlewareFactory<UnionCaseJsonMiddlewareFactory>()
+				.AddMiddlewareFactory<OnDeserializedCallbackJsonMiddlewareFactory>();
 
 		public static IMicroContractResolverBuilder AddPlatformContracts (this IMicroContractResolverBuilder builder) {
 			var assemblies = AppDomain.CurrentDomain.GetAssemblies();

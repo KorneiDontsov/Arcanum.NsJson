@@ -3,7 +3,7 @@
         <Configurations>Debug;Release;NuGet</Configurations>
         <Optimize Condition=" '$(Configuration)' != 'Debug' ">true</Optimize>
         <Platforms>AnyCPU</Platforms>
-        <NoWarn>1573, 1591</NoWarn>
+        <NoWarn>1573, 1591, 8509</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup>

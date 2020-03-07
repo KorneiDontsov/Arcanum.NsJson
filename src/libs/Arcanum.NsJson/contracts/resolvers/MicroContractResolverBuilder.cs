@@ -15,7 +15,7 @@ namespace Arcanum.NsJson.Contracts {
 		ImmutableArray<IJsonContractPatch>.Builder contractPatches { get; } =
 			ImmutableArray.CreateBuilder<IJsonContractPatch>();
 
-		ImmutableArray<IJsonMiddlewareFactory>.Builder middlewarePatches { get; } =
+		ImmutableArray<IJsonMiddlewareFactory>.Builder middlewareFactories { get; } =
 			ImmutableArray.CreateBuilder<IJsonMiddlewareFactory>();
 
 		/// <inheritdoc />
@@ -38,7 +38,7 @@ namespace Arcanum.NsJson.Contracts {
 
 		/// <inheritdoc />
 		public IMicroContractResolverBuilder AddMiddlewareFactory (IJsonMiddlewareFactory middlewareFactory) {
-			middlewarePatches.Add(middlewareFactory);
+			middlewareFactories.Add(middlewareFactory);
 			return this;
 		}
 
@@ -49,7 +49,7 @@ namespace Arcanum.NsJson.Contracts {
 				contractCreators.ToImmutable(),
 				contractFactories.ToImmutable(),
 				contractPatches.ToImmutable(),
-				middlewarePatches.ToImmutable());
+				middlewareFactories.ToImmutable());
 		}
 	}
 }
