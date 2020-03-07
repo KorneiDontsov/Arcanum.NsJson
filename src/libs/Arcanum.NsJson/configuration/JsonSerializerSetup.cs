@@ -44,12 +44,12 @@ namespace Arcanum.NsJson {
 		public ISerializationBinder serializationBinder { get; }
 
 		public JsonSerializerSetup
-		(CultureInfo culture,
-		 UInt32 maxDepth,
-		 Boolean checkAdditionalContent,
-		 IEqualityComparer referenceComparer,
-		 Func<IReferenceResolver> referenceResolverProvider,
-		 ISerializationBinder serializationBinder) {
+			(CultureInfo culture,
+			 UInt32 maxDepth,
+			 Boolean checkAdditionalContent,
+			 IEqualityComparer referenceComparer,
+			 Func<IReferenceResolver> referenceResolverProvider,
+			 ISerializationBinder serializationBinder) {
 			this.culture = culture;
 			this.maxDepth = maxDepth;
 			this.checkAdditionalContent = checkAdditionalContent;
@@ -59,12 +59,12 @@ namespace Arcanum.NsJson {
 		}
 
 		public JsonSerializerSetup With
-		(CultureInfo? culture = null,
-		 UInt32? maxDepth = null,
-		 Boolean? checkAdditionalContent = null,
-		 IEqualityComparer? referenceComparer = null,
-		 Func<IReferenceResolver>? referenceResolverProvider = null,
-		 ISerializationBinder? serializationBinder = null) =>
+			(CultureInfo? culture = null,
+			 UInt32? maxDepth = null,
+			 Boolean? checkAdditionalContent = null,
+			 IEqualityComparer? referenceComparer = null,
+			 Func<IReferenceResolver>? referenceResolverProvider = null,
+			 ISerializationBinder? serializationBinder = null) =>
 			new JsonSerializerSetup(
 				culture ?? this.culture,
 				maxDepth ?? this.maxDepth,

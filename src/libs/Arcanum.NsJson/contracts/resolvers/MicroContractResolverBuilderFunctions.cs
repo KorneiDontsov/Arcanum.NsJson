@@ -7,19 +7,19 @@ namespace Arcanum.NsJson.Contracts {
 		}
 
 		public static IMicroContractResolverBuilder AddCreator<TData, T> (this IMicroContractResolverBuilder builder)
-		where T: class, IJsonContractCreator, new() =>
+			where T: class, IJsonContractCreator, new() =>
 			builder.AddCreator(typeof(TData), Singleton<T>.instance);
 
 		public static IMicroContractResolverBuilder AddFactory<T> (this IMicroContractResolverBuilder builder)
-		where T: class, IJsonContractFactory, new() =>
+			where T: class, IJsonContractFactory, new() =>
 			builder.AddFactory(Singleton<T>.instance);
 
 		public static IMicroContractResolverBuilder AddPatch<T> (this IMicroContractResolverBuilder builder)
-		where T: class, IJsonContractPatch, new() =>
+			where T: class, IJsonContractPatch, new() =>
 			builder.AddPatch(Singleton<T>.instance);
 
 		public static IMicroContractResolverBuilder AddMiddlewareFactory<T> (this IMicroContractResolverBuilder builder)
-		where T: class, IJsonMiddlewareFactory, new() =>
+			where T: class, IJsonMiddlewareFactory, new() =>
 			builder.AddMiddlewareFactory(Singleton<T>.instance);
 	}
 }

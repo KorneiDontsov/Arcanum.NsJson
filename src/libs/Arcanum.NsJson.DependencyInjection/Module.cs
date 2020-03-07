@@ -9,8 +9,7 @@ namespace Arcanum.NsJson.DependencyInjection {
 			services.AddSingleton(standardJsonSerializer);
 
 		public static IServiceCollection AddJsonSerializer
-		(this IServiceCollection services,
-		 JsonSerializerConfig serializerConfig) =>
+			(this IServiceCollection services, JsonSerializerConfig serializerConfig) =>
 			services.AddSingleton(p => CreateJsonSerializer(serializerConfig));
 	}
 }

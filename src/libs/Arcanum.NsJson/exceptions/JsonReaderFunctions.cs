@@ -7,25 +7,21 @@ namespace Arcanum.NsJson {
 
 	public static class JsonReaderFunctions {
 		public static JsonReaderException Exception
-		(this JsonReader jsonReader,
-		 String message,
-		 Exception? innerException) =>
+			(this JsonReader jsonReader, String message, Exception? innerException) =>
 			ReaderException(jsonReader, message, innerException);
 
 		public static JsonReaderException Exception (this JsonReader jsonReader, String message) =>
 			ReaderException(jsonReader, message);
 
 		public static JsonReaderException Exception
-		(this JsonReader jsonReader,
-		 IFormatProvider formatProvider,
-		 String messageFormat,
-		 params Object[] messageArgs) =>
+			(this JsonReader jsonReader,
+			 IFormatProvider formatProvider,
+			 String messageFormat,
+			 params Object[] messageArgs) =>
 			ReaderException(jsonReader, formatProvider, messageFormat, messageArgs);
 
 		public static JsonReaderException Exception
-		(this JsonReader jsonReader,
-		 String messageFormat,
-		 params Object[] messageArgs) =>
+			(this JsonReader jsonReader, String messageFormat, params Object[] messageArgs) =>
 			ReaderException(jsonReader, messageFormat, messageArgs);
 
 		public static void ReadNext (this JsonReader jsonReader) {

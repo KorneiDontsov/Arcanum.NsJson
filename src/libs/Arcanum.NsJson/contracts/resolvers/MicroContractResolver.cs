@@ -215,10 +215,10 @@ namespace Arcanum.NsJson.Contracts {
 		}
 
 		public MicroContractResolver
-		(ImmutableDictionary<Type, IJsonContractCreator> contractCreators,
-		 ImmutableArray<IJsonContractFactory> contractFactories,
-		 ImmutableArray<IJsonContractPatch> contractPatches,
-		 ImmutableArray<IJsonMiddlewareFactory> middlewareFactories) {
+			(ImmutableDictionary<Type, IJsonContractCreator> contractCreators,
+			 ImmutableArray<IJsonContractFactory> contractFactories,
+			 ImmutableArray<IJsonContractPatch> contractPatches,
+			 ImmutableArray<IJsonMiddlewareFactory> middlewareFactories) {
 			this.contractCreators = contractCreators;
 			this.contractFactories = contractFactories;
 			this.contractPatches = contractPatches;

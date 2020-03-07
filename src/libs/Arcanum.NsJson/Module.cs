@@ -9,9 +9,7 @@ namespace Arcanum.NsJson {
 
 	public static class Module {
 		public static void SetUpNsSerializerSettings
-		(this JsonSerializerSetup setup,
-		 JsonSerializerSettings settings,
-		 JsonSerializerConfig? config = null) {
+			(this JsonSerializerSetup setup, JsonSerializerSettings settings, JsonSerializerConfig? config = null) {
 			static Int32? ConvertDepth (UInt32 depth) =>
 				depth switch {
 					0 => (Int32?) null,
@@ -62,26 +60,20 @@ namespace Arcanum.NsJson {
 		}
 
 		public static JsonSerializerSettings CreateNsSerializerSettings
-		(this JsonSerializerSetup setup,
-		 IContractResolver contractResolver,
-		 JsonSerializerConfig? config = null) {
+			(this JsonSerializerSetup setup, IContractResolver contractResolver, JsonSerializerConfig? config = null) {
 			var settings = new JsonSerializerSettings { ContractResolver = contractResolver };
 			setup.SetUpNsSerializerSettings(settings, config);
 			return settings;
 		}
 
 		public static JsonSerializer CreateNsJsonSerializer
-		(this JsonSerializerSetup setup,
-		 IContractResolver contractResolver,
-		 JsonSerializerConfig? config = null) {
+			(this JsonSerializerSetup setup, IContractResolver contractResolver, JsonSerializerConfig? config = null) {
 			var settings = setup.CreateNsSerializerSettings(contractResolver, config);
 			return JsonSerializer.Create(settings);
 		}
 
 		public static IJsonSerializer CreateJsonSerializer
-		(this JsonSerializerSetup setup,
-		 IContractResolver contractResolver,
-		 JsonSerializerConfig? config = null) {
+			(this JsonSerializerSetup setup, IContractResolver contractResolver, JsonSerializerConfig? config = null) {
 			var nsSerializer = setup.CreateNsJsonSerializer(contractResolver, config);
 			return new JsonSerializerAdapter(nsSerializer);
 		}

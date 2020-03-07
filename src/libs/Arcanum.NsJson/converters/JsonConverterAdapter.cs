@@ -32,10 +32,7 @@ namespace Arcanum.NsJson {
 
 		/// <inheritdoc />
 		public override sealed Object? ReadJson
-		(JsonReader reader,
-		 Type objectType,
-		 Object? existingValue,
-		 JsonSerializer serializer) =>
+			(JsonReader reader, Type objectType, Object? existingValue, JsonSerializer serializer) =>
 			readConverter is null
 				? throw new NotSupportedException()
 				: readConverter.Read(reader, serializer);

@@ -20,11 +20,11 @@ namespace Arcanum.NsJson {
 			};
 
 		static JsonProperty CreateProperty<TProp>
-		(String propName,
-		 Func<T, TProp> get,
-		 Required required = Required.Always,
-		 DefaultValueHandling defaultValueHandling = DefaultValueHandling.Include,
-		 Object? defaultValue = null) =>
+			(String propName,
+			 Func<T, TProp> get,
+			 Required required = Required.Always,
+			 DefaultValueHandling defaultValueHandling = DefaultValueHandling.Include,
+			 Object? defaultValue = null) =>
 			new JsonProperty {
 				PropertyName = propName,
 				UnderlyingName = propName,
@@ -39,12 +39,12 @@ namespace Arcanum.NsJson {
 			};
 
 		static JsonProperty CreateProperty<TProp>
-		(String propName,
-		 Func<T, TProp> get,
-		 Action<T, TProp> set,
-		 Required required = Required.Always,
-		 DefaultValueHandling defaultValueHandling = DefaultValueHandling.Include,
-		 Object? defaultValue = null) =>
+			(String propName,
+			 Func<T, TProp> get,
+			 Action<T, TProp> set,
+			 Required required = Required.Always,
+			 DefaultValueHandling defaultValueHandling = DefaultValueHandling.Include,
+			 Object? defaultValue = null) =>
 			new JsonProperty {
 				PropertyName = propName,
 				UnderlyingName = propName,
@@ -59,34 +59,34 @@ namespace Arcanum.NsJson {
 			};
 
 		public JsonObjectContractBuilder<T> AddProperty<TProp>
-		(String propName,
-		 Func<T, TProp> get,
-		 Required required = Required.Always,
-		 DefaultValueHandling defaultValueHandling = DefaultValueHandling.Include,
-		 Object? defaultValue = null) {
+			(String propName,
+			 Func<T, TProp> get,
+			 Required required = Required.Always,
+			 DefaultValueHandling defaultValueHandling = DefaultValueHandling.Include,
+			 Object? defaultValue = null) {
 			var prop = CreateProperty(propName, get, required, defaultValueHandling, defaultValue);
 			contract.Properties.AddProperty(prop);
 			return this;
 		}
 
 		public JsonObjectContractBuilder<T> AddProperty<TProp>
-		(String propName,
-		 Func<T, TProp> get,
-		 Action<T, TProp> set,
-		 Required required = Required.Always,
-		 DefaultValueHandling defaultValueHandling = DefaultValueHandling.Include,
-		 Object? defaultValue = null) {
+			(String propName,
+			 Func<T, TProp> get,
+			 Action<T, TProp> set,
+			 Required required = Required.Always,
+			 DefaultValueHandling defaultValueHandling = DefaultValueHandling.Include,
+			 Object? defaultValue = null) {
 			var prop = CreateProperty(propName, get, set, required, defaultValueHandling, defaultValue);
 			contract.Properties.AddProperty(prop);
 			return this;
 		}
 
 		public JsonObjectContractBuilder<T> AddCreatorArg<TProp>
-		(String propName,
-		 Func<T, TProp> get,
-		 Required required = Required.Always,
-		 DefaultValueHandling defaultValueHandling = DefaultValueHandling.Include,
-		 Object? defaultValue = null) {
+			(String propName,
+			 Func<T, TProp> get,
+			 Required required = Required.Always,
+			 DefaultValueHandling defaultValueHandling = DefaultValueHandling.Include,
+			 Object? defaultValue = null) {
 			var prop = CreateProperty(propName, get, required, defaultValueHandling, defaultValue);
 			contract.Properties.AddProperty(prop);
 			contract.CreatorParameters.AddProperty(prop);
@@ -94,12 +94,12 @@ namespace Arcanum.NsJson {
 		}
 
 		public JsonObjectContractBuilder<T> AddCreatorArg<TProp>
-		(String propName,
-		 Func<T, TProp> get,
-		 Action<T, TProp> set,
-		 Required required = Required.Always,
-		 DefaultValueHandling defaultValueHandling = DefaultValueHandling.Include,
-		 Object? defaultValue = null) {
+			(String propName,
+			 Func<T, TProp> get,
+			 Action<T, TProp> set,
+			 Required required = Required.Always,
+			 DefaultValueHandling defaultValueHandling = DefaultValueHandling.Include,
+			 Object? defaultValue = null) {
 			var prop = CreateProperty(propName, get, set, required, defaultValueHandling, defaultValue);
 			contract.Properties.AddProperty(prop);
 			contract.CreatorParameters.AddProperty(prop);

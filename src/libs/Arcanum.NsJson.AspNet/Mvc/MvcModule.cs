@@ -10,11 +10,11 @@ namespace Arcanum.NsJson.AspNet {
 		public static MvcJsonOptions standardMvcJsonOptions = new MvcJsonOptions();
 
 		public static IMvcBuilder AddArcaneNsJson
-		(this IMvcBuilder mvcBuilder,
-		 JsonSerializerSetup serializerSetup,
-		 IContractResolver contractResolver,
-		 MvcJsonOptions options,
-		 JsonSerializerConfig? config = null) =>
+			(this IMvcBuilder mvcBuilder,
+			 JsonSerializerSetup serializerSetup,
+			 IContractResolver contractResolver,
+			 MvcJsonOptions options,
+			 JsonSerializerConfig? config = null) =>
 			mvcBuilder.AddNewtonsoftJson(
 				nsOptions => {
 					nsOptions.AllowInputFormatterExceptionMessages = options.allowInputFormatterExceptionMessages;
@@ -24,9 +24,7 @@ namespace Arcanum.NsJson.AspNet {
 				});
 
 		public static IMvcBuilder AddArcaneNsJson
-		(this IMvcBuilder mvcBuilder,
-		 MvcJsonOptions options,
-		 JsonSerializerConfig? config = null) =>
+			(this IMvcBuilder mvcBuilder, MvcJsonOptions options, JsonSerializerConfig? config = null) =>
 			mvcBuilder.AddArcaneNsJson(standardJsonSerializerSetup, standardContractResolver, options, config);
 
 		public static IMvcBuilder AddArcaneNsJson (this IMvcBuilder mvcBuilder, JsonSerializerConfig? config = null) =>

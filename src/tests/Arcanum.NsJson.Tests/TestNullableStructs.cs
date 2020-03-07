@@ -61,11 +61,11 @@ namespace Arcanum.NsJson.Tests {
 
 			/// <inheritdoc />
 			public override Unit ReadJson
-			(JsonReader reader,
-			 Type objectType,
-			 Unit existingValue,
-			 Boolean hasExistingValue,
-			 JsonSerializer serializer) {
+				(JsonReader reader,
+				 Type objectType,
+				 Unit existingValue,
+				 Boolean hasExistingValue,
+				 JsonSerializer serializer) {
 				reader.CurrentTokenMustBe(JsonToken.String);
 				var value = (String) reader.Value!;
 				return value is "unit"

@@ -13,10 +13,7 @@ namespace Arcanum.NsJson {
 		// Copyright (c) 2007 James Newton-King
 
 		public static JsonReaderException ReaderException
-		(IJsonLineInfo? maybeLineInfo,
-		 String path,
-		 String message,
-		 Exception? innerException = null) {
+			(IJsonLineInfo? maybeLineInfo, String path, String message, Exception? innerException = null) {
 			static String FormatMessage (IJsonLineInfo? maybeAvailableLineInfo, String path, String message) {
 				if (! message.EndsWith(Environment.NewLine, StringComparison.Ordinal)) {
 					message = message.Trim();
@@ -51,28 +48,24 @@ namespace Arcanum.NsJson {
 		}
 
 		public static JsonReaderException ReaderException
-		(JsonReader jsonReader,
-		 String message,
-		 Exception? innerException) =>
+			(JsonReader jsonReader, String message, Exception? innerException) =>
 			ReaderException(jsonReader as IJsonLineInfo, jsonReader.Path, message, innerException);
 
 		public static JsonReaderException ReaderException (JsonReader jsonReader, String message) =>
 			ReaderException(jsonReader, message, innerException: null);
 
 		public static JsonReaderException ReaderException
-		(JsonReader jsonReader,
-		 IFormatProvider formatProvider,
-		 String messageFormat,
-		 params Object[] messageArgs) =>
+			(JsonReader jsonReader,
+			 IFormatProvider formatProvider,
+			 String messageFormat,
+			 params Object[] messageArgs) =>
 			ReaderException(
 				jsonReader,
 				String.Format(formatProvider, messageFormat, messageArgs),
 				innerException: null);
 
 		public static JsonReaderException ReaderException
-		(JsonReader jsonReader,
-		 String messageFormat,
-		 params Object[] messageArgs) =>
+			(JsonReader jsonReader, String messageFormat, params Object[] messageArgs) =>
 			ReaderException(jsonReader, CultureInfo.InvariantCulture, messageFormat, messageArgs);
 	}
 }
