@@ -21,6 +21,6 @@ namespace Arcanum.NsJson.Ext.AspNet {
 		///     either in HTML or using <see cref = "BadRequestObjectResult" />. In effect, this setting
 		///     controls whether clients can receive detailed error messages about submitted JSON data.
 		/// </remarks>
-		public Boolean allowInputFormatterExceptionMessages { get; set; } = false;
+		public Boolean allowInputFormatterExceptionMessages { get; set; }
 	}
 }

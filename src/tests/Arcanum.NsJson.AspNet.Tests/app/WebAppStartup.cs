@@ -6,7 +6,7 @@ namespace Arcanum.NsJson.AspNet.Tests {
 
 	public class WebAppStartup {
 		public void ConfigureServices (IServiceCollection services) =>
-			services.AddControllers().AddArcaneNsJson();
+			services.AddControllers().AddJson();
 
 		public void Configure (IApplicationBuilder app) =>
 			app

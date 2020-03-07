@@ -2,6 +2,7 @@
 
 namespace Arcanum.NsJson.NsTests {
 	using FluentAssertions.Execution;
+	using JetBrains.Annotations;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
 	using System;
@@ -11,13 +12,13 @@ namespace Arcanum.NsJson.NsTests {
 	public class TestDeserializationCallbacks {
 		[JsonConverter(typeof(DataConverter))]
 		class Data {
-			[OnDeserializing]
+			[OnDeserializing, UsedImplicitly]
 			void OnDeserializing (StreamingContext context) {
 				var msg = "Not expected 'OnDeserializing' to be invoked because of custom converter.";
 				throw new AssertionFailedException(msg);
 			}
 
-			[OnDeserialized]
+			[OnDeserialized, UsedImplicitly]
 			void OnDeserialized (StreamingContext context) {
 				var msg = "Not expected 'OnDeserialized' to be invoked because of custom converter.";
 				throw new AssertionFailedException(msg);

@@ -5,6 +5,8 @@ namespace Arcanum.NsJson {
 	using System;
 
 	public interface IJsonSerializer {
+		JsonSerializerSetup setup { get; }
+
 		/// <exception cref = "JsonException" />
 		void Write (JsonWriter jsonWriter, Object? maybeData);
 

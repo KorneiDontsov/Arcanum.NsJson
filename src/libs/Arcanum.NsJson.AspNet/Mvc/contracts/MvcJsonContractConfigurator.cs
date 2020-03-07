@@ -4,13 +4,10 @@
 
 namespace Arcanum.NsJson.Ext.AspNet {
 	using Arcanum.NsJson.Contracts;
-	using Microsoft.AspNetCore.Mvc;
 
 	class MvcJsonContractConfigurator: PlatformJsonContractConfigurator {
 		/// <inheritdoc />
 		public override void ConfigurePlatformJsonContracts (IMicroContractResolverBuilder builder) =>
-			builder
-				.AddCreator<ProblemDetails, ProblemDetailsJsonContractCreator>()
-				.AddCreator<ValidationProblemDetails, ValidationProblemDetailsJsonContractCreator>();
+			builder.AddContractFactory(new ProblemDetailsJsonContractFactory());
 	}
 }

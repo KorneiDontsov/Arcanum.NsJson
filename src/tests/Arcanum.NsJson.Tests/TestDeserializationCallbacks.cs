@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
 namespace Arcanum.NsJson.Tests {
+	using Arcanum.NsJson.Contracts;
 	using FluentAssertions;
 	using JetBrains.Annotations;
 	using Newtonsoft.Json;
@@ -24,8 +25,22 @@ namespace Arcanum.NsJson.Tests {
 				baseWhenDeserialized = true;
 		}
 
-		[JsonConverter(typeof(DataConverter))]
-		class Data: DataBase {
+		sealed class Data: DataBase {
+			class FromJsonConverter: IFromJsonConverter {
+				/// <inheritdoc />
+				public Object Read (IJsonSerializer serializer, JsonReader reader, ILocalsCollection locals) {
+					reader.ReadAsString();
+					return new Data();
+				}
+			}
+
+			[UsedImplicitly]
+			public class Companion: IJsonConverterFactory {
+				/// <inheritdoc />
+				public void Handle (IJsonConverterRequest request) =>
+					request.ReturnReadOnly(new FromJsonConverter());
+			}
+
 			public Boolean whenDeserializing { get; private set; }
 
 			public Boolean whenDeserialized { get; private set; }
@@ -40,14 +55,6 @@ namespace Arcanum.NsJson.Tests {
 			void OnDeserialized (StreamingContext context) {
 				whenDeserialized = true;
 				whenDeserializedAfterBase = true;
-			}
-		}
-
-		class DataConverter: JsonConverterAdapter, IFromJsonConverter {
-			/// <inheritdoc />
-			public Object? Read (JsonReader reader, JsonSerializer serializer) {
-				reader.ReadAsString();
-				return new Data();
 			}
 		}
 

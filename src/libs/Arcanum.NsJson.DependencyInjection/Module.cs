@@ -5,11 +5,11 @@ namespace Arcanum.NsJson.DependencyInjection {
 	using static Arcanum.NsJson.Module;
 
 	public static class Module {
-		public static IServiceCollection AddJsonSerializer (this IServiceCollection services) =>
-			services.AddSingleton(standardJsonSerializer);
-
 		public static IServiceCollection AddJsonSerializer
-			(this IServiceCollection services, JsonSerializerConfig serializerConfig) =>
-			services.AddSingleton(p => CreateJsonSerializer(serializerConfig));
+			(this IServiceCollection services, IJsonSerializer jsonSerializer) =>
+			services.AddSingleton(jsonSerializer);
+
+		public static IServiceCollection AddJsonSerializer (this IServiceCollection services) =>
+			services.AddJsonSerializer(standardJsonSerializer);
 	}
 }

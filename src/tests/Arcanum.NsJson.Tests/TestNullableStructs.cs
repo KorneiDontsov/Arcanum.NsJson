@@ -75,7 +75,7 @@ namespace Arcanum.NsJson.Tests {
 		}
 
 		[Fact]
-		public void NullableStructConverterIsUsed () {
+		public void ConverterIsUsed () {
 			Action action = () => serializer.MayFromToken<Unit?>(new JValue("not unit"));
 			action.Should().ThrowExactly<UnitJsonDeserializationException>();
 		}

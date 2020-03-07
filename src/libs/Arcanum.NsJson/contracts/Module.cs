@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
 namespace Arcanum.NsJson.Contracts {
+	using Newtonsoft.Json.Serialization;
 	using System;
-	using System.Net;
 	using System.Reflection;
 
 	public static class Module {
@@ -11,17 +11,15 @@ namespace Arcanum.NsJson.Contracts {
 
 		public static IMicroContractResolverBuilder AddStandardContracts (this IMicroContractResolverBuilder builder) =>
 			builder
-				.AddFactory<BasicJsonContractFactory>()
-				.AddFactory<NullableStructJsonContractFactory>()
-				.AddFactory<EnumJsonContractFactory>()
-				.AddFactory<FlagsEnumJsonContractFactory>()
-				.AddFactory<UnionJsonContractFactory>()
-				.AddCreator<IPAddress, IpAddressJsonContractCreator>()
-				.AddCreator<IPEndPoint, IpEndPointJsonContractCreator>()
-				.AddCreator<DnsEndPoint, DnsEndPointJsonContractCreator>()
-				.AddPatch<DiscardDeserializationCallbacksJsonContractPatch>()
-				.AddMiddlewareFactory<UnionCaseJsonMiddlewareFactory>()
-				.AddMiddlewareFactory<OnDeserializedCallbackJsonMiddlewareFactory>();
+				.AddContractFactory(new NsJsonBasedContractFactory())
+				.AddContractFactory(new FlagsEnumJsonContractFactory())
+				.AddConverterFactory(new EnumJsonConverterFactory())
+				.AddConverterFactory(new UnionJsonConverterFactory())
+				.AddConverterFactory(new IpAddressJsonConverterFactory())
+				.AddContractFactory(new IpEndPointJsonContractFactory())
+				.AddContractFactory(new DnsEndPointJsonContractFactory())
+				.AddMiddlewareFactory(new UnionCaseJsonMiddlewareFactory())
+				.AddMiddlewareFactory(new OnDeserializedCallbackJsonMiddlewareFactory());
 
 		public static IMicroContractResolverBuilder AddPlatformContracts (this IMicroContractResolverBuilder builder) {
 			var assemblies = AppDomain.CurrentDomain.GetAssemblies();
@@ -31,5 +29,11 @@ namespace Arcanum.NsJson.Contracts {
 			}
 			return builder;
 		}
+
+		public static IContractResolver standardJsonContractResolver { get; } =
+			CreateMicroContractResolverBuilder()
+				.AddStandardContracts()
+				.AddPlatformContracts()
+				.Build();
 	}
 }
