@@ -10,7 +10,7 @@ namespace Arcanum.NsJson.Tests {
 	using System.Runtime.Serialization;
 	using Xunit;
 
-	public class TestDeserializationCallbacks: TestJsonSerializer {
+	public class TestDeserializeCallbacks: TestJsonSerializer {
 		abstract class DataBase {
 			public Boolean baseWhenDeserializing { get; private set; }
 
@@ -54,13 +54,13 @@ namespace Arcanum.NsJson.Tests {
 			[OnDeserialized, UsedImplicitly]
 			void OnDeserialized (StreamingContext context) {
 				whenDeserialized = true;
-				whenDeserializedAfterBase = true;
+				whenDeserializedAfterBase = baseWhenDeserialized;
 			}
 		}
 
 		Data data { get; }
 
-		public TestDeserializationCallbacks () {
+		public TestDeserializeCallbacks () {
 			var token = new JValue("any-string");
 			data = serializer.FromToken<Data>(token);
 		}
@@ -72,11 +72,11 @@ namespace Arcanum.NsJson.Tests {
 		}
 
 		[Fact]
-		public void DefaultOnDeserializedCallbackIsCalled () =>
+		public void OnDeserializedCallbackIsCalled () =>
 			data.whenDeserialized.Should().BeTrue();
 
 		[Fact]
-		public void DefaultOnDeserializedCallbackOfBaseTypeIsCalled () =>
+		public void OnDeserializedCallbackOfBaseTypeIsCalled () =>
 			data.baseWhenDeserialized.Should().BeTrue();
 
 		[Fact]
