@@ -6,18 +6,29 @@ namespace Arcanum.NsJson.AspNet {
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Serialization;
 	using System;
+	using System.Collections.Concurrent;
 	using static Arcanum.NsJson.Module;
 
 	public static class MvcModule {
 		class StubContractResolver: IContractResolver {
 			JsonConverter jsonConverter { get; }
 
-			public StubContractResolver (JsonConverter jsonConverter) =>
-				this.jsonConverter = jsonConverter;
+			ConcurrentDictionary<Type, JsonContract> jsonContractStorage { get; } =
+				new ConcurrentDictionary<Type, JsonContract>();
+
+			Func<Type, JsonContract> createContract { get; }
 
 			/// <inheritdoc />
 			public JsonContract ResolveContract (Type type) =>
+				jsonContractStorage.GetOrAdd(type, createContract);
+
+			JsonContract CreateContract (Type type) =>
 				new JsonLinqContract(type) { Converter = jsonConverter };
+
+			public StubContractResolver (JsonConverter jsonConverter) {
+				this.jsonConverter = jsonConverter;
+				createContract = CreateContract;
+			}
 		}
 
 		class JsonSerializerProxy: JsonConverter {
