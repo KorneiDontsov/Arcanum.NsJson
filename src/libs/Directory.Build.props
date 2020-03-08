@@ -12,7 +12,7 @@
         <Copyright>Copyright © Kornei Dontsov 2019</Copyright>
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
         <IncludeSymbols>true</IncludeSymbols>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <IncludeSource>true</IncludeSource>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
