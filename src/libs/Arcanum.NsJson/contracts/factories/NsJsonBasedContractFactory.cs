@@ -20,6 +20,7 @@ namespace Arcanum.NsJson.Contracts {
 			var contract = resolver.CreateContract(request.dataType);
 			contract.OnDeserializingCallbacks.Clear();
 			contract.OnDeserializedCallbacks.Clear();
+			contract.OnErrorCallbacks.Clear();
 			contract.IsReference = false;
 			request.Return(contract);
 		}
