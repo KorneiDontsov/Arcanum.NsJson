@@ -17,7 +17,7 @@ namespace Arcanum.NsJson.Contracts {
 				var names = dataType.GetEnumNames();
 				var mutValues = ImmutableDictionary.CreateBuilder<String, Object>();
 				var pos = 0;
-				foreach (var value in dataType.GetEnumValues()) {
+				foreach(var value in dataType.GetEnumValues()) {
 					mutValues.Add(names[pos], value);
 					pos = checked(pos + 1);
 				}
@@ -31,16 +31,16 @@ namespace Arcanum.NsJson.Contracts {
 			}
 
 			String ReadEnumName (JsonReader reader) {
-				switch (reader.TokenType) {
+				switch(reader.TokenType) {
 					case JsonToken.String:
 						return (String) reader.Value!;
 					case JsonToken.StartObject: {
 						reader.ReadNext();
-						while (reader.TokenType != JsonToken.EndObject) {
+						while(reader.TokenType != JsonToken.EndObject) {
 							reader.CurrentTokenMustBe(JsonToken.PropertyName);
 							var propName = (String) reader.Value!;
 							reader.ReadNext();
-							if (propName is "$case") {
+							if(propName is "$case") {
 								reader.CurrentTokenMustBe(JsonToken.String);
 								return (String) reader.Value!;
 							}
@@ -59,7 +59,7 @@ namespace Arcanum.NsJson.Contracts {
 			/// <inheritdoc />
 			public Object Read (IJsonSerializer serializer, JsonReader reader, ILocalsCollection locals) {
 				var valueName = ReadEnumName(reader);
-				if (values.TryGetValue(valueName, out var value))
+				if(values.TryGetValue(valueName, out var value))
 					return value;
 				else {
 					var msg = "Failed to read enum '{0}': '{1}' is not a value.";
@@ -70,7 +70,7 @@ namespace Arcanum.NsJson.Contracts {
 
 		/// <inheritdoc />
 		public void Handle (IJsonConverterRequest request) {
-			if (request.dataType.IsEnum && ! Attribute.IsDefined(request.dataType, typeof(FlagsAttribute)))
+			if(request.dataType.IsEnum && ! Attribute.IsDefined(request.dataType, typeof(FlagsAttribute)))
 				request.Return(new EnumJsonConverter(request.dataType));
 		}
 	}

@@ -9,11 +9,11 @@ namespace Arcanum.NsJson.Ext.AspNet {
 	class ProblemDetailsJsonContractFactory: IJsonContractFactory {
 		/// <inheritdoc />
 		public void Handle (IJsonContractRequest request) {
-			if (request.dataType == typeof(ProblemDetails))
+			if(request.dataType == typeof(ProblemDetails))
 				request.Return(
 					new JsonLinqContract(typeof(ProblemDetails))
 						{ Converter = new ProblemDetailsConverter() });
-			else if (request.dataType == typeof(ValidationProblemDetails))
+			else if(request.dataType == typeof(ValidationProblemDetails))
 				request.Return(
 					new JsonLinqContract(typeof(ValidationProblemDetails))
 						{ Converter = new ValidationProblemDetailsConverter() });

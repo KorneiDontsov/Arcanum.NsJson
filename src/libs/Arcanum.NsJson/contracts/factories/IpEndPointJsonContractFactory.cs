@@ -7,7 +7,7 @@ namespace Arcanum.NsJson.Contracts {
 	public sealed class IpEndPointJsonContractFactory: IJsonContractFactory {
 		/// <inheritdoc />
 		public void Handle (IJsonContractRequest request) {
-			if (request.dataType == typeof(IPEndPoint))
+			if(request.dataType == typeof(IPEndPoint))
 				request.Return(
 					new JsonObjectContractBuilder<IPEndPoint>()
 						.AddCreatorArg(nameof(IPEndPoint.Address), d => d.Address)

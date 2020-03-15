@@ -33,7 +33,7 @@ namespace Arcanum.NsJson.Contracts {
 			}
 
 			void SetReturned () {
-				if (returned)
+				if(returned)
 					throw new Exception("Return method invoked twice.");
 				else
 					returned = true;
@@ -76,28 +76,28 @@ namespace Arcanum.NsJson.Contracts {
 
 			/// <inheritdoc />
 			public override void WriteJson (JsonWriter writer, Object? value, JsonSerializer serializer) {
-				if (value is null)
+				if(value is null)
 					writer.WriteNull();
-				else if (toJsonConverter is null)
+				else if(toJsonConverter is null)
 					throw new JsonSerializationException($"Type {dataType} is not serializable to json.");
 				else {
 					var arcaneSerializer = serializer.Arcane();
-					using var context = arcaneSerializer.CaptureContext();
-					toJsonConverter.Write(arcaneSerializer, writer, value, context.locals);
+					using var localsOwner = arcaneSerializer.CaptureLocals();
+					toJsonConverter.Write(arcaneSerializer, writer, value, localsOwner.locals);
 				}
 			}
 
 			/// <inheritdoc />
 			public override Object? ReadJson
 				(JsonReader reader, Type objectType, Object? existingValue, JsonSerializer serializer) {
-				if (reader.TokenType is JsonToken.Null)
+				if(reader.TokenType is JsonToken.Null)
 					return null;
-				else if (fromJsonConverter is null)
+				else if(fromJsonConverter is null)
 					throw new JsonSerializationException($"Type {dataType} is not serializable from json.");
 				else {
 					var arcaneSerializer = serializer.Arcane();
-					using var context = arcaneSerializer.CaptureContext();
-					return fromJsonConverter.Read(arcaneSerializer, reader, context.locals);
+					using var localsOwner = arcaneSerializer.CaptureLocals();
+					return fromJsonConverter.Read(arcaneSerializer, reader, localsOwner.locals);
 				}
 			}
 		}
@@ -111,7 +111,7 @@ namespace Arcanum.NsJson.Contracts {
 		public void Handle (IJsonContractRequest request) {
 			var converterRequest = new JsonConverterRequest(request.dataType);
 			var (returned, toJsonConverter, fromJsonConverter) = converterRequest.Request(converterFactory);
-			if (returned) {
+			if(returned) {
 				var converterAdapter = new JsonConverterAdapter(request.dataType, toJsonConverter, fromJsonConverter);
 				request.Return(new JsonLinqContract(request.dataType) { Converter = converterAdapter });
 			}

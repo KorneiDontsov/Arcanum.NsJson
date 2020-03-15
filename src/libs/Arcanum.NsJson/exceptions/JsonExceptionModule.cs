@@ -15,17 +15,17 @@ namespace Arcanum.NsJson {
 		public static JsonReaderException ReaderException
 			(IJsonLineInfo? maybeLineInfo, String path, String message, Exception? innerException = null) {
 			static String FormatMessage (IJsonLineInfo? maybeAvailableLineInfo, String path, String message) {
-				if (! message.EndsWith(Environment.NewLine, StringComparison.Ordinal)) {
+				if(! message.EndsWith(Environment.NewLine, StringComparison.Ordinal)) {
 					message = message.Trim();
 
-					if (! message.EndsWith(".", StringComparison.Ordinal)) message += ".";
+					if(! message.EndsWith(".", StringComparison.Ordinal)) message += ".";
 
 					message += " ";
 				}
 
 				message += String.Format(CultureInfo.InvariantCulture, "Path '{0}'", path);
 
-				if (maybeAvailableLineInfo is { } lineInfo && lineInfo.HasLineInfo())
+				if(maybeAvailableLineInfo is { } lineInfo && lineInfo.HasLineInfo())
 					message += String.Format(
 						CultureInfo.InvariantCulture,
 						", line {0}, position {1}",

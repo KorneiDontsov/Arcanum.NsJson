@@ -15,7 +15,7 @@ namespace Arcanum.NsJson.Contracts {
 				this.unionInfo = unionInfo;
 
 			IUnionCaseInfo ReadCaseInfo (JsonReader reader) {
-				if (reader.TokenType != JsonToken.String) {
+				if(reader.TokenType != JsonToken.String) {
 					var msg = "Expected string with union case route but accepted {0}";
 					throw reader.Exception(msg, reader.TokenType);
 				}
@@ -24,7 +24,7 @@ namespace Arcanum.NsJson.Contracts {
 					try {
 						return unionInfo.GetNestedCaseInfo(caseRoute);
 					}
-					catch (FormatException ex) {
+					catch(FormatException ex) {
 						var msg = $"Failed to find case '{caseRoute}' in '{unionInfo}'.";
 						throw new JsonSerializationException(msg, ex);
 					}
@@ -49,11 +49,11 @@ namespace Arcanum.NsJson.Contracts {
 				IUnionCaseInfo? unionCaseInfo = null;
 				var targetCase = TargetCase.Unknown;
 
-				while (reader.TokenType != JsonToken.EndObject) {
+				while(reader.TokenType != JsonToken.EndObject) {
 					reader.CurrentTokenMustBe(JsonToken.PropertyName);
 					var curPropName = (String) reader.Value!;
 
-					switch (curPropName) {
+					switch(curPropName) {
 						case "$case" when unionCaseInfo is { }:
 							throw reader.Exception("The property '$case' is contained twice in the object.");
 						case "$case":
@@ -64,14 +64,14 @@ namespace Arcanum.NsJson.Contracts {
 						case "$value" when targetCase == TargetCase.Unknown:
 							targetCase = TargetCase.Value;
 							reader.ReadNext();
-							if (reader.TokenType is JsonToken.Null)
+							if(reader.TokenType is JsonToken.Null)
 								throw reader.Exception("The property '{0}' is null.", curPropName);
 							else {
 								writer.WriteToken(reader, writeChildren: true);
 								break;
 							}
 						case var _ when targetCase != TargetCase.Value:
-							if (targetCase == TargetCase.Unknown) {
+							if(targetCase == TargetCase.Unknown) {
 								targetCase = TargetCase.Object;
 								writer.WriteStartObject();
 							}
@@ -86,13 +86,13 @@ namespace Arcanum.NsJson.Contracts {
 					reader.ReadNext();
 				}
 
-				if (unionCaseInfo is null) {
+				if(unionCaseInfo is null) {
 					var msg =
 						"The property '$case' is not found. It's required to deserialize '{0}' to a specific case.";
 					throw reader.Exception(msg, unionInfo);
 				}
 				else {
-					switch (targetCase) {
+					switch(targetCase) {
 						case TargetCase.Unknown:
 							writer.WriteStartObject();
 							writer.WriteEndObject();
@@ -114,7 +114,7 @@ namespace Arcanum.NsJson.Contracts {
 				using var source = JsonMemory.Rent();
 
 				IUnionCaseInfo unionCaseInfo;
-				using (var writer = source.Write())
+				using(var writer = source.Write())
 					unionCaseInfo =
 						reader.TokenType switch {
 							JsonToken.String => ExtractCaseInfoFromString(reader, writer),
@@ -122,7 +122,7 @@ namespace Arcanum.NsJson.Contracts {
 							_ => throw BadTokenException(reader)
 						};
 
-				using (var targetReader = source.Read())
+				using(var targetReader = source.Read())
 					return serializer.Read(targetReader, unionCaseInfo.dataType);
 			}
 		}
@@ -130,8 +130,8 @@ namespace Arcanum.NsJson.Contracts {
 		/// <inheritdoc />
 		public void Handle (IJsonConverterRequest request) {
 			var matched = request.dataType.IsClass && request.dataType.IsAbstract;
-			if (matched && GetDataTypeInfo(request.dataType).asUnionInfo is {} unionInfo) {
-				if (unionInfo.hasErrors) {
+			if(matched && GetDataTypeInfo(request.dataType).asUnionInfo is {} unionInfo) {
+				if(unionInfo.hasErrors) {
 					var message =
 						$"Cannot resolve {unionInfo.dataType} because it has errors.\n{unionInfo.GetErrorString()}";
 					throw new JsonContractException(message);

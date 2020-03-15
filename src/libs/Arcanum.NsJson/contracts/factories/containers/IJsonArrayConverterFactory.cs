@@ -2,10 +2,8 @@
 
 namespace Arcanum.NsJson.Contracts {
 	using Newtonsoft.Json;
-	using System;
 
-	public sealed class JsonContractException: JsonException {
-		public JsonContractException (String message, Exception? innerException = null):
-			base(message, innerException) { }
+	public interface IJsonArrayConverterFactory {
+		void Handle (IJsonConverterRequest request, JsonArrayAttribute? jsonArrayAttribute);
 	}
 }

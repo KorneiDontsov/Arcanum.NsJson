@@ -25,7 +25,7 @@ namespace Arcanum.NsJson.Contracts {
 
 			/// <inheritdoc />
 			public void Return (JsonContract contract) {
-				if (returnedContract is null)
+				if(returnedContract is null)
 					returnedContract = contract;
 				else
 					throw new Exception("Cannot return contract second time.");
@@ -50,16 +50,16 @@ namespace Arcanum.NsJson.Contracts {
 			}
 
 			public JsonContract? RequestFrom (ImmutableArray<IJsonContractFactory> contractFactories) {
-				foreach (var contractFactory in contractFactories)
-					if (RequestFrom(contractFactory) is {} contract)
+				foreach(var contractFactory in contractFactories)
+					if(RequestFrom(contractFactory) is {} contract)
 						return contract;
 				return null;
 			}
 
 			public JsonContract? RequestFromCompanions () {
 				var converterFactories = dataType.EnumerateCompanions<IJsonConverterFactory>();
-				foreach (var converterFactory in converterFactories)
-					if (RequestFrom(new JsonConverterFactoryAdapter(converterFactory)) is {} contract)
+				foreach(var converterFactory in converterFactories)
+					if(RequestFrom(new JsonConverterFactoryAdapter(converterFactory)) is {} contract)
 						return contract;
 				return null;
 			}
@@ -117,7 +117,7 @@ namespace Arcanum.NsJson.Contracts {
 
 			/// <inheritdoc />
 			public override void WriteJson (JsonWriter writer, Object? value, JsonSerializer serializer) {
-				if (value is null)
+				if(value is null)
 					writer.WriteNull();
 				else {
 					var arcaneSerializer = serializer.Arcane();
@@ -128,7 +128,7 @@ namespace Arcanum.NsJson.Contracts {
 			/// <inheritdoc />
 			public override Object? ReadJson
 				(JsonReader reader, Type objectType, Object? existingValue, JsonSerializer serializer) {
-				if (reader.TokenType is JsonToken.Null)
+				if(reader.TokenType is JsonToken.Null)
 					return null;
 				else {
 					var arcaneSerializer = serializer.Arcane();
@@ -156,28 +156,28 @@ namespace Arcanum.NsJson.Contracts {
 				fromJsonMiddlewares.Add(fromJsonMiddleware);
 
 			public JsonMiddlewareRequest RequestFrom (ImmutableArray<IJsonMiddlewareFactory> middlewareFactories) {
-				foreach (var middlewareFactory in middlewareFactories) middlewareFactory.Handle(this);
+				foreach(var middlewareFactory in middlewareFactories) middlewareFactory.Handle(this);
 				return this;
 			}
 
 			public JsonMiddlewareRequest RequestFromCompanions () {
 				var middlewareFactories = dataType.EnumerateCompanions<IJsonMiddlewareFactory>();
-				foreach (var middlewareFactory in middlewareFactories) middlewareFactory.Handle(this);
+				foreach(var middlewareFactory in middlewareFactories) middlewareFactory.Handle(this);
 				return this;
 			}
 
 			WriteJson BuildWrite () {
 				WriteJson write =
 					(serializer, writer, value) => {
-						using (new ThreadLocalTrigger(noMiddleware))
+						using(new ThreadLocalTrigger(noMiddleware))
 							serializer.Write(writer, value);
 					};
-				for (var i = toJsonMiddlewares.Count - 1; i >= 0; i -= 1) {
+				for(var i = toJsonMiddlewares.Count - 1; i >= 0; i -= 1) {
 					var middleware = toJsonMiddlewares[i];
 					var previous = write;
 					write = (serializer, writer, value) => {
-						using var context = ((ArcaneJsonSerializer) serializer).CaptureContext();
-						middleware.Write(serializer, writer, value, previous, context.locals);
+						using var localsOwner = serializer.Arcane().CaptureLocals();
+						middleware.Write(serializer, writer, value, previous, localsOwner.locals);
 					};
 				}
 
@@ -187,14 +187,14 @@ namespace Arcanum.NsJson.Contracts {
 			ReadJson BuildRead () {
 				ReadJson read =
 					(serializer, reader) => {
-						using (new ThreadLocalTrigger(noMiddleware))
+						using(new ThreadLocalTrigger(noMiddleware))
 							return serializer.Read(reader, dataType);
 					};
-				foreach (var middleware in fromJsonMiddlewares) {
+				foreach(var middleware in fromJsonMiddlewares) {
 					var next = read;
 					read = (serializer, reader) => {
-						using var context = ((ArcaneJsonSerializer) serializer).CaptureContext();
-						return middleware.Read(serializer, reader, next, context.locals);
+						using var localsOwner = serializer.Arcane().CaptureLocals();
+						return middleware.Read(serializer, reader, next, localsOwner.locals);
 					};
 				}
 
@@ -202,7 +202,7 @@ namespace Arcanum.NsJson.Contracts {
 			}
 
 			public JsonContract ProduceContract (JsonContract baseContract) {
-				if (toJsonMiddlewares.Count > 0 || fromJsonMiddlewares.Count > 0) {
+				if(toJsonMiddlewares.Count > 0 || fromJsonMiddlewares.Count > 0) {
 					var write = BuildWrite();
 					var read = BuildRead();
 					var mwConverter = new MiddlewareJsonConverter(write, read);
@@ -215,9 +215,9 @@ namespace Arcanum.NsJson.Contracts {
 
 		/// <exception cref = "JsonContractException" />
 		JsonContract CreateMiddlewareContract (Type dataType) {
-			if (dataType.IsByRef && dataType.HasElementType)
+			if(dataType.IsByRef && dataType.HasElementType)
 				return middlewareContractStorage.GetOrCreate(dataType.GetElementType());
-			else if (Nullable.GetUnderlyingType(dataType) is {} underlyingType)
+			else if(Nullable.GetUnderlyingType(dataType) is {} underlyingType)
 				return
 					new JsonLinqContract(underlyingType)
 						{ Converter = new NullableStructJsonConverter(underlyingType) };

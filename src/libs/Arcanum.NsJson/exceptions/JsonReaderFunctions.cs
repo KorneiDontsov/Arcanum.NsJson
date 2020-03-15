@@ -25,11 +25,11 @@ namespace Arcanum.NsJson {
 			ReaderException(jsonReader, messageFormat, messageArgs);
 
 		public static void ReadNext (this JsonReader jsonReader) {
-			if (! jsonReader.Read()) throw jsonReader.Exception("Unexpected end when reading JSON.");
+			if(! jsonReader.Read()) throw jsonReader.Exception("Unexpected end when reading JSON.");
 		}
 
 		public static void CurrentTokenMustBe (this JsonReader jsonReader, JsonToken expected) {
-			if (jsonReader.TokenType != expected)
+			if(jsonReader.TokenType != expected)
 				throw
 					jsonReader.Exception("Expected token to be {0} but accepted {1}.", expected, jsonReader.TokenType);
 		}

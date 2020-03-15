@@ -30,27 +30,27 @@ namespace Arcanum.NsJson.Contracts {
 				 ILocalsCollection locals) {
 				using var source = JsonMemory.Rent();
 
-				using (var sourceWriter = source.Write())
+				using(var sourceWriter = source.Write())
 					previous(serializer, sourceWriter, value);
 
-				using (var reader = source.Read())
-					switch (reader.TokenType) {
+				using(var reader = source.Read())
+					switch(reader.TokenType) {
 						case JsonToken.Null:
 							writer.WriteNull();
 							break;
 						case JsonToken.StartObject:
 							reader.ReadNext();
 
-							if (reader.TokenType is JsonToken.EndObject)
+							if(reader.TokenType is JsonToken.EndObject)
 								writer.WriteValue(caseRouteStr);
 							else {
 								writer.WriteStartObject();
 								WriteCaseProp(writer);
 
-								while (reader.TokenType != JsonToken.EndObject) {
+								while(reader.TokenType != JsonToken.EndObject) {
 									reader.CurrentTokenMustBe(JsonToken.PropertyName);
 									var propName = (String) reader.Value!;
-									if (propName is "$case") {
+									if(propName is "$case") {
 										var msg =
 											$"Failed to serialize '{unionCaseInfo}' because it has property '$case' "
 											+ "which is not allowed.";
@@ -89,12 +89,12 @@ namespace Arcanum.NsJson.Contracts {
 		/// <inheritdoc />
 		public void Handle (IJsonMiddlewareRequest request) {
 			var matched = request.dataType.IsClass && ! request.dataType.IsAbstract;
-			if (matched && GetDataTypeInfo(request.dataType).asUnionCaseInfo is {} unionCaseInfo)
+			if(matched && GetDataTypeInfo(request.dataType).asUnionCaseInfo is {} unionCaseInfo)
 				try {
 					var caseRoute = unionCaseInfo.GetNestedCaseRoute();
 					request.Yield(new UnionCaseWriteMiddleware(unionCaseInfo, caseRoute.ToString()));
 				}
-				catch (FormatException ex) {
+				catch(FormatException ex) {
 					throw new JsonContractException($"Failed to get route of '{unionCaseInfo}'.", ex);
 				}
 		}

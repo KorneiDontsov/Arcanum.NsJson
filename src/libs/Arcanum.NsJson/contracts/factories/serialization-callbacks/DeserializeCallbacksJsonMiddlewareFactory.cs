@@ -7,7 +7,7 @@ namespace Arcanum.NsJson.Contracts {
 	using static RuntimeModule;
 	using static Arcanum.NsJson.Contracts.SerializationCallbackFunctions;
 
-	public class DeserializeCallbacksJsonMiddlewareFactory: IJsonMiddlewareFactory {
+	public sealed class DeserializeCallbacksJsonMiddlewareFactory: IJsonMiddlewareFactory {
 		class OnDeserializedFromJsonMiddleware: IFromJsonMiddleware {
 			Action<Object> onDeserialized { get; }
 
@@ -26,7 +26,7 @@ namespace Arcanum.NsJson.Contracts {
 		/// <inheritdoc />
 		public void Handle (IJsonMiddlewareRequest request) {
 			var callbacks = GetCallbacks(request.dataType, typeof(OnDeserializedAttribute));
-			if (callbacks.Length > 0) {
+			if(callbacks.Length > 0) {
 				var onDeserialized =
 					isJit
 						? CompileComposedCallback(request.dataType, callbacks, $"OnDeserialized<{request.dataType}>")

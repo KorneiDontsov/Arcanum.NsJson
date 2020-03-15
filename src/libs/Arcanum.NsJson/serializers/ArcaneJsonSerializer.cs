@@ -4,7 +4,7 @@ namespace Arcanum.NsJson.Contracts {
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Serialization;
 	using System;
-	using System.Collections.Concurrent;
+	using System.Runtime.CompilerServices;
 	using System.Runtime.Serialization;
 	using System.Threading;
 
@@ -21,35 +21,13 @@ namespace Arcanum.NsJson.Contracts {
 
 		public JsonSerializerSetup setup { get; }
 
-		static ConcurrentBag<JsonSerializerContext> contextPool { get; } =
-			new ConcurrentBag<JsonSerializerContext>();
+		ConditionalWeakTable<Thread, JsonSerializationContext> contexts { get; } =
+			new ConditionalWeakTable<Thread, JsonSerializationContext>();
 
-		ConcurrentDictionary<Int32, JsonSerializerContext> contexts { get; } =
-			new ConcurrentDictionary<Int32, JsonSerializerContext>();
-
-		Func<Int32, JsonSerializerContext> createContext { get; }
-
-		Action<Int32> closeContext { get; }
-
-		JsonSerializerContext CreateContext (Int32 threadId) {
-			var context = contextPool.TryTake(out var pooledContext) ? pooledContext : new JsonSerializerContext();
-			context.threadId = threadId;
-			context.closeContext = closeContext;
-			return context;
-		}
-
-		void CloseContext (Int32 threadId) {
-			if (contexts.TryRemove(threadId, out var context)) {
-				context.threadId = 0;
-				context.closeContext = null!;
-				contextPool.Add(context);
-			}
-		}
-
-		public JsonSerializerContext CaptureContext () {
-			var context = contexts.GetOrAdd(Thread.CurrentThread.ManagedThreadId, createContext);
-			context.Capture();
-			return context;
+		public LocalsCollectionOwner CaptureLocals () {
+			var context = contexts.GetOrCreateValue(Thread.CurrentThread);
+			var locals = LocalsCollection.Capture(context);
+			return new LocalsCollectionOwner(locals);
 		}
 
 		public ArcaneJsonSerializer (JsonSerializerSetup setup, IContractResolver contractResolver) {
@@ -85,8 +63,6 @@ namespace Arcanum.NsJson.Contracts {
 					ContractResolver = contractResolver
 				};
 			this.setup = setup;
-			createContext = CreateContext;
-			closeContext = CloseContext;
 		}
 	}
 }

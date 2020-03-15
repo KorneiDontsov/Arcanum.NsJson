@@ -6,7 +6,7 @@ namespace Arcanum.NsJson.Contracts {
 	using System.Runtime.Serialization;
 	using static Arcanum.NsJson.Contracts.SerializationCallbackFunctions;
 
-	public class SerializeCallbacksJsonMiddlewareFactory: IJsonMiddlewareFactory {
+	public sealed class SerializeCallbacksJsonMiddlewareFactory: IJsonMiddlewareFactory {
 		class OnSerializingToJsonMiddleware: IToJsonMiddleware {
 			Action<Object> onSerializing { get; }
 
@@ -46,7 +46,7 @@ namespace Arcanum.NsJson.Contracts {
 		/// <inheritdoc />
 		public void Handle (IJsonMiddlewareRequest request) {
 			var onSerializingCallbacks = GetCallbacks(request.dataType, typeof(OnSerializingAttribute));
-			if (onSerializingCallbacks.Length > 0) {
+			if(onSerializingCallbacks.Length > 0) {
 				var onSerializing =
 					RuntimeModule.isJit
 						? CompileComposedCallback(
@@ -58,7 +58,7 @@ namespace Arcanum.NsJson.Contracts {
 			}
 
 			var onSerializedCallbacks = GetCallbacks(request.dataType, typeof(OnSerializedAttribute));
-			if (onSerializedCallbacks.Length > 0) {
+			if(onSerializedCallbacks.Length > 0) {
 				var onSerialized =
 					RuntimeModule.isJit
 						? CompileComposedCallback(

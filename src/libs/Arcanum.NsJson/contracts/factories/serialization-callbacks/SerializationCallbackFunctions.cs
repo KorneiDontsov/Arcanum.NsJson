@@ -11,11 +11,11 @@ namespace Arcanum.NsJson.Contracts {
 	static class SerializationCallbackFunctions {
 		public static ImmutableArray<MethodInfo> GetCallbacks (Type dataType, Type attributeType) {
 			var result = ImmutableArray.CreateBuilder<MethodInfo>();
-			for (var t = dataType; t is {}; t = t.BaseType)
-				foreach (var m in t.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
-					if (m.DeclaringType == t && Attribute.IsDefined(m, attributeType)) {
+			for(var t = dataType; t is {}; t = t.BaseType)
+				foreach(var m in t.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+					if(m.DeclaringType == t && Attribute.IsDefined(m, attributeType)) {
 						var @params = m.GetParameters();
-						if (@params.Length != 1 || @params[0].ParameterType != typeof(StreamingContext))
+						if(@params.Length != 1 || @params[0].ParameterType != typeof(StreamingContext))
 							throw new JsonContractException($"Method {m} must accept only {typeof(StreamingContext)}.");
 						else
 							result.Add(m);
@@ -34,7 +34,7 @@ namespace Arcanum.NsJson.Contracts {
 			var targetExp = Expression.Convert(targetParam, dataType);
 
 			var callbackCallExps = new List<MethodCallExpression>();
-			foreach (var callback in callbacks) {
+			foreach(var callback in callbacks) {
 				var callExp = Expression.Call(targetExp, callback, defaultContextExp);
 				callbackCallExps.Add(callExp);
 			}
@@ -47,7 +47,7 @@ namespace Arcanum.NsJson.Contracts {
 
 		public static Action<Object> ComposeCallback (ImmutableArray<MethodInfo> callbacks) =>
 			target => {
-				foreach (var callback in callbacks)
+				foreach(var callback in callbacks)
 					callback.Invoke(target, defaultContextAsObjArray);
 			};
 	}

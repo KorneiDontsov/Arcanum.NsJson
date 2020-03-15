@@ -16,12 +16,12 @@ namespace Arcanum.NsJson.Contracts {
 
 			/// <inheritdoc />
 			public Object Read (IJsonSerializer serializer, JsonReader reader, ILocalsCollection locals) {
-				if (reader.TokenType is JsonToken.String) {
+				if(reader.TokenType is JsonToken.String) {
 					var ipAddressStr = (String) reader.Value!;
 					try {
 						return IPAddress.Parse(ipAddressStr);
 					}
-					catch (FormatException formatEx) {
+					catch(FormatException formatEx) {
 						var message =
 							String.Format(
 								CultureInfo.InvariantCulture,
@@ -37,7 +37,7 @@ namespace Arcanum.NsJson.Contracts {
 
 		/// <inheritdoc />
 		public void Handle (IJsonConverterRequest request) {
-			if (request.dataType == typeof(IPAddress)) request.Return(new IpAddressJsonConverter());
+			if(request.dataType == typeof(IPAddress)) request.Return(new IpAddressJsonConverter());
 		}
 	}
 }

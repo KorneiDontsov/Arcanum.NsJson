@@ -9,5 +9,10 @@ namespace Arcanum.NsJson {
 			jsonSerializer.Context.Context is ArcaneJsonSerializer arcaneJsonSerializer
 				? arcaneJsonSerializer
 				: throw new JsonException("Json serializer is not arcane.");
+
+		public static ArcaneJsonSerializer Arcane (this IJsonSerializer jsonSerializer) =>
+			jsonSerializer is ArcaneJsonSerializer arcaneJsonSerializer
+				? arcaneJsonSerializer
+				: throw new JsonException("Json serializer is not arcane.");
 	}
 }
