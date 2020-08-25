@@ -24,8 +24,8 @@ static class JsonContractFunctions {
 			IsReference = source.IsReference
 		};
 
-	public static JsonObjectContract Copy (this JsonObjectContract source) =>
-		new JsonObjectContract(source.UnderlyingType) {
+	public static JsonObjectContract Copy (this JsonObjectContract source) {
+		var copy = new JsonObjectContract(source.UnderlyingType) {
 			Converter = source.Converter,
 			CreatedType = source.CreatedType,
 			DefaultCreator = source.DefaultCreator,
@@ -45,6 +45,12 @@ static class JsonContractFunctions {
 			MissingMemberHandling = source.MissingMemberHandling,
 			OverrideCreator = source.OverrideCreator
 		};
+
+		foreach (var property in source.Properties)
+			copy.Properties.Add(property);
+
+		return copy;
+	}
 
 	public static JsonArrayContract Copy (this JsonArrayContract source) =>
 		new JsonArrayContract(source.UnderlyingType) {
