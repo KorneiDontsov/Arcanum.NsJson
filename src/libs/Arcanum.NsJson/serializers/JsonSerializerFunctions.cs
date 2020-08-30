@@ -28,7 +28,7 @@ namespace Arcanum.NsJson {
 		/// <exception cref = "JsonException" />
 		[return: NotNull]
 		public static T Read<T> (this IJsonSerializer jsonSerializer, JsonReader jsonReader) =>
-			(T) jsonSerializer.Read(jsonReader, typeof(T));
+			(T) jsonSerializer.Read(jsonReader, typeof(T))!;
 
 		/// <exception cref = "JsonException" />
 		public static String ToText (this IJsonSerializer jsonSerializer, Object? maybeData) {
@@ -66,7 +66,7 @@ namespace Arcanum.NsJson {
 		/// <exception cref = "JsonException" />
 		[return: NotNull]
 		public static T FromText<T> (this IJsonSerializer jsonSerializer, String text) =>
-			(T) jsonSerializer.FromText(text, typeof(T));
+			(T) jsonSerializer.FromText(text, typeof(T))!;
 
 		/// <exception cref = "JsonException" />
 		public static JToken ToToken (this IJsonSerializer jsonSerializer, Object? maybeData) {
@@ -97,6 +97,6 @@ namespace Arcanum.NsJson {
 		/// <exception cref = "JsonException" />
 		[return: NotNull]
 		public static T FromToken<T> (this IJsonSerializer jsonSerializer, JToken token) =>
-			(T) jsonSerializer.FromToken(token, typeof(T));
+			(T) jsonSerializer.FromToken(token, typeof(T))!;
 	}
 }

@@ -54,7 +54,7 @@ namespace Arcanum.NsJson.Contracts {
 					Culture = setup.culture,
 					MaxDepth =
 						setup.maxDepth switch {
-							0 => (Int32?) null,
+							0 => null,
 							var d when d <= Int32.MaxValue => (Int32) d,
 							_ => Int32.MaxValue
 						},

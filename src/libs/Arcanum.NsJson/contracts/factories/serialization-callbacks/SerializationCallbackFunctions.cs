@@ -43,7 +43,7 @@ namespace Arcanum.NsJson.Contracts {
 			return Expression.Lambda<Action<Object>>(bodyExp, callbackName, new[] { targetParam }).Compile();
 		}
 
-		static Object[] defaultContextAsObjArray { get; } = { default(StreamingContext) };
+		static Object[] defaultContextAsObjArray { get; } = { default(StreamingContext)! };
 
 		public static Action<Object> ComposeCallback (ImmutableArray<MethodInfo> callbacks) =>
 			target => {

@@ -30,14 +30,14 @@ namespace Arcanum.NsJson.NsTests {
 			public override Boolean CanWrite => false;
 
 			/// <inheritdoc />
-			public override void WriteJson (JsonWriter writer, Data value, JsonSerializer serializer) =>
+			public override void WriteJson (JsonWriter writer, Data? value, JsonSerializer serializer) =>
 				throw new NotSupportedException();
 
 			/// <inheritdoc />
 			public override Data ReadJson
 				(JsonReader reader,
 				 Type objectType,
-				 Data existingValue,
+				 Data? existingValue,
 				 Boolean hasExistingValue,
 				 JsonSerializer serializer) {
 				reader.ReadAsString();

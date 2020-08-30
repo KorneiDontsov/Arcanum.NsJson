@@ -23,7 +23,7 @@ static class ReflectionFunctions {
 	static Func<(Type type, Type interfaceType), Type?> maybeUnderlyingTypeIfHasGenericInterface { get; } =
 		MemoizeFunc.Create<(Type type, Type interfaceType), Type?>(
 			(args, self) => {
-				if(!args.interfaceType.IsInterface)
+				if(! args.interfaceType.IsInterface)
 					throw new Exception($"Type {args.interfaceType} is not interface.");
 				else if(! args.interfaceType.IsGenericTypeDefinition)
 					throw new Exception($"Interface type {args.interfaceType} is not open generic type.");
@@ -45,8 +45,8 @@ static class ReflectionFunctions {
 		maybeUnderlyingTypeIfHasGenericInterface((type, interfaceType));
 
 	public static Boolean HasOpenGenericInterface
-		(this Type type, Type interfaceType, [MaybeNullWhen(false)] out Type underlyingType) {
-		underlyingType = maybeUnderlyingTypeIfHasGenericInterface((type, interfaceType))!;
+		(this Type type, Type interfaceType, [NotNullWhen(true)] out Type? underlyingType) {
+		underlyingType = maybeUnderlyingTypeIfHasGenericInterface((type, interfaceType));
 		return underlyingType is {};
 	}
 
