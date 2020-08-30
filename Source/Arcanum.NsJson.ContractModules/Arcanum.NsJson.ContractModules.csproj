@@ -15,7 +15,7 @@
         <Description>
             Arcanum.NsJson.ContractModules is part of Arcanum.NsJson distribution that provides json contract modules.
         </Description>
-        <Version>1.0.0</Version>
+        <Version>1.0.1</Version>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -32,7 +32,7 @@
             <ItemGroup>
                 <PackageReference Include="Arcanum.NsJson.Tools" Version="[1.0.0]"/>
                 <PackageReference Include="Arcanum.NsJson.Abstractions" Version="[1.0.0]"/>
-                <PackageReference Include="Arcanum.NsJson.ContractResolvers" Version="[1.0.0]"/>
+                <PackageReference Include="Arcanum.NsJson.ContractResolvers" Version="[1.0.1]"/>
             </ItemGroup>
         </When>
         <Otherwise>

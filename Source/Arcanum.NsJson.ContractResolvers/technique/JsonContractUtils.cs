@@ -37,27 +37,34 @@ namespace Arcanum.NsJson.ContractResolvers {
 				IsReference = source.IsReference
 			};
 
-		public static JsonObjectContract Copy (this JsonObjectContract source) =>
-			new JsonObjectContract(source.UnderlyingType) {
-				Converter = source.Converter,
-				CreatedType = source.CreatedType,
-				DefaultCreator = source.DefaultCreator,
-				DefaultCreatorNonPublic = source.DefaultCreatorNonPublic,
-				IsReference = source.IsReference,
-				ItemConverter = source.ItemConverter,
-				ItemIsReference = source.ItemIsReference,
-				ItemReferenceLoopHandling = source.ItemReferenceLoopHandling,
-				ItemTypeNameHandling = source.ItemTypeNameHandling,
-				ExtensionDataGetter = source.ExtensionDataGetter,
-				ExtensionDataNameResolver = source.ExtensionDataNameResolver,
-				ExtensionDataSetter = source.ExtensionDataSetter,
-				ExtensionDataValueType = source.ExtensionDataValueType,
-				ItemNullValueHandling = source.ItemNullValueHandling,
-				ItemRequired = source.ItemRequired,
-				MemberSerialization = source.MemberSerialization,
-				MissingMemberHandling = source.MissingMemberHandling,
-				OverrideCreator = source.OverrideCreator
-			};
+		public static JsonObjectContract Copy (this JsonObjectContract source) {
+			var copy =
+				new JsonObjectContract(source.UnderlyingType) {
+					Converter = source.Converter,
+					CreatedType = source.CreatedType,
+					DefaultCreator = source.DefaultCreator,
+					DefaultCreatorNonPublic = source.DefaultCreatorNonPublic,
+					IsReference = source.IsReference,
+					ItemConverter = source.ItemConverter,
+					ItemIsReference = source.ItemIsReference,
+					ItemReferenceLoopHandling = source.ItemReferenceLoopHandling,
+					ItemTypeNameHandling = source.ItemTypeNameHandling,
+					ExtensionDataGetter = source.ExtensionDataGetter,
+					ExtensionDataNameResolver = source.ExtensionDataNameResolver,
+					ExtensionDataSetter = source.ExtensionDataSetter,
+					ExtensionDataValueType = source.ExtensionDataValueType,
+					ItemNullValueHandling = source.ItemNullValueHandling,
+					ItemRequired = source.ItemRequired,
+					MemberSerialization = source.MemberSerialization,
+					MissingMemberHandling = source.MissingMemberHandling,
+					OverrideCreator = source.OverrideCreator
+				};
+
+			foreach (var property in source.Properties)
+				copy.Properties.Add(property);
+
+			return copy;
+		}
 
 		public static JsonArrayContract Copy (this JsonArrayContract source) =>
 			new JsonArrayContract(source.UnderlyingType) {
