@@ -88,8 +88,10 @@ namespace Arcanum.NsJson.Contracts {
 
 		/// <inheritdoc />
 		public void Handle (IJsonMiddlewareRequest request) {
-			var matched = request.dataType.IsClass && ! request.dataType.IsAbstract;
-			if(matched && GetDataTypeInfo(request.dataType).asUnionCaseInfo is {} unionCaseInfo)
+			if(request.dataType.IsClass
+			   && ! request.dataType.IsAbstract
+			   && ! request.dataType.IsGenericTypeDefinition
+			   && GetDataTypeInfo(request.dataType).asUnionCaseInfo is {} unionCaseInfo)
 				try {
 					var caseRoute = unionCaseInfo.GetNestedCaseRoute();
 					request.Yield(new UnionCaseWriteMiddleware(unionCaseInfo, caseRoute.ToString()));
