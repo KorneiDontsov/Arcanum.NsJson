@@ -9,7 +9,7 @@ namespace Arcanum.NsJson.Contracts {
 	class LocalsCollection: ILocalsCollection {
 		static Int64 freeToken;
 
-		Dictionary<Object, Object> items { get; } = new Dictionary<Object, Object>();
+		Dictionary<Object, Object?> items { get; } = new Dictionary<Object, Object?>();
 
 		List<Int64> tokens { get; } = new List<Int64>(capacity: 2);
 
@@ -21,7 +21,7 @@ namespace Arcanum.NsJson.Contracts {
 		public Object? this [Object key] {
 			get => items.TryGetValue(key, out var value) ? value : prototype?[key];
 			set {
-				if(value is {})
+				if(! ReferenceEquals(value, prototype?[key]))
 					items[key] = value;
 				else
 					items.Remove(key);
