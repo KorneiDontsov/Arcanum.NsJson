@@ -8,9 +8,9 @@ namespace Arcanum.NsJson {
 		JsonSerializerSetup setup { get; }
 
 		/// <exception cref = "JsonException" />
-		void Write (JsonWriter jsonWriter, Object? maybeData);
+		void Write (JsonWriter jsonWriter, Object? maybeData, Action<ILocalsCollection>? configureLocals = null);
 
 		/// <exception cref = "JsonException" />
-		Object? MayRead (JsonReader jsonReader, Type dataType);
+		Object? MayRead (JsonReader jsonReader, Type dataType, Action<ILocalsCollection>? configureLocals = null);
 	}
 }

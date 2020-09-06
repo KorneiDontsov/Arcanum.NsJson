@@ -12,12 +12,28 @@ namespace Arcanum.NsJson.Contracts {
 		public JsonSerializer nsSerializer { get; }
 
 		/// <inheritdoc />
-		public void Write (JsonWriter jsonWriter, Object? maybeData) =>
-			nsSerializer.Serialize(jsonWriter, maybeData);
+		public void Write
+			(JsonWriter jsonWriter, Object? maybeData, Action<ILocalsCollection>? configureLocals = null) {
+			if(configureLocals is null)
+				nsSerializer.Serialize(jsonWriter, maybeData);
+			else {
+				using var localsOwner = CaptureLocals();
+				configureLocals(localsOwner.locals);
+				nsSerializer.Serialize(jsonWriter, maybeData);
+			}
+		}
 
 		/// <inheritdoc />
-		public Object? MayRead (JsonReader jsonReader, Type dataType) =>
-			nsSerializer.Deserialize(jsonReader, dataType);
+		public Object? MayRead
+			(JsonReader jsonReader, Type dataType, Action<ILocalsCollection>? configureLocals = null) {
+			if(configureLocals is null)
+				return nsSerializer.Deserialize(jsonReader, dataType);
+			else {
+				using var localsOwner = CaptureLocals();
+				configureLocals(localsOwner.locals);
+				return nsSerializer.Deserialize(jsonReader, dataType);
+			}
+		}
 
 		public JsonSerializerSetup setup { get; }
 
