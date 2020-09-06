@@ -27,6 +27,7 @@ namespace Arcanum.NsJson.Contracts {
 				.AddContractFactory(new IpEndPointJsonContractFactory())
 				.AddContractFactory(new DnsEndPointJsonContractFactory())
 				//middlewares
+				.AddMiddlewareFactory(new SamplesJsonMiddlewareFactory())
 				.AddMiddlewareFactory(new SerializeCallbacksJsonMiddlewareFactory())
 				.AddMiddlewareFactory(new UnionCaseJsonMiddlewareFactory())
 				.AddMiddlewareFactory(new DeserializeCallbacksJsonMiddlewareFactory());
