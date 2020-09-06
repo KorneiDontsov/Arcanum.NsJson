@@ -7,14 +7,14 @@ namespace Arcanum.NsJson.Contracts {
 	using static System.Threading.Interlocked;
 
 	class LocalsCollection: ILocalsCollection {
-		static ConcurrentBag<LocalsCollection> pool { get; } =
-			new ConcurrentBag<LocalsCollection>();
-
 		static Int64 freeToken;
 
 		Dictionary<Object, Object> items { get; } = new Dictionary<Object, Object>();
-		public Int64 token { get; private set; }
+
+		List<Int64> tokens { get; } = new List<Int64>(capacity: 2);
+
 		JsonSerializationContext context = null!;
+
 		LocalsCollection? prototype;
 
 		/// <inheritdoc />
@@ -28,26 +28,42 @@ namespace Arcanum.NsJson.Contracts {
 			}
 		}
 
-		public static LocalsCollection Capture (JsonSerializationContext context) {
-			var locals = pool.TryTake(out var pooledLocals) ? pooledLocals : new LocalsCollection();
-			locals.token = Increment(ref freeToken);
+		static ConcurrentBag<LocalsCollection> pool { get; } =
+			new ConcurrentBag<LocalsCollection>();
 
-			locals.context = context;
-			(context.locals, locals.prototype) = (locals, context.locals);
+		// items and tokens should be already empty.
+		static void ReturnToPool (LocalsCollection locals) {
+			locals.prototype = null;
+			locals.context = null!;
+			pool.Add(locals);
+		}
 
-			return locals;
+		public static LocalsCollectionOwner Capture (JsonSerializationContext context) {
+			if(! (context.locals is {items: {Count: 0}} locals)) {
+				locals = pool.TryTake(out var pooledLocals) ? pooledLocals : new LocalsCollection();
+				locals.context = context;
+				locals.prototype = context.locals;
+				context.locals = locals;
+			}
+
+			var token = Increment(ref freeToken);
+			locals.tokens.Add(token);
+			return new LocalsCollectionOwner(locals, token);
 		}
 
 		public void Free (Int64 token) {
-			if(this.token != token)
+			if(tokens.Count is 0)
+				throw new InvalidOperationException("Not initialized.");
+			else if(tokens.Count - 1 is var currentTokenIndex && tokens[currentTokenIndex] != token)
 				throw new InvalidOperationException("Internal error: locals collection is already free.");
 			else {
-				(context.locals, prototype) = (prototype, null);
-				context = null!;
 				items.Clear();
+				tokens.RemoveAt(currentTokenIndex);
 
-				this.token = 0;
-				pool.Add(this);
+				if(tokens.Count is 0) {
+					context.locals = prototype;
+					ReturnToPool(this);
+				}
 			}
 		}
 	}

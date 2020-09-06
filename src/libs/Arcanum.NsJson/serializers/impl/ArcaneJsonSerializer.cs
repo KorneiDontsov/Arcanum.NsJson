@@ -40,10 +40,25 @@ namespace Arcanum.NsJson.Contracts {
 		ConditionalWeakTable<Thread, JsonSerializationContext> contexts { get; } =
 			new ConditionalWeakTable<Thread, JsonSerializationContext>();
 
+		[ThreadStatic]
+		static ArcaneJsonSerializer? threadLastUsedSerializer;
+
+		[ThreadStatic]
+		static JsonSerializationContext? threadLastUsedContext;
+
 		public LocalsCollectionOwner CaptureLocals () {
-			var context = contexts.GetOrCreateValue(Thread.CurrentThread);
-			var locals = LocalsCollection.Capture(context);
-			return new LocalsCollectionOwner(locals);
+			JsonSerializationContext context;
+			if(ReferenceEquals(this, threadLastUsedSerializer))
+				context = threadLastUsedContext!;
+			else {
+				context = contexts.GetOrCreateValue(Thread.CurrentThread);
+				try { }
+				finally {
+					threadLastUsedSerializer = this;
+					threadLastUsedContext = context;
+				}
+			}
+			return LocalsCollection.Capture(context);
 		}
 
 		public ArcaneJsonSerializer (JsonSerializerSetup setup, IContractResolver contractResolver) {

@@ -8,9 +8,9 @@ namespace Arcanum.NsJson.Contracts {
 
 		readonly Int64 token;
 
-		public LocalsCollectionOwner (LocalsCollection locals) {
+		public LocalsCollectionOwner (LocalsCollection locals, Int64 token) {
 			this.locals = locals;
-			token = locals.token;
+			this.token = token;
 		}
 
 		/// <inheritdoc />
