@@ -3,6 +3,7 @@
 namespace Arcanum.NsJson.Contracts {
 	using Newtonsoft.Json;
 	using System;
+	using System.Collections.Generic;
 
 	public sealed class JitCollectionFromJsonConverter<T>: IFromJsonConverter {
 		static Boolean canHaveNullItems { get; } =
@@ -31,7 +32,19 @@ namespace Arcanum.NsJson.Contracts {
 			reader.CurrentTokenMustBe(JsonToken.StartArray);
 			reader.ReadNext();
 
-			var collection = createCollection(locals);
+			var samples = locals.MaybeSamples();
+
+			ICollection<T> collection;
+			if(! (samples?.createSelfSample is {} createSelfSample))
+				collection = createCollection(locals);
+			else if(createSelfSample() is var sample && sample is ICollection<T> collectionSample)
+				collection = collectionSample;
+			else {
+				var msg =
+					$"Expected sample to be assignable to {nameof(ICollection<T>)}<{typeof(T)}>, "
+					+ $"but actual {sample.GetType()}.";
+				throw new JsonSerializationException(msg);
+			}
 
 			if(collection.IsReadOnly)
 				throw new JsonSerializationException(

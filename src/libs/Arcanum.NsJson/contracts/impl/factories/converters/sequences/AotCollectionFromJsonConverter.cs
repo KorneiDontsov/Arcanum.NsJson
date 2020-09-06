@@ -57,26 +57,21 @@ namespace Arcanum.NsJson.Contracts {
 			reader.CurrentTokenMustBe(JsonToken.StartArray);
 			reader.ReadNext();
 
-			var collection = createCollection(locals);
-			var collectionItemType =
-				collection.GetType().MaybeUnderlyingTypeIfHasGenericInterface(typeof(ICollection<>));
-			if(collectionItemType is null) {
+			var samples = locals.MaybeSamples();
+
+			var collection = samples?.createSelfSample?.Invoke() ?? createCollection(locals);
+			var collectionType = collection.GetType();
+			var collectionItemType = collectionType.MaybeUnderlyingTypeIfHasGenericInterface(typeof(ICollection<>));
+			if(collectionItemType is null || ! collectionItemType.IsAssignableFrom(itemType)) {
 				var msg =
-					$"{nameof(AotCollectionFromJsonConverter)} configuration error: "
-					+ $"'{nameof(createCollection)}' returned object that is not collection.";
-				throw new JsonSerializationException(msg);
-			}
-			else if(! collectionItemType.IsAssignableFrom(itemType)) {
-				var msg =
-					$"{nameof(AotCollectionFromJsonConverter)} configuration error: "
-					+ $"{nameof(createCollection)} returned collection "
-					+ $"which item type is not assignable from {collectionItemType}";
+					$"Expected sample to be assignable to {nameof(ICollection<Object>)}<{itemType}>, "
+					+ $"but actual {collectionType}.";
 				throw new JsonSerializationException(msg);
 			}
 			else if(getCollectionMethods(collectionItemType) is var methods
 			        && (Boolean) methods.isReadOnly.Invoke(collection, Array.Empty<Object>()))
 				throw new JsonSerializationException(
-					$"{collection.GetType()} is readonly collection and cannot be deserialized.");
+					$"{collectionType} is read-only collection and cannot be deserialized.");
 			else {
 				var itemAsArray = new Object?[1];
 
