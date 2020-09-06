@@ -1,0 +1,10 @@
+*.iml
+
+/.idea/.name
+/.idea/contentModel.xml
+/.idea/encodings.xml
+/.idea/indexLayout.xml
+/.idea/modules.xml
+/.idea/projectSettingsUpdater.xml
+/.idea/workspace.xml
+/.idea/vcs.xml

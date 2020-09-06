@@ -1,25 +1,25 @@
 <Project>
-    <PropertyGroup>
-        <Configurations>Debug;Release;NuGet</Configurations>
-        <Optimize Condition=" '$(Configuration)' != 'Debug' ">true</Optimize>
-        <Platforms>AnyCPU</Platforms>
-        <NoWarn>1573, 1591, 8509</NoWarn>
-    </PropertyGroup>
+	<PropertyGroup>
+		<Configurations>Debug;Release;NuGet</Configurations>
+		<Optimize Condition=" '$(Configuration)' != 'Debug' ">true</Optimize>
+		<Platforms>AnyCPU</Platforms>
+		<NoWarn>1573, 1591, 8509</NoWarn>
+	</PropertyGroup>
 
-    <PropertyGroup>
-        <RepositoryUrl>https://github.com/KorneiDontsov/Arcanum.NsJson</RepositoryUrl>
-        <Authors>KorneiDontsov</Authors>
-        <Copyright>Copyright © Kornei Dontsov 2019</Copyright>
-        <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-        <IncludeSymbols>true</IncludeSymbols>
-        <IncludeSource>true</IncludeSource>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    </PropertyGroup>
+	<PropertyGroup>
+		<RepositoryUrl>https://github.com/KorneiDontsov/Arcanum.NsJson</RepositoryUrl>
+		<Authors>KorneiDontsov</Authors>
+		<Copyright>Copyright © Kornei Dontsov 2019</Copyright>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<IncludeSymbols>true</IncludeSymbols>
+		<IncludeSource>true</IncludeSource>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	</PropertyGroup>
 
-    <ItemGroup>
-        <None Include="..\..\..\LICENSE.txt">
-            <Pack>true</Pack>
-            <PackagePath>$(PackageLicenseFile)</PackagePath>
-        </None>
-    </ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\..\LICENSE.txt">
+			<Pack>true</Pack>
+			<PackagePath>$(PackageLicenseFile)</PackagePath>
+		</None>
+	</ItemGroup>
 </Project>
