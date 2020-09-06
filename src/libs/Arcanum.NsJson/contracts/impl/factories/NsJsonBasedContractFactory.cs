@@ -9,8 +9,14 @@ namespace Arcanum.NsJson.Contracts {
 			public Resolver () =>
 				SerializeCompilerGeneratedMembers = true;
 
-			public new JsonContract CreateContract (Type dataType) =>
-				base.CreateContract(dataType);
+			public new JsonContract CreateContract (Type dataType) {
+				var contract = base.CreateContract(dataType);
+				contract.OnDeserializingCallbacks.Clear();
+				contract.OnDeserializedCallbacks.Clear();
+				contract.OnErrorCallbacks.Clear();
+				contract.IsReference = false;
+				return contract;
+			}
 		}
 
 		static Resolver resolver { get; } = new Resolver();
@@ -18,10 +24,6 @@ namespace Arcanum.NsJson.Contracts {
 		/// <inheritdoc />
 		public void Handle (IJsonContractRequest request) {
 			var contract = resolver.CreateContract(request.dataType);
-			contract.OnDeserializingCallbacks.Clear();
-			contract.OnDeserializedCallbacks.Clear();
-			contract.OnErrorCallbacks.Clear();
-			contract.IsReference = false;
 			request.Return(contract);
 		}
 	}
