@@ -73,6 +73,10 @@ namespace Arcanum.NsJson.Contracts {
 				throw new JsonSerializationException(
 					$"{collectionType} is read-only collection and cannot be deserialized.");
 			else {
+				// Set samples for items.
+				if(samples?.createItemSample is {} createItemSample)
+					locals.SetSamples(new LocalSamples(dataType: itemType, createSelfSample: createItemSample));
+
 				var itemAsArray = new Object?[1];
 
 				for(var itemNumber = 0ul; ! (reader.TokenType is JsonToken.EndArray); itemNumber += 1) {
