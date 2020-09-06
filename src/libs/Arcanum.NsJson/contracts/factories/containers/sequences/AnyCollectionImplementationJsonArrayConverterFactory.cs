@@ -24,46 +24,45 @@ namespace Arcanum.NsJson.Contracts {
 			where TCollection: ICollection<T>, new() =>
 			new TCollection();
 
+		static IFromJsonConverter CreateFromJsonConverter
+			(Type collectionType, Type itemType, JsonArrayAttribute? jsonArrayAttribute) {
+			var allowNullItems = jsonArrayAttribute?.AllowNullItems ?? true;
+			var defaultConstructor = collectionType.GetConstructor(Array.Empty<Type>());
+
+			if(isJit) {
+				var createCollectionMethodName =
+					defaultConstructor is {}
+						? nameof(CreateCollection)
+						: nameof(CreateCollectionWithoutDefaultConstructor);
+				var createCollection =
+					MethodBase.GetCurrentMethod().DeclaringType!
+						.GetGenericMethodDefinition(
+							createCollectionMethodName,
+							BindingFlags.Static | BindingFlags.NonPublic)
+						.MakeGenericMethod(itemType, collectionType)
+						.CreateGenericDelegate(typeof(CreateCollectionFunc<>), itemType);
+				return typeof(JitCollectionFromJsonConverter<>).MakeGenericType(itemType)
+					.ConstructAs<IFromJsonConverter>(allowNullItems, createCollection);
+			}
+			else if(defaultConstructor is {})
+				return new AotCollectionFromJsonConverter(
+					itemType,
+					allowNullItems,
+					createCollection: locals => defaultConstructor.Invoke(Array.Empty<Object>()));
+			else
+				return new AotCollectionFromJsonConverter(
+					itemType,
+					allowNullItems,
+					createCollection: locals => throw NoDefaultConstructorError(collectionType));
+		}
+
 		/// <inheritdoc />
 		public void Handle (IJsonConverterRequest request, JsonArrayAttribute? jsonArrayAttribute) {
 			if(! request.dataType.IsAbstract
 			   && request.dataType.HasOpenGenericInterface(typeof(ICollection<>), out var itemType)) {
-				var allowNullItems = jsonArrayAttribute?.AllowNullItems ?? true;
-				var defaultConstructor = request.dataType.GetConstructor(Array.Empty<Type>());
-
-				IJsonConverter converter;
-				if(isJit) {
-					var createCollectionMethodName =
-						defaultConstructor is {}
-							? nameof(CreateCollection)
-							: nameof(CreateCollectionWithoutDefaultConstructor);
-					var createCollection =
-						MethodBase.GetCurrentMethod().DeclaringType!
-							.GetGenericMethodDefinition(
-								createCollectionMethodName,
-								BindingFlags.Static | BindingFlags.NonPublic)
-							.MakeGenericMethod(itemType, request.dataType)
-							.CreateGenericDelegate(typeof(CreateCollectionFunc<>), itemType);
-					converter =
-						typeof(JitCollectionJsonConverter<>).MakeGenericType(itemType)
-							.ConstructAs<IJsonConverter>(allowNullItems, createCollection);
-				}
-				else if(defaultConstructor is {})
-					converter =
-						new AotCollectionJsonConverter(
-							itemType,
-							allowNullItems,
-							createCollection: locals => defaultConstructor.Invoke(Array.Empty<Object>()));
-				else {
-					var dataType = request.dataType;
-					converter =
-						new AotCollectionJsonConverter(
-							itemType,
-							allowNullItems,
-							createCollection: locals => throw NoDefaultConstructorError(dataType));
-				}
-
-				request.Return(converter);
+				var toJsonConverter = AnySequenceJsonArrayConverterFactory.CreateToJsonConverter(itemType);
+				var fromJsonConverter = CreateFromJsonConverter(request.dataType, itemType, jsonArrayAttribute);
+				request.Return(toJsonConverter, fromJsonConverter);
 			}
 		}
 	}

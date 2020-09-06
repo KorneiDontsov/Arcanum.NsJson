@@ -40,10 +40,10 @@ namespace Arcanum.NsJson.Contracts {
 			}
 
 			/// <inheritdoc />
-			public void Return (IJsonConverter jsonConverter) {
+			public void Return (IToJsonConverter toJsonConverter, IFromJsonConverter fromJsonConverter) {
 				SetReturned();
-				toJsonConverter = jsonConverter;
-				fromJsonConverter = jsonConverter;
+				this.toJsonConverter = toJsonConverter;
+				this.fromJsonConverter = fromJsonConverter;
 			}
 
 			/// <inheritdoc />

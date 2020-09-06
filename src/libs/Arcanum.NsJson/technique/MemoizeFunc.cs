@@ -4,24 +4,40 @@ using System;
 using System.Collections.Concurrent;
 
 class MemoizeFunc {
-	public delegate TResult Invocation<TArg, TResult> (TArg arg, Func<TArg, TResult> self);
+	delegate TResult InvocationInvocation<TInvocation, TArg, TResult>
+		(TInvocation invocation, TArg arg, Func<TArg, TResult> self);
 
-	class Implementation<TArg, TResult> {
+	class Implementation<TInvocation, TArg, TResult> {
 		ConcurrentDictionary<TArg, TResult> dict { get; } = new ConcurrentDictionary<TArg, TResult>();
 		Func<TArg, TResult> invoke { get; }
 		TResult GetOrInvoke (TArg arg) => dict.GetOrAdd(arg, invoke);
 
 		public Func<TArg, TResult> self { get; }
-		Invocation<TArg, TResult> invocation { get; }
-		TResult Invoke (TArg arg) => invocation(arg, self);
+		TInvocation invocation { get; }
+		InvocationInvocation<TInvocation, TArg, TResult> invocationInvocation { get; }
+		TResult Invoke (TArg arg) => invocationInvocation(invocation, arg, self);
 
-		public Implementation (Invocation<TArg, TResult> invocation) {
-			this.invocation = invocation;
+		public Implementation
+			(TInvocation invocation, InvocationInvocation<TInvocation, TArg, TResult> invocationInvocation) {
 			invoke = Invoke;
 			self = GetOrInvoke;
+
+			this.invocation = invocation;
+			this.invocationInvocation = invocationInvocation;
 		}
 	}
 
+	public delegate TResult Invocation<TArg, TResult> (TArg arg, Func<TArg, TResult> self);
+
 	public static Func<TArg, TResult> Create<TArg, TResult> (Invocation<TArg, TResult> invocation) =>
-		new Implementation<TArg, TResult>(invocation).self;
+		new Implementation<Invocation<TArg, TResult>, TArg, TResult>(
+				invocation,
+				(invocation, arg, self) => invocation(arg, self))
+			.self;
+
+	public static Func<TArg, TResult> Create<TArg, TResult> (Func<TArg, TResult> invocation) =>
+		new Implementation<Func<TArg, TResult>, TArg, TResult>(
+				invocation,
+				(invocation, arg, self) => invocation(arg))
+			.self;
 }

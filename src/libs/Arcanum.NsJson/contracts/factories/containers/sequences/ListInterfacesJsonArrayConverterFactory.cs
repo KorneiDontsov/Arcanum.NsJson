@@ -11,12 +11,14 @@ namespace Arcanum.NsJson.Contracts {
 
 	public sealed class ListInterfacesJsonArrayConverterFactory: IJsonArrayConverterFactory {
 		static ImmutableHashSet<Type> handledTypeDefinitions { get; } =
-			ImmutableHashSet<Type>.Empty
-				.Add(typeof(IEnumerable<>))
-				.Add(typeof(IReadOnlyCollection<>))
-				.Add(typeof(IReadOnlyList<>))
-				.Add(typeof(ICollection<>))
-				.Add(typeof(IList<>));
+			ImmutableHashSet.CreateRange(
+				new[] {
+					typeof(IEnumerable<>),
+					typeof(IReadOnlyCollection<>),
+					typeof(IReadOnlyList<>),
+					typeof(ICollection<>),
+					typeof(IList<>)
+				});
 
 		// ReSharper disable once UnusedParameter.Local
 		static ICollection<T> CreateCollection<T> (ILocalsCollection locals) =>
@@ -31,45 +33,43 @@ namespace Arcanum.NsJson.Contracts {
 			}
 		}
 
+		static IFromJsonConverter CreateFromJsonConverter
+			(Type collectionType, Type itemType, JsonArrayAttribute? jsonArrayAttribute) {
+			var allowNullItems = jsonArrayAttribute?.AllowNullItems ?? true;
+			if(isJit) {
+				var createCollection =
+					MethodBase.GetCurrentMethod().DeclaringType
+						.GetGenericMethodDefinition(
+							nameof(CreateCollection),
+							BindingFlags.Static | BindingFlags.NonPublic)
+						.MakeGenericMethod(itemType)
+						.CreateGenericDelegate(typeof(CreateCollectionFunc<>), itemType);
+				return typeof(JitCollectionFromJsonConverter<>).MakeGenericType(itemType)
+					.ConstructAs<IFromJsonConverter>(allowNullItems, createCollection);
+			}
+			else if(MayMakeListType(itemType) is {} listType)
+				return new AotCollectionFromJsonConverter(
+					itemType,
+					allowNullItems,
+					createCollection: locals => listType.Construct());
+			else
+				return new AotCollectionFromJsonConverter(
+					itemType,
+					allowNullItems,
+					createCollection: locals => {
+						var msg = $"Cannot create {collectionType} because of AOT. Add sample.";
+						throw new JsonSerializationException(msg);
+					});
+		}
+
 		/// <inheritdoc />
 		public void Handle (IJsonConverterRequest request, JsonArrayAttribute? jsonArrayAttribute) {
 			if(request.dataType.IsGenericType
 			   && handledTypeDefinitions.Contains(request.dataType.GetGenericTypeDefinition())) {
 				var itemType = request.dataType.GetGenericArguments()[0];
-				var allowNullItems = jsonArrayAttribute?.AllowNullItems ?? true;
-
-				IJsonConverter converter;
-				if(isJit) {
-					var createCollection =
-						MethodBase.GetCurrentMethod().DeclaringType!
-							.GetGenericMethodDefinition(
-								nameof(CreateCollection),
-								BindingFlags.Static | BindingFlags.NonPublic)
-							.MakeGenericMethod(itemType)
-							.CreateGenericDelegate(typeof(CreateCollectionFunc<>), itemType);
-					converter =
-						typeof(JitCollectionJsonConverter<>).MakeGenericType(itemType)
-							.ConstructAs<IJsonConverter>(allowNullItems, createCollection);
-				}
-				else if(MayMakeListType(itemType) is {} listType)
-					converter =
-						new AotCollectionJsonConverter(
-							itemType,
-							allowNullItems,
-							createCollection: locals => listType.Construct());
-				else {
-					var dataType = request.dataType;
-					converter =
-						new AotCollectionJsonConverter(
-							itemType,
-							allowNullItems,
-							createCollection: locals => {
-								var msg = $"Cannot create {dataType} because of AOT. Add sample.";
-								throw new JsonSerializationException(msg);
-							});
-				}
-
-				request.Return(converter);
+				var toJsonConverter = AnySequenceJsonArrayConverterFactory.CreateToJsonConverter(itemType);
+				var fromJsonConverter = CreateFromJsonConverter(request.dataType, itemType, jsonArrayAttribute);
+				request.Return(toJsonConverter, fromJsonConverter);
 			}
 		}
 	}

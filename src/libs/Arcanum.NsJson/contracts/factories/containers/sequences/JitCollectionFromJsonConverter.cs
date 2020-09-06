@@ -4,7 +4,7 @@ namespace Arcanum.NsJson.Contracts {
 	using Newtonsoft.Json;
 	using System;
 
-	public sealed class JitCollectionJsonConverter<T>: JitSequenceToJsonConverter<T>, IJsonConverter {
+	public sealed class JitCollectionFromJsonConverter<T>: IFromJsonConverter {
 		static Boolean canHaveNullItems { get; } =
 			! typeof(T).IsValueType
 			|| typeof(T).IsGenericType && typeof(T).GetGenericTypeDefinition() == typeof(Nullable<>);
@@ -13,7 +13,7 @@ namespace Arcanum.NsJson.Contracts {
 		CreateCollectionFunc<T> createCollection { get; }
 		FinalizeCollectionFunc<T> finalizeCollection { get; }
 
-		public JitCollectionJsonConverter
+		public JitCollectionFromJsonConverter
 			(Boolean allowNullItems,
 			 CreateCollectionFunc<T> createCollection,
 			 FinalizeCollectionFunc<T> finalizeCollection) {
@@ -22,7 +22,7 @@ namespace Arcanum.NsJson.Contracts {
 			this.finalizeCollection = finalizeCollection;
 		}
 
-		public JitCollectionJsonConverter
+		public JitCollectionFromJsonConverter
 			(Boolean allowNullItems, CreateCollectionFunc<T> createCollection):
 			this(allowNullItems, createCollection, finalizeCollection: it => it) { }
 
@@ -33,30 +33,28 @@ namespace Arcanum.NsJson.Contracts {
 
 			var collection = createCollection(locals);
 
-			if(collection.IsReadOnly) {
-				var msg = $"{collection.GetType()} is readonly collection and cannot be deserialized.";
-				throw new JsonSerializationException(msg);
+			if(collection.IsReadOnly)
+				throw new JsonSerializationException(
+					$"{collection.GetType()} is read-only collection and cannot be deserialized.");
+			else {
+				var acceptNullItems = canHaveNullItems && allowNullItems;
+
+				for(var itemNumber = 0ul; ! (reader.TokenType is JsonToken.EndArray); itemNumber += 1) {
+					var item =
+						(reader.TokenType, acceptNullItems) switch {
+							(JsonToken.Null, true) => default!, // always null
+							(JsonToken.Null, false) =>
+								throw reader.Exception(
+									"Item {0} is null which is not allowed for the current collection.",
+									itemNumber),
+							_ => serializer.Read<T>(reader)
+						};
+					collection.Add(item);
+					reader.ReadNext();
+				}
+
+				return finalizeCollection(collection);
 			}
-
-			var acceptNullItems = canHaveNullItems && allowNullItems;
-
-			static Exception NullItemError (JsonReader reader, UInt64 itemNumber) =>
-				reader.Exception("Item {0} is null which is not allowed for the current collection.", itemNumber);
-
-			var itemNumber = 0ul;
-			while(reader.TokenType != JsonToken.EndArray) {
-				var item =
-					(reader.TokenType, acceptNullItems) switch {
-						(JsonToken.Null, true) => default!, // always null
-						(JsonToken.Null, false) => throw NullItemError(reader, itemNumber),
-						_ => serializer.Read<T>(reader)
-					};
-				collection.Add(item);
-				reader.ReadNext();
-				itemNumber += 1;
-			}
-
-			return finalizeCollection(collection);
 		}
 	}
 }

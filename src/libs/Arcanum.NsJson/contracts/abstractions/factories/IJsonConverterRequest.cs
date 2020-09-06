@@ -6,7 +6,7 @@ namespace Arcanum.NsJson.Contracts {
 	public interface IJsonConverterRequest {
 		Type dataType { get; }
 
-		void Return (IJsonConverter jsonConverter);
+		void Return (IToJsonConverter toJsonConverter, IFromJsonConverter fromJsonConverter);
 
 		void ReturnReadOnly (IFromJsonConverter fromJsonConverter);
 
