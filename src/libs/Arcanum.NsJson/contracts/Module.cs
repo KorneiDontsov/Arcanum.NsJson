@@ -9,8 +9,9 @@ namespace Arcanum.NsJson.Contracts {
 		public static IMicroContractResolverBuilder CreateMicroContractResolverBuilder () =>
 			new MicroContractResolverBuilder();
 
-		public static IMicroContractResolverBuilder AddStandardContracts (this IMicroContractResolverBuilder builder) =>
-			builder.AddContractFactory(new NsJsonBasedContractFactory())
+		public static IMicroContractResolverBuilder AddStandardContracts (this IMicroContractResolverBuilder builder) {
+			var standardJsonContractFactory = new NsJsonBasedContractFactory();
+			return builder.AddContractFactory(standardJsonContractFactory)
 				// enums
 				.AddContractFactory(new FlagsEnumJsonContractFactory())
 				.AddConverterFactory(new EnumJsonConverterFactory())
@@ -19,6 +20,7 @@ namespace Arcanum.NsJson.Contracts {
 				.AddJsonArrayConverterFactory(new ListInterfacesJsonArrayConverterFactory())
 				.AddJsonArrayConverterFactory(new AnyCollectionImplementationJsonArrayConverterFactory())
 				.AddJsonArrayConverterFactory(new ArrayJsonArrayConverterFactory())
+				.AddContractFactory(new MultidimensionalArrayJsonContractFactory(standardJsonContractFactory))
 				// unions
 				.AddConverterFactory(new UnionJsonConverterFactory())
 				// primitives
@@ -32,6 +34,7 @@ namespace Arcanum.NsJson.Contracts {
 				.AddMiddlewareFactory(new SerializeCallbacksJsonMiddlewareFactory())
 				.AddMiddlewareFactory(new UnionCaseJsonMiddlewareFactory())
 				.AddMiddlewareFactory(new DeserializeCallbacksJsonMiddlewareFactory());
+		}
 
 		public static IMicroContractResolverBuilder AddPlatformContracts (this IMicroContractResolverBuilder builder) {
 			var assemblies = AppDomain.CurrentDomain.GetAssemblies();
