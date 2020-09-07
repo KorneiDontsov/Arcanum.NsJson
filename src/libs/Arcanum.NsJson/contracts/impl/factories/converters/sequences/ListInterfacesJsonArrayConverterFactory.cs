@@ -24,22 +24,13 @@ namespace Arcanum.NsJson.Contracts {
 		static ICollection<T> CreateCollection<T> (ILocalsCollection locals) =>
 			new List<T>();
 
-		static Type? MayMakeListType (Type itemType) {
-			try {
-				return typeof(List<>).MakeGenericType(itemType);
-			}
-			catch {
-				return null;
-			}
-		}
-
 		static IFromJsonConverter CreateFromJsonConverter
 			(Type collectionType, Type itemType, JsonArrayAttribute? jsonArrayAttribute) {
 			var allowNullItems = jsonArrayAttribute?.AllowNullItems ?? true;
 			if(isJit) {
 				var createCollection =
-					MethodBase.GetCurrentMethod().DeclaringType
-						.GetGenericMethodDefinition(
+					MethodBase.GetCurrentMethod()
+						.DeclaringType.GetGenericMethodDefinition(
 							nameof(CreateCollection),
 							BindingFlags.Static | BindingFlags.NonPublic)
 						.MakeGenericMethod(itemType)
@@ -47,7 +38,7 @@ namespace Arcanum.NsJson.Contracts {
 				return typeof(JitCollectionFromJsonConverter<>).MakeGenericType(itemType)
 					.ConstructAs<IFromJsonConverter>(allowNullItems, createCollection);
 			}
-			else if(MayMakeListType(itemType) is {} listType)
+			else if(MayMakeGenericType(typeof(List<>), itemType) is {} listType)
 				return new AotCollectionFromJsonConverter(
 					itemType,
 					allowNullItems,
@@ -56,10 +47,9 @@ namespace Arcanum.NsJson.Contracts {
 				return new AotCollectionFromJsonConverter(
 					itemType,
 					allowNullItems,
-					createCollection: locals => {
-						var msg = $"Cannot create {collectionType} because of AOT. Add sample.";
-						throw new JsonSerializationException(msg);
-					});
+					createCollection: locals =>
+						throw new JsonSerializationException(
+							$"Cannot create {collectionType} because of AOT. Add sample."));
 		}
 
 		/// <inheritdoc />

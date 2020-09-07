@@ -1,4 +1,4 @@
-﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
+// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
 namespace Arcanum.NsJson.Contracts {
 	using Newtonsoft.Json.Serialization;
@@ -17,6 +17,7 @@ namespace Arcanum.NsJson.Contracts {
 				.AddConverterFactory(new EnumJsonConverterFactory())
 				// sequences
 				.AddJsonArrayConverterFactory(new AnySequenceJsonArrayConverterFactory())
+				.AddJsonArrayConverterFactory(new SetInterfacesJsonArrayConverterFactory())
 				.AddJsonArrayConverterFactory(new ListInterfacesJsonArrayConverterFactory())
 				.AddJsonArrayConverterFactory(new AnyCollectionImplementationJsonArrayConverterFactory())
 				.AddJsonArrayConverterFactory(new ArrayJsonArrayConverterFactory())

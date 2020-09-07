@@ -5,31 +5,31 @@ namespace Arcanum.NsJson.Contracts {
 	using System;
 	using System.Collections.Generic;
 
-	public sealed class AotCollectionFromJsonConverter: IFromJsonConverter {
+	public sealed class AotSetFromJsonConverter: IFromJsonConverter {
 		Type itemType { get; }
-		Func<ILocalsCollection, Object> createCollection { get; }
-		Func<Object, Object> finalizeCollection { get; }
+		Func<ILocalsCollection, Object> createSet { get; }
+		Func<Object, Object> finalizeSet { get; }
 		Boolean acceptNullItems { get; }
 
-		public AotCollectionFromJsonConverter
+		public AotSetFromJsonConverter
 			(Type itemType,
 			 Boolean allowNullItems,
-			 Func<ILocalsCollection, Object> createCollection,
-			 Func<Object, Object> finalizeCollection) {
+			 Func<ILocalsCollection, Object> createSet,
+			 Func<Object, Object> finalizeSet) {
 			this.itemType = itemType;
-			this.createCollection = createCollection;
-			this.finalizeCollection = finalizeCollection;
+			this.createSet = createSet;
+			this.finalizeSet = finalizeSet;
 			acceptNullItems =
 				allowNullItems
 				&& (! itemType.IsValueType
 				    || itemType.IsGenericType && itemType.GetGenericTypeDefinition() == typeof(Nullable<>));
 		}
 
-		public AotCollectionFromJsonConverter
+		public AotSetFromJsonConverter
 			(Type itemType,
 			 Boolean allowNullItems,
-			 Func<ILocalsCollection, Object> createCollection):
-			this(itemType, allowNullItems, createCollection, finalizeCollection: collection => collection) { }
+			 Func<ILocalsCollection, Object> createSet):
+			this(itemType, allowNullItems, createSet, finalizeSet: set => set) { }
 
 		/// <inheritdoc />
 		public Object Read (IJsonSerializer serializer, JsonReader reader, ILocalsCollection locals) {
@@ -38,20 +38,22 @@ namespace Arcanum.NsJson.Contracts {
 
 			var samples = locals.MaybeSamples();
 
-			var collection = samples?.createSelfSample?.Invoke() ?? createCollection(locals);
-			var collectionType = collection.GetType();
-			var collectionItemType = collectionType.MaybeUnderlyingTypeIfHasGenericInterface(typeof(ICollection<>));
-			if(collectionItemType is null || ! collectionItemType.IsAssignableFrom(itemType)) {
+			var set = samples?.createSelfSample?.Invoke() ?? createSet(locals);
+			var setType = set.GetType();
+			var setItemType = setType.MaybeUnderlyingTypeIfHasGenericInterface(typeof(ICollection<>));
+			if(setItemType is null || ! setItemType.IsAssignableFrom(itemType)) {
 				var msg =
-					$"Expected sample to be assignable to {nameof(ICollection<Object>)}<{itemType}>, "
-					+ $"but actual {collectionType}.";
+					$"Expected sample to be assignable to {nameof(ISet<Object>)}<{itemType}>, "
+					+ $"but actual {setType}.";
 				throw new JsonSerializationException(msg);
 			}
-			else if(AotCollectionMethods.forItemType(collectionItemType) is var methods
-			        && methods.isReadOnly.Invoke(collection, Array.Empty<Object>()) is true)
+			else if(AotCollectionMethods.forItemType(setItemType) is var collectionMethods
+			        && collectionMethods.isReadOnly.Invoke(set, Array.Empty<Object>()) is true)
 				throw new JsonSerializationException(
-					$"{collectionType} is read-only collection and cannot be deserialized.");
+					$"{setType} is read-only collection and cannot be deserialized.");
 			else {
+				var setMethods = AotSetMethods.forItemType(setItemType);
+
 				// Set samples for items.
 				if(samples?.createItemSample is {} createItemSample)
 					locals.SetSamples(new LocalSamples(dataType: itemType, createSelfSample: createItemSample));
@@ -68,11 +70,14 @@ namespace Arcanum.NsJson.Contracts {
 									itemNumber),
 							_ => serializer.Read(reader, itemType)
 						};
-					methods.add.Invoke(collection, itemAsArray);
+					if(setMethods.add.Invoke(set, itemAsArray) is false) {
+						collectionMethods.remove.Invoke(set, itemAsArray);
+						collectionMethods.add.Invoke(set, itemAsArray);
+					}
 					reader.ReadNext();
 				}
 
-				return finalizeCollection(collection);
+				return finalizeSet(set);
 			}
 		}
 	}
