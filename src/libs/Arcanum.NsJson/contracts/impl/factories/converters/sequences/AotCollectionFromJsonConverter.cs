@@ -4,28 +4,9 @@ namespace Arcanum.NsJson.Contracts {
 	using Newtonsoft.Json;
 	using System;
 	using System.Collections.Generic;
-	using System.Reflection;
 
 	public sealed class AotCollectionFromJsonConverter: IFromJsonConverter {
-		class CollectionMethods {
-			public MethodInfo isReadOnly { get; }
-			public MethodInfo add { get; }
-
-			public CollectionMethods (MethodInfo isReadOnly, MethodInfo add) {
-				this.isReadOnly = isReadOnly;
-				this.add = add;
-			}
-		}
-
-		static Func<Type, CollectionMethods> getCollectionMethods { get; } =
-			MemoizeFunc.Create(
-				(Type itemType) => {
-					var t = typeof(ICollection<>).MakeGenericType(itemType);
-					// ReSharper disable once PossibleNullReferenceException
-					var isReadOnly = t.GetProperty(nameof(ICollection<Object>.IsReadOnly))!.GetGetMethod();
-					var add = t.GetMethod(nameof(ICollection<Object>.Add))!;
-					return new CollectionMethods(isReadOnly, add);
-				});
+		
 
 		Type itemType { get; }
 		Func<ILocalsCollection, Object> createCollection { get; }
@@ -68,7 +49,7 @@ namespace Arcanum.NsJson.Contracts {
 					+ $"but actual {collectionType}.";
 				throw new JsonSerializationException(msg);
 			}
-			else if(getCollectionMethods(collectionItemType) is var methods
+			else if(AotCollectionMethods.forItemType(collectionItemType) is var methods
 			        && (Boolean) methods.isReadOnly.Invoke(collection, Array.Empty<Object>()))
 				throw new JsonSerializationException(
 					$"{collectionType} is read-only collection and cannot be deserialized.");

@@ -18,6 +18,7 @@ namespace Arcanum.NsJson.Contracts {
 				.AddJsonArrayConverterFactory(new AnySequenceJsonArrayConverterFactory())
 				.AddJsonArrayConverterFactory(new ListInterfacesJsonArrayConverterFactory())
 				.AddJsonArrayConverterFactory(new AnyCollectionImplementationJsonArrayConverterFactory())
+				.AddJsonArrayConverterFactory(new ArrayJsonArrayConverterFactory())
 				// unions
 				.AddConverterFactory(new UnionJsonConverterFactory())
 				// primitives
