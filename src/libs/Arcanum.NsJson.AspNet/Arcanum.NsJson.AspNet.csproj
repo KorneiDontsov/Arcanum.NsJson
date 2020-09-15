@@ -5,10 +5,10 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
-	<PropertyGroup>
-		<Product>Arcanum.NsJson.AspNet</Product>
-		<Version>2.0.1</Version>
-	</PropertyGroup>
+    <PropertyGroup>
+        <Product>Arcanum.NsJson.AspNet</Product>
+        <Version>2.0.2</Version>
+    </PropertyGroup>
 
 	<PropertyGroup>
 		<Title>Arcanum.NsJson.AspNet</Title>
@@ -22,18 +22,18 @@
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.1" />
 	</ItemGroup>
 
-	<Choose>
-		<When Condition="'$(Configuration)' == 'NuGet'">
-			<ItemGroup>
-				<PackageReference Include="Arcanum.NsJson" Version="[2.0.1]" />
-				<PackageReference Include="Arcanum.NsJson.DependencyInjection" Version="2.0.0" />
-			</ItemGroup>
-		</When>
-		<Otherwise>
-			<ItemGroup>
-				<ProjectReference Include="../Arcanum.NsJson/Arcanum.NsJson.csproj" />
-				<ProjectReference Include="../Arcanum.NsJson.DependencyInjection/Arcanum.NsJson.DependencyInjection.csproj" />
-			</ItemGroup>
-		</Otherwise>
-	</Choose>
+    <Choose>
+        <When Condition="'$(Configuration)' == 'NuGet'">
+            <ItemGroup>
+                <PackageReference Include="Arcanum.NsJson" Version="[2.0.2]" />
+                <PackageReference Include="Arcanum.NsJson.DependencyInjection" Version="2.0.0" />
+            </ItemGroup>
+        </When>
+        <Otherwise>
+            <ItemGroup>
+                <ProjectReference Include="../Arcanum.NsJson/Arcanum.NsJson.csproj" />
+                <ProjectReference Include="../Arcanum.NsJson.DependencyInjection/Arcanum.NsJson.DependencyInjection.csproj" />
+            </ItemGroup>
+        </Otherwise>
+    </Choose>
 </Project>

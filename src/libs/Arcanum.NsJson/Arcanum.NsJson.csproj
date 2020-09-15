@@ -5,10 +5,10 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
-	<PropertyGroup>
-		<Product>Arcanum.NsJson</Product>
-		<Version>2.0.1</Version>
-	</PropertyGroup>
+    <PropertyGroup>
+        <Product>Arcanum.NsJson</Product>
+        <Version>2.0.2</Version>
+    </PropertyGroup>
 
 	<PropertyGroup>
 		<Title>Arcanum.NsJson</Title>
