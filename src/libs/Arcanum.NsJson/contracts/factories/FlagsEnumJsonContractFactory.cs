@@ -10,7 +10,7 @@ namespace Arcanum.NsJson.Contracts {
 		public void Handle (IJsonContractRequest request) {
 			if (request.dataType.IsEnum && Attribute.IsDefined(request.dataType, typeof(FlagsAttribute))) {
 				var converter = new StringEnumConverter { AllowIntegerValues = false };
-				request.Return(new JsonLinqContract(request.dataType) { Converter = converter });
+				request.Return(new JsonPrimitiveContract(request.dataType) { Converter = converter });
 			}
 		}
 	}
