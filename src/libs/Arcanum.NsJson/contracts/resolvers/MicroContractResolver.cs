@@ -1,4 +1,4 @@
-﻿// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
+// Copyright (c) Kornei Dontsov. All Rights Reserved. Licensed under the MIT. See LICENSE in the project root for license information.
 
 namespace Arcanum.NsJson.Contracts {
 	using Arcanum.Companions;
@@ -229,9 +229,12 @@ namespace Arcanum.NsJson.Contracts {
 
 		/// <inheritdoc />
 		/// <exception cref = "JsonContractException" />
-		public JsonContract ResolveContract (Type dataType) =>
-			noMiddleware.Value
+		public JsonContract ResolveContract (Type dataType) {
+			var useNoMiddleware = noMiddleware.Value;
+			noMiddleware.Value = false;
+			return useNoMiddleware
 				? contractStorage.GetOrCreate(dataType)
 				: middlewareContractStorage.GetOrCreate(dataType);
+		}
 	}
 }
