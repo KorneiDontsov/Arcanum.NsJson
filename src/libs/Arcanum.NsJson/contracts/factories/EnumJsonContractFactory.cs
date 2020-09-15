@@ -73,7 +73,7 @@ namespace Arcanum.NsJson.Contracts {
 		public void Handle (IJsonContractRequest request) {
 			if (request.dataType.IsEnum && ! Attribute.IsDefined(request.dataType, typeof(FlagsAttribute))) {
 				var converter = new EnumJsonConverter(request.dataType);
-				var contract = new JsonLinqContract(request.dataType) { Converter = converter };
+				var contract = new JsonPrimitiveContract(request.dataType) { Converter = converter };
 				request.Return(contract);
 			}
 		}

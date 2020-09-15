@@ -2,7 +2,6 @@
 
 namespace Arcanum.NsJson.Contracts {
 	using Newtonsoft.Json;
-	using Newtonsoft.Json.Serialization;
 	using System;
 
 	public sealed class NullableStructJsonContractFactory: IJsonContractFactory {
@@ -20,8 +19,9 @@ namespace Arcanum.NsJson.Contracts {
 		/// <inheritdoc />
 		public void Handle (IJsonContractRequest request) {
 			if (Nullable.GetUnderlyingType(request.dataType) is {} notNullDataType) {
-				var converter = new NullableStructJsonConverter(notNullDataType);
-				request.Return(new JsonLinqContract(request.dataType) { Converter = converter });
+				var contract = BasicJsonContractFactory.CreateContract(request.dataType);
+				contract.Converter = new NullableStructJsonConverter(notNullDataType);
+				request.Return(contract);
 			}
 		}
 	}

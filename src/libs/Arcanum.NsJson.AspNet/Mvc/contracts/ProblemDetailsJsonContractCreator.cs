@@ -9,6 +9,6 @@ namespace Arcanum.NsJson.Ext.AspNet {
 	class ProblemDetailsJsonContractCreator: IJsonContractCreator {
 		/// <inheritdoc />
 		public JsonContract CreateJsonContract () =>
-			new JsonLinqContract(typeof(ProblemDetails)) { Converter = new ProblemDetailsConverter() };
+			new JsonObjectContract(typeof(ProblemDetails)) { Converter = new ProblemDetailsConverter() };
 	}
 }
